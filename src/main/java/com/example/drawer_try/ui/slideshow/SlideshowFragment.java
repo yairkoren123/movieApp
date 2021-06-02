@@ -15,6 +15,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.drawer_try.R;
 import com.example.drawer_try.databinding.FragmentGalleryBinding;
 import com.example.drawer_try.databinding.FragmentSlideshowBinding;
+import com.example.drawer_try.modle.Fragment_the_movie_overview;
 import com.example.drawer_try.modle.The_movies;
 import com.example.drawer_try.singletonClass.Single_one;
 import com.example.drawer_try.ui.gallery.GalleryViewModel;
@@ -56,26 +57,25 @@ public class SlideshowFragment extends Fragment {
         binding = FragmentSlideshowBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        final TextView textView = binding.textSlideshow;
-        slideshowViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
-            }
-        });
+
         // use  TextView textView = binding.textSlideshow; to get like id
 
-        TextView movie_Random = binding.randomMovieR;
 
-        The_movies the_movies = new The_movies();
+        The_movies the_movie = new The_movies();
 
         Random rand;
         rand = new Random();
         the_moviesArrayList =  single_one.getMovies_list();
-        if(!the_moviesArrayList.isEmpty()) {
-            int index = (int) (Math.random() * the_moviesArrayList.size());
-            movie_Random.setText(the_moviesArrayList.get(index).getTitle());
-        }
+//        if(!the_moviesArrayList.isEmpty()) {
+//            int index = (int) (Math.random() * the_moviesArrayList.size());
+//            the_movie = the_moviesArrayList.get(index);
+//            movie_Random.setText(the_moviesArrayList.get(index).getTitle());
+//        }
+        Fragment_the_movie_overview nextFrag= new Fragment_the_movie_overview();
+        getActivity().getSupportFragmentManager().beginTransaction()
+                .replace(R.id.mail_countener, nextFrag, "findThisFragment")
+                .addToBackStack(null)
+                .commit();
 
 
         return root;

@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -26,6 +27,7 @@ import com.android.volley.toolbox.Volley;
 import com.example.drawer_try.R;
 import com.example.drawer_try.databinding.FragmentHomeBinding;
 import com.example.drawer_try.modle.FlowerAdapter;
+import com.example.drawer_try.modle.Fragment_the_movie_overview;
 import com.example.drawer_try.modle.The_movies;
 import com.example.drawer_try.modle.ViewPagerAdpter;
 import com.example.drawer_try.singletonClass.Single_one;
@@ -44,7 +46,6 @@ public class HomeFragment extends Fragment {
     private FragmentHomeBinding binding;
 
 
-
     // layout
     private ImageView imagemovies;
 
@@ -53,6 +54,8 @@ public class HomeFragment extends Fragment {
 
 
     public ArrayList<The_movies> theMoviesArrayList = new ArrayList<>();
+
+    Single_one single_one;
 
 
     // Will show the string "data" that holds the results
@@ -64,7 +67,6 @@ public class HomeFragment extends Fragment {
     String data = "";
     // Defining the Volley request queue that handles the URL request concurrently
     RequestQueue requestQueue;
-
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -80,12 +82,11 @@ public class HomeFragment extends Fragment {
     }
 
     @Override
-    public void onCreate(@Nullable  Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
-        //        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
-//        getSupportActionBar().hide();
+//            this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
+//            getSupportActionBar().hide();
 
 
 
@@ -137,6 +138,8 @@ public class HomeFragment extends Fragment {
                                 String original_language = jsonObject.getString("original_language");
                                 int vote_count = jsonObject.getInt("vote_count");
                                 String image =  jsonObject.getString("poster_path");
+                                String image_sec =  jsonObject.getString("backdrop_path");
+
 
 
                                 // put values in class movies
@@ -148,6 +151,8 @@ public class HomeFragment extends Fragment {
                                 one_movie.setOriginal_language(original_language);
                                 one_movie.setVote_count(vote_count);
                                 one_movie.setImage(image);
+                                one_movie.setImage_sec(image_sec);
+
 
                                 // after all in movies :
 
@@ -170,7 +175,7 @@ public class HomeFragment extends Fragment {
                                 //results.setText(data);
 
                             }
-                            Single_one single_one = Single_one.getInstance();
+                            single_one = Single_one.getInstance();
                             single_one.setMovies_list(theMoviesArrayList);
                             next_level();
 
@@ -198,7 +203,7 @@ public class HomeFragment extends Fragment {
         // Adds the JSON object request "obreq" to the request queue
         requestQueue.add(obreq);
         //https://image.tmdb.org/t/p/w500/pKAxHs04yxLDQSIf4MNiZoePVWX.jpg
-///pKAxHs04yxLDQSIf4MNiZoePVWX.jpg
+//pKAxHs04yxLDQSIf4MNiZoePVWX.jpg
 //        //https://image.tmdb.org/t/p/w500/
 //        Glide.with(getApplicationContext())
 //                .load("https://image.tmdb.org/t/p/w500/pKAxHs04yxLDQSIf4MNiZoePVWX.jpg")
@@ -216,6 +221,7 @@ public class HomeFragment extends Fragment {
 
 
 
+
         // gridView
 
         FlowerAdapter adapter;
@@ -225,8 +231,25 @@ public class HomeFragment extends Fragment {
         adapter = new FlowerAdapter(getContext(),theMoviesArrayList);
         gridView.setAdapter(adapter);
 
-        gridView.setOnItemClickListener((parent, view, position, id) ->
-                msg("click on " + position ));
+
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                msg("click on " + theMoviesArrayList.get(position).getTitle());
+                single_one.setValue_movie(theMoviesArrayList.get(position));
+
+
+                Fragment_the_movie_overview nextFrag= new Fragment_the_movie_overview();
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .add(R.id.mail_countener2, nextFrag, "findThisFragment")
+                        .addToBackStack(null)
+                        .commit();
+
+//                gridView.setVisibility(View.GONE);
+//                pager_images_movies.setVisibility(View.GONE);
+
+            }
+        });
 
 
     }
@@ -237,9 +260,9 @@ public class HomeFragment extends Fragment {
     }
 
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        binding = null;
-    }
+        @Override
+        public void onDestroyView(){
+            super.onDestroyView();
+            binding = null;
+        }
 }

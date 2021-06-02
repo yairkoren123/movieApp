@@ -8,6 +8,7 @@
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/viewpager"
+        android:background="@drawable/gradint_viewpager"
         android:layout_width="wrap_content"
         android:layout_height="230dp"
         android:scaleType="fitXY"
@@ -19,7 +20,7 @@
         android:id="@+id/gridview"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="#003366"
+        android:background="@color/backbluedark"
         android:columnWidth="100dp"
         android:horizontalSpacing="5dp"
         android:numColumns="auto_fit"
@@ -31,5 +32,14 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/viewpager" />
+
+    <FrameLayout
+        android:id="@+id/mail_countener2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

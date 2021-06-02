@@ -20,6 +20,11 @@ public class The_movies {
 
     String image;
 
+    String image_sec;
+
+    public The_movies(String title) {
+        this.title = title;
+    }
 
     // constructors
     public The_movies() {
@@ -28,17 +33,25 @@ public class The_movies {
     @Override
     public String toString() {
         return "The_movies{" +
-                "image=" + image +
-                ", adult=" + adult +
+                "adult=" + adult +
                 ", title='" + title + '\'' +
                 ", vote_average='" + vote_average + '\'' +
                 ", release_date='" + release_date + '\'' +
                 ", overview='" + overview + '\'' +
                 ", original_language='" + original_language + '\'' +
                 ", vote_count=" + vote_count +
+                ", image='" + image + '\'' +
+                ", image_sec='" + image_sec + '\'' +
                 '}';
     }
 
+    public String getImage_sec() {
+        return image_sec;
+    }
+
+    public void setImage_sec(String image_sec) {
+        this.image_sec = image_sec;
+    }
 
     public String getImage() {
         return image;
@@ -52,6 +65,8 @@ public class The_movies {
     public boolean isAdult() {
         return adult;
     }
+
+
 
     public void setAdult(boolean adult) {
         this.adult = adult;

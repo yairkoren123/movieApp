@@ -22,7 +22,7 @@ public class SlideshowViewModel extends ViewModel {
         Single_one single_one = Single_one.getInstance();
 
         Log.d("mee", "SlideshowViewModel: " + single_one.getMovies_list().get(1).getTitle());
-        mText.setValue("This is slideshow fragment");
+        //mText.setValue("This is slideshow fragment");
 
 
     }
