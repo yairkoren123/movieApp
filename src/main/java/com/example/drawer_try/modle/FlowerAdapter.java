@@ -13,15 +13,34 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+
 import com.airbnb.lottie.LottieAnimationView;
 import com.bumptech.glide.Glide;
 import com.example.drawer_try.R;
 import com.example.drawer_try.singletonClass.Single_one;
+import com.example.drawer_try.singup.ToData;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
 public class FlowerAdapter extends BaseAdapter  {
     private Context mContext;
+
+    private FirebaseAuth firebaseAuth;
+
+
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+    private DocumentReference movie_data_add = db.collection("shopping").document();
+
 
     private Single_one single_one = Single_one.getInstance();
 
@@ -105,6 +124,8 @@ public class FlowerAdapter extends BaseAdapter  {
 
         LottieAnimationView add = itemView.findViewById(R.id.button_add_love);
 
+
+
         if (single_one.seeiflove(selectedMovie)){
             add.setAnimation(R.raw.minus);
         }else {
@@ -114,7 +135,12 @@ public class FlowerAdapter extends BaseAdapter  {
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                //movie_data_add = db.collection("shopping").document();
+                //movie_data_add.set(shopping);
+
                 add.playAnimation();
+
 //                Log.d("button", "getView: button" + position);
 //                single_one.addThe_love_movies(selectedMovie);
                 add.addAnimatorListener(new AnimatorListenerAdapter() {
@@ -129,7 +155,35 @@ public class FlowerAdapter extends BaseAdapter  {
                         super.onAnimationStart(animation);
                         Log.d("button", "getView: button" + position);
                         single_one.addThe_love_movies(selectedMovie);
-                        msg(selectedMovie.getTitle() + " was add to your list");
+
+                        ToData toData = new ToData();
+                        single_one = Single_one.getInstance();
+                        toData.setEmail(single_one.getNow_login_email());
+                        toData.setThe_moviesArrayList(Single_one.getInstance().getMovies_list());
+
+                        movie_data_add = db.collection("good").document(single_one.getNow_login_email());
+                        // add to the list
+                        movie_data_add.
+                                set(toData).
+                                addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull @NotNull Task<Void> task) {
+                                if (task.isSuccessful()){
+                                    msg(selectedMovie.getTitle() + " was add to your list");
+                                }else {
+                                    msg(task.getException().getMessage());
+                                }
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull @NotNull Exception e) {
+                                msg(e.getMessage());
+                            }
+                        });
+
+                        //msg(selectedMovie.getTitle() + " was add to your list");
+
+
                     }
                 });
 

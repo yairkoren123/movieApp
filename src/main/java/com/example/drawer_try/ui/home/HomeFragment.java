@@ -31,6 +31,8 @@ import com.example.drawer_try.modle.Fragment_the_movie_overview;
 import com.example.drawer_try.modle.The_movies;
 import com.example.drawer_try.modle.ViewPagerAdpter;
 import com.example.drawer_try.singletonClass.Single_one;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -39,6 +41,16 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 public class HomeFragment extends Fragment {
+
+
+    // fireStore
+    private FirebaseFirestore firebaseFirestore;
+
+
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    //private DocumentReference journalRef = db.document("Journal/First Thoughts");
+
+    private DocumentReference shopping_data_add = db.collection("shopping").document();
 
     //home
 
@@ -96,6 +108,7 @@ public class HomeFragment extends Fragment {
 
 
 
+        firebaseFirestore = FirebaseFirestore.getInstance();
 
         // Creates the Volley request queue
         requestQueue = Volley.newRequestQueue(getContext());

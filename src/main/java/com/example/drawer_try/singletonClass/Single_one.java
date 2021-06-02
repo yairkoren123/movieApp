@@ -7,6 +7,10 @@ import com.example.drawer_try.modle.The_movies;
 import java.util.ArrayList;
 
 public class Single_one {
+
+    // values
+    String now_login_email;
+    String now_login_pass;
     ArrayList<The_movies> movies_list = null;
     The_movies value_movie  = new The_movies("none");
     ArrayList<The_movies> the_love_movies = new ArrayList<>();
@@ -20,7 +24,6 @@ public class Single_one {
     public Single_one(ArrayList<The_movies> movies_list) {
         this.movies_list = movies_list;
     }
-
 
     public Single_one(ArrayList<The_movies> movies_list, The_movies value_movie) {
         this.movies_list = movies_list;
@@ -63,5 +66,24 @@ public class Single_one {
                 }
             }
         return false;
+    }
+
+    // login
+
+
+    public String getNow_login_email() {
+        return now_login_email;
+    }
+
+    public void setNow_login_email(String now_login_email) {
+        this.now_login_email = now_login_email;
+    }
+
+    public String getNow_login_pass() {
+        return now_login_pass;
+    }
+
+    public void setNow_login_pass(String now_login_pass) {
+        this.now_login_pass = now_login_pass;
     }
 }
