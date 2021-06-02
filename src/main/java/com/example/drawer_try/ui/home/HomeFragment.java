@@ -28,6 +28,7 @@ import com.example.drawer_try.databinding.FragmentHomeBinding;
 import com.example.drawer_try.modle.FlowerAdapter;
 import com.example.drawer_try.modle.The_movies;
 import com.example.drawer_try.modle.ViewPagerAdpter;
+import com.example.drawer_try.singletonClass.Single_one;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -37,19 +38,21 @@ import java.util.ArrayList;
 
 public class HomeFragment extends Fragment {
 
+    //home
+
     private HomeViewModel homeViewModel;
     private FragmentHomeBinding binding;
 
 
 
     // layout
-    ImageView imagemovies;
+    private ImageView imagemovies;
 
 
-    ArrayList<String> imagesURLS = new ArrayList<>();
+    public ArrayList<String> imagesURLS = new ArrayList<>();
 
 
-    ArrayList<The_movies> theMoviesArrayList = new ArrayList<>();
+    public ArrayList<The_movies> theMoviesArrayList = new ArrayList<>();
 
 
     // Will show the string "data" that holds the results
@@ -167,7 +170,8 @@ public class HomeFragment extends Fragment {
                                 //results.setText(data);
 
                             }
-
+                            Single_one single_one = Single_one.getInstance();
+                            single_one.setMovies_list(theMoviesArrayList);
                             next_level();
 
 

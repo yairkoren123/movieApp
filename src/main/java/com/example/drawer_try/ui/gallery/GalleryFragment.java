@@ -17,6 +17,8 @@ import com.example.drawer_try.databinding.FragmentGalleryBinding;
 
 public class GalleryFragment extends Fragment {
 
+    //watchlist
+
     private GalleryViewModel galleryViewModel;
     private FragmentGalleryBinding binding;
 

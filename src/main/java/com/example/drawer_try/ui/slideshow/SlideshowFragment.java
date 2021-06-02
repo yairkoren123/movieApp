@@ -13,15 +13,43 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.drawer_try.R;
+import com.example.drawer_try.databinding.FragmentGalleryBinding;
 import com.example.drawer_try.databinding.FragmentSlideshowBinding;
+import com.example.drawer_try.modle.The_movies;
+import com.example.drawer_try.singletonClass.Single_one;
+import com.example.drawer_try.ui.gallery.GalleryViewModel;
+import com.example.drawer_try.ui.home.HomeFragment;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 public class SlideshowFragment extends Fragment {
+
+    // random
+
+    ArrayList<The_movies> the_moviesArrayList = new ArrayList<>();
+
 
     private SlideshowViewModel slideshowViewModel;
     private FragmentSlideshowBinding binding;
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+    }
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
+
+        // get Array from home fragment
+        HomeFragment homeFragment = new HomeFragment();
+
+        // get singleton
+        Single_one single_one = Single_one.getInstance();
+
+
         slideshowViewModel =
                 new ViewModelProvider(this).get(SlideshowViewModel.class);
 
@@ -35,6 +63,21 @@ public class SlideshowFragment extends Fragment {
                 textView.setText(s);
             }
         });
+        // use  TextView textView = binding.textSlideshow; to get like id
+
+        TextView movie_Random = binding.randomMovieR;
+
+        The_movies the_movies = new The_movies();
+
+        Random rand;
+        rand = new Random();
+        the_moviesArrayList =  single_one.getMovies_list();
+        if(!the_moviesArrayList.isEmpty()) {
+            int index = (int) (Math.random() * the_moviesArrayList.size());
+            movie_Random.setText(the_moviesArrayList.get(index).getTitle());
+        }
+
+
         return root;
     }
 
@@ -43,4 +86,9 @@ public class SlideshowFragment extends Fragment {
         super.onDestroyView();
         binding = null;
     }
+
+
+    // get Rndom from Array list
+
+
 }

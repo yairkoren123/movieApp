@@ -12,14 +12,25 @@
         tools:layout="@layout/fragment_home" />
 
     <fragment
-        android:id="@+id/nav_gallery"
+        android:id="@+id/nav_watchlist"
         android:name="com.example.drawer_try.ui.gallery.GalleryFragment"
-        android:label="@string/menu_gallery"
+        android:label="@string/menu_love"
         tools:layout="@layout/fragment_gallery" />
+
+    <fragment
+        android:id="@+id/nav_search"
+        android:name="com.example.drawer_try.ui.Search.SearchFragment"
+        android:label="@string/menu_search"
+        tools:layout="@layout/search_fragment" />
 
     <fragment
         android:id="@+id/nav_slideshow"
         android:name="com.example.drawer_try.ui.slideshow.SlideshowFragment"
-        android:label="@string/menu_slideshow"
+        android:label="@string/menu_random"
         tools:layout="@layout/fragment_slideshow" />
+    <fragment
+        android:id="@+id/nav_setting"
+        android:name="com.example.drawer_try.ui.Setting.SettingFragment"
+        android:label="@string/menu_setting"
+        tools:layout="@layout/setting_fragment" />
 </navigation>

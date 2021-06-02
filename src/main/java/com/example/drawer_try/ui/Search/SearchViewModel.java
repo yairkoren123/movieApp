@@ -1,18 +1,19 @@
-package com.example.drawer_try.ui.gallery;
+package com.example.drawer_try.ui.Search;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class GalleryViewModel extends ViewModel {
+public class SearchViewModel extends ViewModel {
 
-    //watchlist
+    //search
+
 
     private MutableLiveData<String> mText;
 
-    public GalleryViewModel() {
+    public SearchViewModel() {
         mText = new MutableLiveData<>();
-        mText.setValue("This is love fragment");
+        mText.setValue("This is search fragment");
     }
 
     public LiveData<String> getText() {
