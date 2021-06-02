@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,19 +19,40 @@ import android.widget.Toast;
 
 import com.example.drawer_try.R;
 import com.example.drawer_try.databinding.SettingFragmentBinding;
+import com.example.drawer_try.modle.The_movies;
 import com.example.drawer_try.singletonClass.Single_one;
 import com.example.drawer_try.singup.SingUp_Fragment;
+import com.example.drawer_try.singup.ToData;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
 
 public class SettingFragment extends Fragment {
 
     //firebase
+    private FirebaseFirestore firebaseFirestore;
+
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    //private DocumentReference journalRef = db.document("Journal/First Thoughts");
+    private DocumentReference cool = db.collection("shopping")
+            .document("First Thoughts");
+    private CollectionReference collectionReference = db.collection("Journal");
+    private CollectionReference collectionReference1 = db.collection("shopping");
+
+    private DocumentReference movie_data_add = db.collection("good").document();
 
     FirebaseAuth auth;
 
@@ -89,6 +111,7 @@ public class SettingFragment extends Fragment {
                 auth = FirebaseAuth.getInstance();
                 if (auth.getCurrentUser() != null) {
                     msg("you are login already");
+
                 } else {
                     String the_email, the_pass, the_username;
 
@@ -117,8 +140,20 @@ public class SettingFragment extends Fragment {
                                             single_one.setNow_login_email(the_email);
                                             single_one.setNow_login_pass(the_pass);
 
-                                        } else {
-                                            msg(task.getException().getMessage());
+
+                                            ToData toData = new ToData();
+                                            toData.setEmail(the_email);
+                                            toData.setThe_moviesArrayList(single_one.getThe_love_movies());
+//                                            movie_data_add = db.collection("good").document();
+//
+//
+//                                            movie_data_add.set(toData).addOnCompleteListener(new OnCompleteListener<Void>() {
+//                                                @Override
+//                                                public void onComplete(@NonNull @NotNull Task<Void> task) {
+//                                                    Log.d("sec2", "onComplete: " + task.toString());
+//
+//                                                }
+//                                            });
 
                                         }
 
@@ -141,6 +176,13 @@ public class SettingFragment extends Fragment {
             public void onClick(View v) {
                 auth = FirebaseAuth.getInstance();
                 auth.signOut();
+                Single_one single_one = Single_one.getInstance();
+                The_movies one_none_move = new The_movies();
+                one_none_move.setTitle("none");
+                ArrayList<The_movies> s =  new ArrayList<>();
+                s.add(one_none_move);
+                single_one.setThe_love_movies(s);
+                single_one.setNow_login_email("none");
                 msg("now your are out");
             }
         });

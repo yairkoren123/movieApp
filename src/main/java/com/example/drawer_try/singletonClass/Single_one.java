@@ -59,9 +59,9 @@ public class Single_one {
     }
 
     public boolean seeiflove(The_movies movie){
-        the_love_movies = movies_list;
             for (int i = 0; i < the_love_movies.size(); i++) {
                 if (the_love_movies.get(i).getTitle().equals(movie.getTitle())) {
+                    Log.d("loves", "seeiflove: in the list already" );
                     return true;
                 }
             }

@@ -84,7 +84,7 @@ public class Fragment_the_movie_overview extends Fragment {
         description_text_overview.setText(the_string_movie.getOverview().toString().trim());
 
         TextView release_date = view.findViewById(R.id.textview_release_date_overview);
-        release_date.setText(the_string_movie.getRelease_date().toString().trim());
+        release_date.setText("Date release : "+the_string_movie.getRelease_date().toString().trim());
 
         TextView avrage_text_overview = view.findViewById(R.id.textview_vote_average_overview);
         avrage_text_overview.setText(the_string_movie.getVote_average().toString().trim());

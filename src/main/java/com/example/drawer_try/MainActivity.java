@@ -8,10 +8,16 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.drawer_try.modle.The_movies;
 import com.example.drawer_try.singletonClass.Single_one;
+import com.example.drawer_try.singup.ToData;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -22,8 +28,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.drawer_try.databinding.ActivityMainBinding;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import org.jetbrains.annotations.NotNull;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -31,16 +45,24 @@ public class MainActivity extends AppCompatActivity {
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityMainBinding binding;
 
+    private FirebaseFirestore firebaseFirestore;
+
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    //private DocumentReference journalRef = db.document("Journal/First Thoughts");
+    private DocumentReference cool = db.collection("good")
+            .document("First Thoughts");
+    private CollectionReference collectionReference = db.collection("good");
+    private CollectionReference collectionReference1 = db.collection("good");
+
+    private DocumentReference movie_data_add = db.collection("good").document();
+
     private FirebaseAuth firebaseAuth;
 
     private FirebaseAuth.AuthStateListener authStateListener;
 
     private FirebaseUser currentUser;
 
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-
-    private DocumentReference movie_data_add = db.collection("shopping").document();
 
 
 
@@ -147,12 +169,40 @@ public class MainActivity extends AppCompatActivity {
         if (auth.getCurrentUser() != null) {
             String email = auth.getCurrentUser().getEmail().toString().trim();
             Log.d("username", "onStart: email:  " + email);
-            msg("welcome back  " );
+            msg("welcome back  ");
             single_one = Single_one.getInstance();
             single_one.setNow_login_email(email);
 
-        }
-        else {
+            ToData data = new ToData();
+            The_movies the_movies = new The_movies();
+
+            collectionReference1.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                @Override
+                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+
+                    String data = "";
+                    for (QueryDocumentSnapshot snapshots : queryDocumentSnapshots) {
+
+                        Log.d("sec", "onSuccess: " + snapshots.getId());
+                        ToData shopping = snapshots.toObject(ToData.class);
+                        Log.d("snal2", "onSuccess: " +email);
+
+                        if (shopping.getEmail().equals(email)){
+                            Log.d("snal", "onSuccess: " +snapshots.toString());
+                            Log.d("sec", "onSuccess: target on : " + snapshots.getId());
+
+                            Log.d("sec2", "onSuccess: target on : " + shopping.getEmail());
+
+                            Single_one single_one = Single_one.getInstance();
+                            single_one.setThe_love_movies(shopping.getThe_moviesArrayList());
+
+                            Log.d("data", "onSuccess: " + shopping.getEmail());
+                        }
+
+                    }
+                }
+            });
+        }else {
             single_one.setNow_login_email("none");
         }
         auth.addAuthStateListener(authStateListener);

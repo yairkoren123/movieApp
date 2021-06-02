@@ -95,7 +95,7 @@ public class FlowerAdapter extends BaseAdapter  {
         }
         Log.d("images", "getView: " + image);
         if (image.equals("null") || image == "null"){
-            if (!selectedMovie.getImage_sec().equals(null) || selectedMovie.getImage_sec() != null){
+            if (selectedMovie.getImage_sec() != null){
                 image ="https://image.tmdb.org/t/p/w500" + selectedMovie.getImage_sec() ;
 
             }else{
@@ -126,10 +126,15 @@ public class FlowerAdapter extends BaseAdapter  {
 
 
 
-        if (single_one.seeiflove(selectedMovie)){
+        if (single_one.seeiflove(selectedMovie) == true){
             add.setAnimation(R.raw.minus);
         }else {
             add.setAnimation(R.raw.add);
+        }
+
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        if (auth.getCurrentUser() == null){
+            add.setVisibility(View.GONE);
         }
 
         add.setOnClickListener(new View.OnClickListener() {
@@ -139,55 +144,63 @@ public class FlowerAdapter extends BaseAdapter  {
                 //movie_data_add = db.collection("shopping").document();
                 //movie_data_add.set(shopping);
 
-                add.playAnimation();
+                if (single_one.seeiflove(selectedMovie) == false) {
+
+
 
 //                Log.d("button", "getView: button" + position);
 //                single_one.addThe_love_movies(selectedMovie);
-                add.addAnimatorListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        super.onAnimationEnd(animation);
-                        add.setAnimation(R.raw.minus);
-                    }
+                    add.addAnimatorListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            super.onAnimationEnd(animation);
+                            add.setAnimation(R.raw.minus);
+                        }
 
-                    @Override
-                    public void onAnimationStart(Animator animation) {
-                        super.onAnimationStart(animation);
-                        Log.d("button", "getView: button" + position);
-                        single_one.addThe_love_movies(selectedMovie);
+                        @Override
+                        public void onAnimationStart(Animator animation) {
+                            super.onAnimationStart(animation);
+                            Log.d("button", "getView: button" + position);
+                            single_one.addThe_love_movies(selectedMovie);
 
-                        ToData toData = new ToData();
-                        single_one = Single_one.getInstance();
-                        toData.setEmail(single_one.getNow_login_email());
-                        toData.setThe_moviesArrayList(Single_one.getInstance().getMovies_list());
+                            ToData toData = new ToData();
+                            single_one = Single_one.getInstance();
+                            toData.setEmail(single_one.getNow_login_email());
+                            toData.setThe_moviesArrayList(Single_one.getInstance().getThe_love_movies());
 
-                        movie_data_add = db.collection("good").document(single_one.getNow_login_email());
-                        // add to the list
-                        movie_data_add.
-                                set(toData).
-                                addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull @NotNull Task<Void> task) {
-                                if (task.isSuccessful()){
-                                    msg(selectedMovie.getTitle() + " was add to your list");
-                                }else {
-                                    msg(task.getException().getMessage());
+                            movie_data_add = db.collection("good").document(single_one.getNow_login_email());
+                            // add to the list
+                            movie_data_add.
+                                    set(toData).
+                                    addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull @NotNull Task<Void> task) {
+                                            if (task.isSuccessful()) {
+                                                msg(selectedMovie.getTitle() + " was add to your list");
+                                            } else {
+                                                msg(task.getException().getMessage());
+                                            }
+                                        }
+                                    }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull @NotNull Exception e) {
+                                    msg(e.getMessage());
                                 }
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull @NotNull Exception e) {
-                                msg(e.getMessage());
-                            }
-                        });
+                            });
 
-                        //msg(selectedMovie.getTitle() + " was add to your list");
+                            //msg(selectedMovie.getTitle() + " was add to your list");
 
 
-                    }
-                });
+                        }
+                    });
+                    add.playAnimation();
 
 
+
+                }else {
+                    msg("in the list already");
+
+                }
             }
         });
 
