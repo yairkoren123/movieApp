@@ -149,7 +149,7 @@ public class HomeFragment extends Fragment {
                                 one_movie.setRelease_date(release);
                                 one_movie.setOverview(overview);
                                 one_movie.setOriginal_language(original_language);
-                                one_movie.setVote_count(vote_count);
+                                one_movie.setVote_count(String.valueOf(vote_count));
                                 one_movie.setImage(image);
                                 one_movie.setImage_sec(image_sec);
 
@@ -244,6 +244,14 @@ public class HomeFragment extends Fragment {
                         .add(R.id.mail_countener2, nextFrag, "findThisFragment")
                         .addToBackStack(null)
                         .commit();
+
+//                The_movies none_movie = new The_movies();
+//                none_movie.setTitle("");
+//
+//                single_one.setValue_movie(none_movie);
+
+
+
 
 //                gridView.setVisibility(View.GONE);
 //                pager_images_movies.setVisibility(View.GONE);

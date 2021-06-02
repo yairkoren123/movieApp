@@ -16,7 +16,7 @@ public class The_movies {
 
     String original_language;
 
-    int vote_count;
+    String vote_count;
 
     String image;
 
@@ -89,6 +89,9 @@ public class The_movies {
     }
 
     public String getRelease_date() {
+        if (release_date == null){
+            release_date = "Empty";
+        }
         return release_date;
     }
 
@@ -97,6 +100,9 @@ public class The_movies {
     }
 
     public String getOverview() {
+        if (overview == null){
+            overview = "Empty";
+        }
         return overview;
     }
 
@@ -105,6 +111,10 @@ public class The_movies {
     }
 
     public String getOriginal_language() {
+
+        if (original_language == null){
+            original_language = "Empty";
+        }
         return original_language;
     }
 
@@ -112,11 +122,14 @@ public class The_movies {
         this.original_language = original_language;
     }
 
-    public int getVote_count() {
+    public String getVote_count() {
+        if (vote_count == null){
+            vote_count = "Empty";
+        }
         return vote_count;
     }
 
-    public void setVote_count(int vote_count) {
+    public void setVote_count(String vote_count) {
         this.vote_count = vote_count;
     }
 }

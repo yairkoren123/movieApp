@@ -137,8 +137,9 @@ public class Fragment_the_movie_overview extends Fragment {
             }
         });
 
-
-
+        The_movies cool = new The_movies();
+        cool.setTitle("none");
+        single_one.setValue_movie(cool);
         Log.d("TAG12", "onViewCreated: " + the_string_movie.getTitle());
 
     }

@@ -73,7 +73,7 @@ public class SlideshowFragment extends Fragment {
 //        }
         Fragment_the_movie_overview nextFrag= new Fragment_the_movie_overview();
         getActivity().getSupportFragmentManager().beginTransaction()
-                .replace(R.id.mail_countener, nextFrag, "findThisFragment")
+                .add(R.id.mail_countener, nextFrag, "findThisFragment")
                 .addToBackStack(null)
                 .commit();
 
