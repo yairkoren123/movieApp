@@ -40,30 +40,39 @@
             app:layout_constraintStart_toEndOf="@+id/edittext_search_s"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <GridView
-            android:id="@+id/gridview_search_s"
-            android:layout_width="0dp"
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:id="@+id/mail_countener6"
             android:layout_height="0dp"
-            android:background="@color/backbluedark"
-            android:columnWidth="100dp"
-            android:horizontalSpacing="5dp"
-            android:numColumns="auto_fit"
-            android:padding="3dp"
-            android:stretchMode="columnWidth"
-            android:verticalSpacing="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/edittext_search_s" />
 
-        <FrameLayout
-            android:id="@+id/mail_countener3"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+<!--        <GridView-->
+<!--            android:id="@+id/gridview_search_s"-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="0dp"-->
+<!--            android:background="@color/backbluedark"-->
+<!--            android:columnWidth="100dp"-->
+<!--            android:horizontalSpacing="5dp"-->
+<!--            android:numColumns="auto_fit"-->
+<!--            android:padding="3dp"-->
+<!--            android:stretchMode="columnWidth"-->
+<!--            android:verticalSpacing="10dp"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/edittext_search_s" />-->
+
+<!--        <FrameLayout-->
+<!--            android:id="@+id/mail_countener3"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent" />-->
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>

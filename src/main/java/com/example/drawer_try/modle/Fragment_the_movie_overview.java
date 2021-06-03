@@ -65,6 +65,9 @@ public class Fragment_the_movie_overview extends Fragment {
         the_string_movie = single_one.getValue_movie();
         the_movies_list = single_one.getMovies_list();
 
+        Log.d("random", "onViewCreated: " +the_movies_list.size());
+        Log.d("random", "onViewCreated: " +the_string_movie);
+
 
         if (the_string_movie.getTitle().equals("none")) {
 

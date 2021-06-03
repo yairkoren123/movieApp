@@ -1,15 +1,22 @@
 package com.example.drawer_try.modle;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 
 import com.bumptech.glide.Glide;
+import com.example.drawer_try.R;
+import com.example.drawer_try.singletonClass.Single_one;
+import com.google.android.material.internal.ThemeEnforcement;
 
 import java.util.ArrayList;
 
@@ -39,6 +46,33 @@ public class ViewPagerAdpter extends PagerAdapter implements View.OnClickListene
     public Object instantiateItem(@NonNull  ViewGroup container, int position) {
         ImageView imageView = new ImageView(context);
 
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("3333", "onClick: click me");
+                Single_one single_one = Single_one.getInstance();
+                ArrayList<The_movies> theMoviesArrayList = single_one.getMovies_list();
+                msg("click on " + theMoviesArrayList.get(position).getTitle());
+                single_one.setValue_movie(theMoviesArrayList.get(position));
+
+                Log.d("URLhome", "onResponse: " + theMoviesArrayList.get(position).getId());
+                single_one.setThe_same_movie_id(theMoviesArrayList.get(position).getId());
+
+                AppCompatActivity activity = (AppCompatActivity) v.getContext();
+
+
+                Fragment_the_movie_overview nextFrag= new Fragment_the_movie_overview();
+                activity.getSupportFragmentManager().beginTransaction()
+                        .add(R.id.mail_countener2, nextFrag, "findThisFragment")
+                        .addToBackStack(null)
+                        .commit();
+
+
+
+
+            }
+        });
+
 
         Glide.with(context)
                 .load(imagesURL.get(position))
@@ -63,6 +97,12 @@ public class ViewPagerAdpter extends PagerAdapter implements View.OnClickListene
     public void destroyItem(@NonNull  ViewGroup container, int position, @NonNull Object object) {
         container.removeView((View) object);
     }
+    private void msg(String text){
+        Toast.makeText(context,text,Toast.LENGTH_LONG)
+                .show();
+    }
+
+
 
     @Override
     public void onClick(View v) {

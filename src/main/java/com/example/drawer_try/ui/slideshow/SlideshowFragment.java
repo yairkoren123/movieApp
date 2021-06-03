@@ -1,7 +1,8 @@
 package com.example.drawer_try.ui.slideshow;
-
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -19,13 +20,16 @@ import com.example.drawer_try.modle.Fragment_the_movie_overview;
 import com.example.drawer_try.modle.The_movies;
 import com.example.drawer_try.singletonClass.Single_one;
 import com.example.drawer_try.ui.gallery.GalleryViewModel;
-import com.example.drawer_try.ui.home.HomeFragment;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 public class SlideshowFragment extends Fragment {
+
+
 
     // random
 
@@ -45,7 +49,6 @@ public class SlideshowFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
 
         // get Array from home fragment
-        HomeFragment homeFragment = new HomeFragment();
 
         // get singleton
         Single_one single_one = Single_one.getInstance();

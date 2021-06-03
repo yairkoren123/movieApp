@@ -1,5 +1,6 @@
 package com.example.drawer_try.singletonClass;
 
+import android.app.Activity;
 import android.util.Log;
 
 import com.example.drawer_try.modle.The_movies;
@@ -10,10 +11,13 @@ public class Single_one {
 
     // values
     String now_login_email;
+
+    String toSearch ="";
     String now_login_pass;
     ArrayList<The_movies> movies_list = null;
     The_movies value_movie  = new The_movies("none");
     ArrayList<The_movies> the_love_movies = new ArrayList<>();
+    String the_same_movie_id = "";
 
     private static final Single_one ourInstance = new Single_one();
     public static Single_one getInstance() {
@@ -68,6 +72,18 @@ public class Single_one {
         return false;
     }
 
+    // id
+
+    public String getThe_same_movie_id() {
+
+        return the_same_movie_id;
+    }
+
+    public void setThe_same_movie_id(String the_same_movie_id) {
+        this.the_same_movie_id = the_same_movie_id;
+    }
+
+
     // login
 
 
@@ -85,5 +101,16 @@ public class Single_one {
 
     public void setNow_login_pass(String now_login_pass) {
         this.now_login_pass = now_login_pass;
+    }
+
+    // Search
+
+
+    public String getToSearch() {
+        return toSearch;
+    }
+
+    public void setToSearch(String toSearch) {
+        this.toSearch = toSearch;
     }
 }

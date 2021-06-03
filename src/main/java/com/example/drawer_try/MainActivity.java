@@ -1,15 +1,19 @@
 package com.example.drawer_try;
 
 import android.content.ClipData;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.drawer_try.modle.The_movies;
 import com.example.drawer_try.singletonClass.Single_one;
+import com.example.drawer_try.singup.About;
 import com.example.drawer_try.singup.ToData;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -141,8 +145,34 @@ public class MainActivity extends AppCompatActivity {
         }
         email.setText(email_now);
 
-
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        switch (item.getItemId()){
+
+            case R.id.action_about:
+                msg("is action_about");
+                Intent intent = new Intent(this, About.class);
+                startActivity(intent);
+
+                break;
+
+            case R.id.action_Login:
+                msg("is action_Login");
+                break;
+
+            case R.id.action_Logout:
+                msg("is action_Logout");
+                break;
+
+
+        }
+
+
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

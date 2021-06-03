@@ -6,6 +6,7 @@ public class The_movies {
 
     boolean adult;
 
+
     String title;
 
     String vote_average;
@@ -21,6 +22,8 @@ public class The_movies {
     String image;
 
     String image_sec;
+
+    String id;
 
     public The_movies(String title) {
         this.title = title;
@@ -39,11 +42,13 @@ public class The_movies {
                 ", release_date='" + release_date + '\'' +
                 ", overview='" + overview + '\'' +
                 ", original_language='" + original_language + '\'' +
-                ", vote_count=" + vote_count +
+                ", vote_count='" + vote_count + '\'' +
                 ", image='" + image + '\'' +
                 ", image_sec='" + image_sec + '\'' +
+                ", id='" + id + '\'' +
                 '}';
     }
+
 
     public String getImage_sec() {
         return image_sec;
@@ -81,6 +86,9 @@ public class The_movies {
     }
 
     public String getVote_average() {
+        if (vote_average == null){
+            vote_average = "Empty";
+        }
         return vote_average;
     }
 
@@ -131,5 +139,17 @@ public class The_movies {
 
     public void setVote_count(String vote_count) {
         this.vote_count = vote_count;
+    }
+
+
+    // id
+
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }

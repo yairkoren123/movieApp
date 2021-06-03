@@ -20,5 +20,8 @@
     <string name="menu_random">Random movie</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="action_About">About</string>
+    <string name="action_logout">Logout</string>
+    <string name="action_login">Login</string>
 
 </resources>
