@@ -39,6 +39,7 @@ public class GalleryFragment extends Fragment {
     //watchlist
 
     private GalleryViewModel galleryViewModel;
+    //FragmentGalleryBinding
     private FragmentGalleryBinding binding;
 
     private Context context;
@@ -67,6 +68,7 @@ public class GalleryFragment extends Fragment {
         Single_one single_one = Single_one.getInstance();
         the_moviesArrayList = single_one.getThe_love_movies();
 
+
         LinearLayout no_account = getView().findViewById(R.id.no_account_linar);
         FirebaseAuth auth = FirebaseAuth.getInstance();
         no_account.setVisibility(View.GONE);
@@ -78,45 +80,48 @@ public class GalleryFragment extends Fragment {
         gridView.setVisibility(View.VISIBLE);
 
 
-
         if (auth.getCurrentUser() == null || single_one.getNow_login_email() == "none") {
             no_account.setVisibility(View.VISIBLE);
             frameLayout.setVisibility(View.GONE);
             gridView.setVisibility(View.GONE);
 
             Log.d("vis", "onViewCreated: ");
-        }
+        } else {
             msg("you are login already");
-        // adpter
+            // adpter
 
-        adapter = new FlowerAdapter(getContext(),the_moviesArrayList);
-        gridView.setAdapter(adapter);
+            Log.d("tostring", "onViewCreated: " + the_moviesArrayList.toString());
+            if (the_moviesArrayList.get(0).getTitle().equals("none") || the_moviesArrayList.get(0).getTitle().equals("here the name of the move")) {
+                Log.d("tostring 1", "onViewCreated: " + "none");
+                the_moviesArrayList.get(0).setTitle("here the name of the move");
 
+            }
 
-
-
-
-
-        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                msg("click on " + the_moviesArrayList.get(position).getTitle());
-                single_one.setValue_movie(the_moviesArrayList.get(position));
+            adapter = new FlowerAdapter(getContext(), the_moviesArrayList);
+            gridView.setAdapter(adapter);
 
 
-                Fragment_the_movie_overview nextFrag= new Fragment_the_movie_overview();
-                getActivity().getSupportFragmentManager().beginTransaction()
-                        .add(R.id.mail_countener5, nextFrag, "findThisFragment")
-                        .addToBackStack(null)
-                        .commit();
+            gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    msg("click on " + the_moviesArrayList.get(position).getTitle());
+                    single_one.setValue_movie(the_moviesArrayList.get(position));
+
+
+                    Fragment_the_movie_overview nextFrag = new Fragment_the_movie_overview();
+                    getActivity().getSupportFragmentManager().beginTransaction()
+                            .add(R.id.mail_countener5, nextFrag, "findThisFragment")
+                            .addToBackStack(null)
+                            .commit();
 
 //                gridView.setVisibility(View.GONE);
 //                pager_images_movies.setVisibility(View.GONE);
 
-            }
-        });
+                }
+            });
 
 
+        }
     }
 
     // on menu

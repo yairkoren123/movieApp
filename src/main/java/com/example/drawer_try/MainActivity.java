@@ -1,13 +1,15 @@
 package com.example.drawer_try;
 
-import android.content.ClipData;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Switch;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -15,13 +17,10 @@ import com.example.drawer_try.modle.The_movies;
 import com.example.drawer_try.singletonClass.Single_one;
 import com.example.drawer_try.singup.About;
 import com.example.drawer_try.singup.ToData;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -34,14 +33,12 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import org.jetbrains.annotations.NotNull;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -55,7 +52,6 @@ public class MainActivity extends AppCompatActivity {
     //private DocumentReference journalRef = db.document("Journal/First Thoughts");
     private DocumentReference cool = db.collection("good")
             .document("First Thoughts");
-    private CollectionReference collectionReference = db.collection("good");
     private CollectionReference collectionReference1 = db.collection("good");
 
     private DocumentReference movie_data_add = db.collection("good").document();
@@ -117,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
 
                 }else {
                     //no user yet...
-                    Log.d("cahneg", "onAuthStateChanged: exit");
+                    Log.d("change", "onAuthStateChanged: exit");
                     Single_one single_one = Single_one.getInstance();
                     single_one = Single_one.getInstance();
                     email_now = "none";
@@ -127,6 +123,8 @@ public class MainActivity extends AppCompatActivity {
             }
         };
     }
+    private static int RESULT_LOAD_IMG = 1;
+    ImageView imagemain;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -139,13 +137,62 @@ public class MainActivity extends AppCompatActivity {
         //username.setText("hi");
 
         email_now = single_one.getNow_login_email();
+
         TextView email = findViewById(R.id.email_main);
         if (email_now == "none"){
             email_now = "no user ";
         }
         email.setText(email_now);
 
+
+        imagemain = findViewById(R.id.imageView_main);
+
+        username.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+                photoPickerIntent.setType("image/*");
+                startActivityForResult(photoPickerIntent, RESULT_LOAD_IMG);
+
+            }
+        });
+
         return true;
+    }
+
+  @Override
+    protected void onActivityResult(int reqCode, int resultCode, Intent data) {
+        super.onActivityResult(reqCode, resultCode, data);
+
+
+        if (resultCode == RESULT_OK) {
+            try {
+                final Uri imageUri = data.getData();
+                final InputStream imageStream = getContentResolver().openInputStream(imageUri);
+                final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+
+                // todo user image save
+                // set in single the user image
+                Single_one single_one = Single_one.getInstance();
+                single_one.setUserImage(selectedImage);
+
+
+                Log.d("image1", "onActivityResult: " + selectedImage);
+                DocumentReference documentReference = db.collection("good").document(email_now);
+
+
+
+                imagemain.setImageBitmap(selectedImage);
+
+                msg("image set!");
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+                Toast.makeText(this, "Something went wrong", Toast.LENGTH_LONG).show();
+            }
+
+        }else {
+            Toast.makeText(this, "You haven't picked Image",Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override
@@ -162,11 +209,35 @@ public class MainActivity extends AppCompatActivity {
 
             case R.id.action_Login:
                 msg("is action_Login");
+
+                //todo need to take the user to the login page
                 break;
 
             case R.id.action_Logout:
-                msg("is action_Logout");
-                break;
+                //msg("is action_Logout");
+//                FirebaseAuth auth = FirebaseAuth.getInstance();
+//
+//                if (auth.getCurrentUser() == null){
+//                    msg("you don't have a user to logout");
+//
+//
+
+//                }else {
+//                    auth = FirebaseAuth.getInstance();
+//                    auth.signOut();
+//                    Single_one single_one = Single_one.getInstance();
+//                    The_movies one_none_move = new The_movies();
+//                    one_none_move.setTitle("none");
+//                    ArrayList<The_movies> s = new ArrayList<>();
+//                    s.add(one_none_move);
+//                    single_one.setThe_love_movies(s);
+//                    single_one.setNow_login_email("none");
+//                    msg("now your are out");
+//
+//                    intent = new Intent(this, MainActivity.class);
+//                    startActivity(intent);
+//                    break;
+//                }
 
 
         }
@@ -206,6 +277,33 @@ public class MainActivity extends AppCompatActivity {
             ToData data = new ToData();
             The_movies the_movies = new The_movies();
 
+
+//            db.collection("good")
+//                    .get()
+//                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                        @Override
+//                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                            if (task.isSuccessful()) {
+//                                for (QueryDocumentSnapshot document : task.getResult()) {
+//                                    Log.d("popo", document.getId() + " => " + document.getData());
+//                                    Log.d("dec", "onComplete: "+document.getId());
+//                                    ArrayList<The_movies> z = new ArrayList<>();
+//                                    z = (ArrayList) document.getData().getOrDefault("the_moviesArrayList","true");
+//                                    Log.d("dec1", "onComplete: "+z.get(0));
+//                                    The_movies the_movies1 = new The_movies();
+//                                    The_movies xd = new The_movies();
+//                                    xd = z.get(0);
+//
+//                                }
+//                            } else {
+//                                Log.d("popo", "Error getting documents: ", task.getException());
+//                            }
+//                        }
+//                    });
+
+
+
+
             collectionReference1.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                 @Override
                 public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
@@ -214,6 +312,7 @@ public class MainActivity extends AppCompatActivity {
                     for (QueryDocumentSnapshot snapshots : queryDocumentSnapshots) {
 
                         Log.d("sec", "onSuccess: " + snapshots.getId());
+
                         ToData shopping = snapshots.toObject(ToData.class);
                         Log.d("snal2", "onSuccess: " +email);
 
@@ -226,7 +325,7 @@ public class MainActivity extends AppCompatActivity {
                             Single_one single_one = Single_one.getInstance();
                             single_one.setThe_love_movies(shopping.getThe_moviesArrayList());
 
-                            Log.d("data", "onSuccess: " + shopping.getEmail());
+                            Log.d("data", "onSuccess: " + shopping.getThe_moviesArrayList().toString());
                         }
 
                     }

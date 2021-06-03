@@ -61,7 +61,6 @@ public class SingUp_Fragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         EditText pass_sing = getView().findViewById(R.id.sing_pass);
-        EditText username_sing = getView().findViewById(R.id.sing_username);
         EditText email_sing = getView().findViewById(R.id.sing_email);
 
         Button login_sing_up_button = getView().findViewById(R.id.sing_button_create);
@@ -74,15 +73,12 @@ public class SingUp_Fragment extends Fragment {
 
                 String the_email , the_pass , the_username;
 
-                the_username = username_sing.getText().toString().trim();
                 the_email = email_sing.getText().toString().trim();
                 the_pass = pass_sing.getText().toString().trim();
 
-                if (the_username.isEmpty()){
-                    username_sing.setError("pls enter");
-                    username_sing.requestFocus();
 
-                }else if(the_email.isEmpty()){
+
+                if(the_email.isEmpty()){
                     email_sing.setError("pls enter");
                     email_sing.requestFocus();
 

@@ -3,6 +3,7 @@ package com.example.drawer_try.ui.Setting;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -15,8 +16,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.drawer_try.MainActivity;
 import com.example.drawer_try.R;
 import com.example.drawer_try.databinding.SettingFragmentBinding;
 import com.example.drawer_try.modle.The_movies;
@@ -60,8 +63,8 @@ public class SettingFragment extends Fragment {
 
 
     //layout
-
-    private Button sing_up_button , login_now , logout_now;
+    private TextView sing_up_text_view;
+    private Button login_now , logout_now;
     private EditText pass , email;
 
     //setting
@@ -85,23 +88,23 @@ public class SettingFragment extends Fragment {
         email = root.findViewById(R.id.login_email);
 
         login_now = root.findViewById(R.id.login_login_button);
-        sing_up_button = root.findViewById(R.id.login_sing_up_button);
-        sing_up_button.setVisibility(View.VISIBLE);
-        login_now.setVisibility(View.VISIBLE);
+        sing_up_text_view = root.findViewById(R.id.login_sing_up_button);
+        //sing_up_text_view.setVisibility(View.VISIBLE);
+        //login_now.setVisibility(View.VISIBLE);
 
 
-        sing_up_button.setOnClickListener(new View.OnClickListener() {
+        sing_up_text_view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 SingUp_Fragment nextFrag= new SingUp_Fragment();
-                ConstraintLayout constraintLayout = root.findViewById(R.id.constractor_setting);
+                //ConstraintLayout constraintLayout = root.findViewById(R.id.constractor_setting);
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .add(R.id.mail_countener4, nextFrag, "findThisFragment")
                         .addToBackStack(null)
                         .commit();
 
-                sing_up_button.setVisibility(View.GONE);
-                login_now.setVisibility(View.GONE);
+                //sing_up_text_view.setVisibility(View.GONE);
+                //login_now.setVisibility(View.GONE);
             }
         });
 
@@ -141,6 +144,8 @@ public class SettingFragment extends Fragment {
                                             single_one.setNow_login_pass(the_pass);
 
 
+
+
                                             ToData toData = new ToData();
                                             toData.setEmail(the_email);
                                             toData.setThe_moviesArrayList(single_one.getThe_love_movies());
@@ -166,6 +171,9 @@ public class SettingFragment extends Fragment {
                             }
                         });
                     }
+                    Intent intent = new Intent(getActivity(),MainActivity.class);
+                    startActivity(intent);
+
 
                 }
             }
@@ -177,13 +185,27 @@ public class SettingFragment extends Fragment {
                 auth = FirebaseAuth.getInstance();
                 auth.signOut();
                 Single_one single_one = Single_one.getInstance();
+
+                // adding a simple move to the start
                 The_movies one_none_move = new The_movies();
-                one_none_move.setTitle("none");
+                one_none_move.setTitle("Shaun the Sheep Movie");
+                one_none_move.setOriginal_language("en");
+                one_none_move.setRelease_date("2015-02-05");
+                one_none_move.setVote_average("7");
+                one_none_move.setImage("/dhVYlfMNc2bfXPB83LLL00I4l9n.jpg");
+                one_none_move.setImage_sec("/1eJLkZWuFVKr6OnNkMyqgoqkU1E.jpg");
+
+
                 ArrayList<The_movies> s =  new ArrayList<>();
                 s.add(one_none_move);
                 single_one.setThe_love_movies(s);
                 single_one.setNow_login_email("none");
                 msg("now your are out");
+
+                Intent intent = new Intent(getActivity(),MainActivity.class);
+                startActivity(intent);
+
+
             }
         });
 

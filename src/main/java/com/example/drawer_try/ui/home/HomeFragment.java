@@ -7,6 +7,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -40,6 +41,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class HomeFragment extends Fragment {
 
@@ -74,6 +76,7 @@ public class HomeFragment extends Fragment {
     public ArrayList<The_movies> theMoviesArrayList = new ArrayList<>();
 
     Single_one single_one;
+    String the_data = "popular";
 
 
     // Will show the string "data" that holds the results
@@ -83,11 +86,13 @@ public class HomeFragment extends Fragment {
 
 
     ArrayList <String> the_values_array =  new ArrayList<>();
+    int currntPage = 1;
+    int the_limit_page;
 
 
 
 
-    String JsonURL = "https://api.themoviedb.org/3/movie/popular?api_key=2029d84f820b9dc29ab83773c31b4320";
+    String JsonURL = "https://api.themoviedb.org/3/movie/popular?api_key=2029d84f820b9dc29ab83773c31b4320&page=1";
     // This string will hold the results
     String data = "";
     // Defining the Volley request queue that handles the URL request concurrently
@@ -102,17 +107,40 @@ public class HomeFragment extends Fragment {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
+        Button v = root.findViewById(R.id.add_page);
+        v.setText("s");
+        v.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                requestQueue = Volley.newRequestQueue(getContext());
+                if (currntPage < the_limit_page) {
+
+                    currntPage++;
+                    JsonURL = JsonURL = "https://api.themoviedb.org/3/movie/" + the_data + "?api_key=2029d84f820b9dc29ab83773c31b4320&page=" + currntPage;
+                    Log.d("current", "onClick: " + currntPage);
+                    get_movies();
+                }else {
+                    // you got to the limit of the pages
+                    msg("no more pages");
+                }
+
+            }
+        });
+
 
         return root;
+
     }
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
+
 //            this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
 //            getSupportActionBar().hide();
-
 
 
         //imagemovies = findViewById(R.id.imageView);
@@ -125,171 +153,198 @@ public class HomeFragment extends Fragment {
         the_values_array.add("upcoming");
 
         int index = (int) (Math.random() * the_values_array.size());
-        String the_data = the_values_array.get(index);
+        the_data = the_values_array.get(index);
         Log.d("tepy", "onCreate: data " + the_data);
-        JsonURL ="https://api.themoviedb.org/3/movie/"+the_data+"?api_key=2029d84f820b9dc29ab83773c31b4320";
-
-
-
-
-
+        JsonURL = "https://api.themoviedb.org/3/movie/" + the_data + "?api_key=2029d84f820b9dc29ab83773c31b4320";
 
 
         firebaseFirestore = FirebaseFirestore.getInstance();
 
         // Creates the Volley request queue
         requestQueue = Volley.newRequestQueue(getContext());
+        Log.d("current", "onClick: "+currntPage);
+
+        get_movies();
 
         // Casts results into the TextView found within the main layout XML with id jsonData
         //results = (TextView) findViewById(R.id.jsonData);
 
         // Creating the JsonObjectRequest class called obreq, passing required parameters:
         //GET is used to fetch data from the server, JsonURL is the URL to be fetched from.
-        JsonObjectRequest obreq = new JsonObjectRequest(Request.Method.GET, JsonURL,null,
-                // The third parameter Listener overrides the method onResponse() and passes
-                //JSONObject as a parameter
-                new Response.Listener<JSONObject>() {
 
-                    // Takes the response from the JSON request
-                    @Override
-                    public void onResponse(JSONObject response) {
+    }
+    private void get_movies() {
 
-                        try {
-                            The_movies one_movie = new The_movies();
-                            JSONObject jsonObject = new JSONObject();
-                            JSONArray jsonArray = response.getJSONArray("results");
+            JsonObjectRequest obreq = new JsonObjectRequest(Request.Method.GET, JsonURL, null,
+                    // The third parameter Listener overrides the method onResponse() and passes
+                    //JSONObject as a parameter
+                    new Response.Listener<JSONObject>() {
 
+                        // Takes the response from the JSON request
+                        @Override
+                        public void onResponse(JSONObject response) {
 
-                            // use jsonArray.length to get all
-                            for (int i = 0; i < jsonArray.length(); i++) {
-                                one_movie =  new The_movies();
+                            try {
 
-                                jsonObject = jsonArray.getJSONObject(i);
-                                // Retrieves the string labeled "colorName" and "description" from
-                                //the response JSON Object
-                                //and converts them into javascript objects
+                                the_limit_page = response.getInt("total_pages");
 
-                                // get values from URL
-                                boolean adult = jsonObject.getBoolean("adult");
-                                String title = jsonObject.getString("title");
-                                String average = jsonObject.getString("vote_average");
-                                String release = jsonObject.getString("release_date");
-                                String overview = jsonObject.getString("overview");
-                                String original_language = jsonObject.getString("original_language");
-                                int vote_count = jsonObject.getInt("vote_count");
-                                String image =  jsonObject.getString("poster_path");
-                                String image_sec =  jsonObject.getString("backdrop_path");
-                                movie_id = String.valueOf(jsonObject.getInt("id"));
+                                Log.d("pages", "onResponse: " + the_limit_page);
+                                The_movies one_movie = new The_movies();
+                                JSONObject jsonObject = new JSONObject();
+                                JSONArray jsonArray = response.getJSONArray("results");
 
 
-
-                                // put values in class movies
-                                one_movie.setAdult(adult);
-                                one_movie.setTitle(title);
-                                one_movie.setVote_average(average);
-                                one_movie.setRelease_date(release);
-                                one_movie.setOverview(overview);
-                                one_movie.setOriginal_language(original_language);
-                                one_movie.setVote_count(String.valueOf(vote_count));
-                                one_movie.setImage(image);
-                                one_movie.setImage_sec(image_sec);
-                                one_movie.setId(movie_id);
+                                // use jsonArray.length to get all
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    one_movie = new The_movies();
 
 
-                                // after all in movies :
+                                    jsonObject = jsonArray.getJSONObject(i);
 
-                                theMoviesArrayList.add(one_movie);
-                                String image_full ="https://image.tmdb.org/t/p/w500" + image ;
+                                    // Retrieves the string labeled "colorName" and "description" from
+                                    //the response JSON Object
+                                    //and converts them into javascript objects
 
-                                imagesURLS.add(image_full);
+                                    // get values from URL
+                                    boolean adult = jsonObject.getBoolean("adult");
+                                    String title = jsonObject.getString("title");
+                                    String average = jsonObject.getString("vote_average");
+                                    String release = jsonObject.getString("release_date");
+                                    String overview = jsonObject.getString("overview");
+                                    String original_language = jsonObject.getString("original_language");
+                                    int vote_count = jsonObject.getInt("vote_count");
+                                    String image = jsonObject.getString("poster_path");
+                                    String image_sec = jsonObject.getString("backdrop_path");
+                                    movie_id = String.valueOf(jsonObject.getInt("id"));
 
 
+                                    // put values in class movies
+                                    one_movie.setAdult(adult);
+                                    one_movie.setTitle(title);
+                                    one_movie.setVote_average(average);
+                                    one_movie.setRelease_date(release);
+                                    one_movie.setOverview(overview);
+                                    one_movie.setOriginal_language(original_language);
+                                    one_movie.setVote_count(String.valueOf(vote_count));
+                                    one_movie.setImage(image);
+                                    one_movie.setImage_sec(image_sec);
+                                    one_movie.setId(movie_id);
 
-                                // Adds strings from object to the "data" string
-                                data = "title Name: " + title +
-                                        "average : " + average +
-                                        " image : " + image;
 
-                                // Adds the data string to the TextView "results"
-                                Log.d("TAG", "onResponse3: "+data);
-                                Log.d("TAG", "onResponse3: \n");
+                                    // after all in movies :
 
-                                //results.setText(data);
+                                    theMoviesArrayList.add(one_movie);
+                                    String image_full = "https://image.tmdb.org/t/p/w500" + image;
+
+                                    //imagesURLS.add(image_full);
+
+
+                                    // Adds strings from object to the "data" string
+                                    data = "title Name: " + title +
+                                            "average : " + average +
+                                            " image : " + image;
+
+                                    // Adds the data string to the TextView "results"
+                                    Log.d("TAG", "onResponse3: " + data);
+                                    Log.d("TAG", "onResponse3: \n");
+
+                                    //results.setText(data);
+
+                                }
+                                single_one = Single_one.getInstance();
+                                Collections.shuffle(theMoviesArrayList);
+
+                                for (int i = 0; i < theMoviesArrayList.size(); i++) {
+                                    String image_full = "https://image.tmdb.org/t/p/w500" + theMoviesArrayList.get(i).getImage();
+
+                                    imagesURLS.add(image_full);
+
+                                }
+
+                                single_one.setMovies_list(theMoviesArrayList);
+
+
+                                // give the id
+
+                                next_level();
+
+
+                                Log.d("size", "onResponse: " + theMoviesArrayList.size());
 
                             }
-                            single_one = Single_one.getInstance();
-                            single_one.setMovies_list(theMoviesArrayList);
-                            // give the id
-
-                            next_level();
-
-
-                            Log.d("size", "onResponse: " + theMoviesArrayList.size());
-
+                            // Try and catch are included to handle any errors due to JSON
+                            catch (JSONException e) {
+                                // If an error occurs, this prints the error to the log
+                                e.printStackTrace();
+                            }
                         }
-                        // Try and catch are included to handle any errors due to JSON
-                        catch (JSONException e) {
-                            // If an error occurs, this prints the error to the log
-                            e.printStackTrace();
+                    },
+                    // The final parameter overrides the method onErrorResponse() and passes VolleyError
+                    //as a parameter
+                    new Response.ErrorListener() {
+                        @Override
+                        // Handles errors that occur due to Volley
+                        public void onErrorResponse(VolleyError error) {
+                            Log.e("Volley", "Error");
                         }
                     }
-                },
-                // The final parameter overrides the method onErrorResponse() and passes VolleyError
-                //as a parameter
-                new Response.ErrorListener() {
-                    @Override
-                    // Handles errors that occur due to Volley
-                    public void onErrorResponse(VolleyError error) {
-                        Log.e("Volley", "Error");
-                    }
-                }
-        );
-        // Adds the JSON object request "obreq" to the request queue
-        requestQueue.add(obreq);
-        //https://image.tmdb.org/t/p/w500/pKAxHs04yxLDQSIf4MNiZoePVWX.jpg
+            );
+            // Adds the JSON object request "obreq" to the request queue
+            requestQueue.add(obreq);
+            //https://image.tmdb.org/t/p/w500/pKAxHs04yxLDQSIf4MNiZoePVWX.jpg
 //pKAxHs04yxLDQSIf4MNiZoePVWX.jpg
 //        //https://image.tmdb.org/t/p/w500/
 //        Glide.with(getApplicationContext())
 //                .load("https://image.tmdb.org/t/p/w500/pKAxHs04yxLDQSIf4MNiZoePVWX.jpg")
 //                .into(imagemovies);
 
-    }
+        }
+
 
     private void next_level(){
 
 
         // viewpager
         ViewPager pager_images_movies = getView().findViewById(R.id.viewpager);
-        ViewPagerAdpter adpter_pager = new ViewPagerAdpter(getContext(),imagesURLS);
-        pager_images_movies.setAdapter(adpter_pager);
 
-        Log.d("222", "next_level: "+ pager_images_movies.getCurrentItem());
-        pager_images_movies.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                Log.d("222", "next_level: "+ pager_images_movies.getCurrentItem());
+        if (currntPage == 1 ) {
+            pager_images_movies.setVisibility(View.VISIBLE);
 
-            }
 
-            @Override
-            public void onPageSelected(int position) {
-                //best
-                Log.d("333", "next_level: "+ pager_images_movies.getCurrentItem());
 
-            }
+            ViewPagerAdpter adpter_pager = new ViewPagerAdpter(getContext(), imagesURLS);
+            pager_images_movies.setAdapter(adpter_pager);
 
-            @Override
-            public void onPageScrollStateChanged(int state) {
-                Log.d("444", "next_level: "+ pager_images_movies.getCurrentItem());
+            Log.d("222", "next_level: " + pager_images_movies.getCurrentItem());
+            pager_images_movies.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+                @Override
+                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                    Log.d("222", "next_level: " + pager_images_movies.getCurrentItem());
 
-            }
-        });
-        pager_images_movies.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d("3333", "onClick: click pager");
-            }
-        });
+                }
+
+                @Override
+                public void onPageSelected(int position) {
+                    //best
+                    Log.d("333", "next_level: " + pager_images_movies.getCurrentItem());
+
+                }
+
+                @Override
+                public void onPageScrollStateChanged(int state) {
+                    Log.d("444", "next_level: " + pager_images_movies.getCurrentItem());
+
+                }
+            });
+            pager_images_movies.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.d("3333", "onClick: click pager");
+                }
+            });
+        }else {
+            pager_images_movies.setVisibility(View.GONE);
+        }
 
 
 

@@ -22,14 +22,19 @@ import com.example.drawer_try.singletonClass.Single_one;
 import com.example.drawer_try.singup.ToData;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class FlowerAdapter extends BaseAdapter  {
     private Context mContext;
@@ -40,6 +45,7 @@ public class FlowerAdapter extends BaseAdapter  {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     private DocumentReference movie_data_add = db.collection("shopping").document();
+    private CollectionReference movie_data_add2 = db.collection("shopping");
 
 
     private Single_one single_one = Single_one.getInstance();
@@ -166,6 +172,7 @@ public class FlowerAdapter extends BaseAdapter  {
                             ToData toData = new ToData();
                             single_one = Single_one.getInstance();
                             toData.setEmail(single_one.getNow_login_email());
+                            toData.setBitmap(String.valueOf(single_one.getUserImage()));
                             toData.setThe_moviesArrayList(Single_one.getInstance().getThe_love_movies());
 
                             movie_data_add = db.collection("good").document(single_one.getNow_login_email());
@@ -198,10 +205,13 @@ public class FlowerAdapter extends BaseAdapter  {
 
 
                 }else {
-                    msg("in the list already");
+                    msg("already in the list");
+                    // now is minus
+                    // todo call a alert dialog and say: " do you wont to remove {movie} from the Watchlist?
 
                 }
             }
+
         });
 
 

@@ -1,10 +1,14 @@
 package com.example.drawer_try.singup;
 
+import android.graphics.Bitmap;
+
 import com.example.drawer_try.modle.The_movies;
 
 import java.util.ArrayList;
 
 public class ToData {
+
+    private String bitmap;
 
     private String email;
 
@@ -24,10 +28,19 @@ public class ToData {
     @Override
     public String toString() {
         return "ToData{" +
-                "email='" + email + '\'' +
+                "bitmap=" + bitmap +
+                ", email='" + email + '\'' +
                 ", the_moviesArrayList=" + the_moviesArrayList +
                 ", last_add='" + last_add + '\'' +
                 '}';
+    }
+
+    public String getBitmap() {
+        return bitmap;
+    }
+
+    public void setBitmap(String bitmap) {
+        this.bitmap = bitmap;
     }
 
     public String getEmail() {

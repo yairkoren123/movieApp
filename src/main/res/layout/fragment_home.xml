@@ -10,19 +10,22 @@
         android:id="@+id/viewpager"
         android:background="@drawable/gradint_viewpager"
         android:layout_width="wrap_content"
-        android:layout_height="230dp"
+        android:layout_height="210dp"
         android:scaleType="fitXY"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent" >
+
+    </androidx.viewpager.widget.ViewPager>
 
     <GridView
         android:id="@+id/gridview"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@color/backbluedark"
-        android:columnWidth="100dp"
         android:horizontalSpacing="5dp"
+        android:columnWidth="100dp"
+
         android:numColumns="auto_fit"
         android:padding="3dp"
         android:stretchMode="columnWidth"
@@ -40,6 +43,14 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/add_page"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="page"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,6 +1,7 @@
 package com.example.drawer_try.singletonClass;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
 import android.util.Log;
 
 import com.example.drawer_try.modle.The_movies;
@@ -11,6 +12,8 @@ public class Single_one {
 
     // values
     String now_login_email;
+
+    Bitmap userImage;
 
     String toSearch ="";
     String now_login_pass;
@@ -112,5 +115,16 @@ public class Single_one {
 
     public void setToSearch(String toSearch) {
         this.toSearch = toSearch;
+    }
+
+    // user image
+
+
+    public Bitmap getUserImage() {
+        return userImage;
+    }
+
+    public void setUserImage(Bitmap userImage) {
+        this.userImage = userImage;
     }
 }

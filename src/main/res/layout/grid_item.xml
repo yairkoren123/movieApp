@@ -8,25 +8,12 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="145dp"
-        android:layout_height="260dp"
+        android:layout_height="wrap_content"
+        android:paddingBottom="10dp"
         android:layout_marginRight="10dp"
         android:background="@android:color/transparent"
         android:backgroundTint="@android:color/transparent">
 
-        <com.airbnb.lottie.LottieAnimationView
-            android:id="@+id/button_add_love"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginRight="6dp"
-            android:layout_marginTop="148dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:lottie_autoPlay="false"
-            android:clickable="true"
-            app:lottie_loop="false"
-            app:lottie_rawRes="@raw/add" />
 
         <ImageView
             android:id="@+id/image_poster_movie_single"
@@ -40,21 +27,40 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:srcCompat="@tools:sample/backgrounds/scenic" />
 
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/button_add_love"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="120dp"
+            android:layout_marginEnd="25dp"
+            android:clickable="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:lottie_autoPlay="false"
+            app:lottie_loop="false"
+            app:lottie_rawRes="@raw/add" />
+
         <TextView
             android:id="@+id/Title_movie_single"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="99dp"
+            android:layout_height="76dp"
             android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="40dp"
+            android:layout_marginBottom="8dp"
             android:fontFamily="sans-serif-black"
             android:gravity="center"
             android:text="Title"
             android:textColor="@color/white"
+            android:textSize="16dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.504"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/image_poster_movie_single" />
+            app:layout_constraintTop_toBottomOf="@+id/button_add_love"
+            app:layout_constraintVertical_bias="0.0" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

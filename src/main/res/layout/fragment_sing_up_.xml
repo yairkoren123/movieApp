@@ -4,61 +4,88 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".singup.SingUp_Fragment">
-
-    <androidx.constraintlayout.widget.ConstraintLayout
+    tools:context=".singup.About">
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#454545">
+        android:layout_centerInParent="true"
+        android:background="@drawable/background_tor"
+        android:layout_gravity="right"
+        android:gravity="right"
+        android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/sing_username"
+        <Button
+            android:id="@+id/logout_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="72dp"
-            android:ems="10"
-            android:hint="Username"
-            android:inputType="textPersonName"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.452"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:background="@android:color/transparent"
+            android:text="logout"
+            android:textColor="#A9A9A9" />
+
+        <ImageView
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_gravity="center"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/edit_text_background"
+            android:scaleType="fitCenter"
+            android:src="@drawable/background1"
+            android:visibility="invisible" />
+
 
         <EditText
             android:id="@+id/sing_email"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="18dp"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginBottom="30dp"
+            android:background="@drawable/edit_text_background"
+            android:drawableStart="@drawable/ic_user"
+            android:drawablePadding="10dp"
             android:ems="10"
-            android:hint="Email"
+            android:hint="User Name"
             android:inputType="textPersonName"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.452"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/sing_username" />
+            android:padding="10dp"
+            android:textColor="@color/white"
+            android:textColorHint="@color/hint_color"
+            android:textSize="21sp" />
 
         <EditText
             android:id="@+id/sing_pass"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="48dp"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/edit_text_background"
+            android:drawableStart="@drawable/ic_password"
+            android:drawablePadding="10dp"
             android:ems="10"
-            android:hint="pass"
-            android:inputType="textPersonName"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.452"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/sing_email" />
+            android:hint="Password"
+            android:inputType="textPassword"
+            android:padding="10dp"
+            android:textColor="@color/white"
+            android:textColorHint="@color/hint_color"
+            android:textSize="21sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="30dp"
+            android:gravity="right"
+            android:text="Forgot password ?"
+            android:textColor="@color/white"
+            android:visibility="invisible" />
 
         <Button
             android:id="@+id/sing_button_create"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="160dp"
-            android:text="Button"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.435"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/sing_pass" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginBottom="30dp"
+            android:background="@drawable/button_background"
+            android:text="Create account"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="21sp" />
+
+    </LinearLayout>
 </FrameLayout>
