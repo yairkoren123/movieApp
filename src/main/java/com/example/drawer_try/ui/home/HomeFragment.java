@@ -43,6 +43,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import static java.util.Collections.shuffle;
+
 public class HomeFragment extends Fragment {
 
 
@@ -78,6 +80,8 @@ public class HomeFragment extends Fragment {
     Single_one single_one;
     String the_data = "popular";
 
+    Button the_next_pages;
+
 
     // Will show the string "data" that holds the results
     TextView results;
@@ -107,9 +111,8 @@ public class HomeFragment extends Fragment {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        Button v = root.findViewById(R.id.add_page);
-        v.setText("s");
-        v.setOnClickListener(new View.OnClickListener() {
+        the_next_pages = root.findViewById(R.id.add_page);
+        the_next_pages.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 requestQueue = Volley.newRequestQueue(getContext());
@@ -252,7 +255,7 @@ public class HomeFragment extends Fragment {
 
                                 }
                                 single_one = Single_one.getInstance();
-                                Collections.shuffle(theMoviesArrayList);
+                                shuffle(theMoviesArrayList);
 
                                 for (int i = 0; i < theMoviesArrayList.size(); i++) {
                                     String image_full = "https://image.tmdb.org/t/p/w500" + theMoviesArrayList.get(i).getImage();
@@ -304,18 +307,23 @@ public class HomeFragment extends Fragment {
     private void next_level(){
 
 
+
+
         // viewpager
         ViewPager pager_images_movies = getView().findViewById(R.id.viewpager);
 
-        if (currntPage == 1 ) {
+        if (currntPage <= 3 ) {
             pager_images_movies.setVisibility(View.VISIBLE);
-
 
 
             ViewPagerAdpter adpter_pager = new ViewPagerAdpter(getContext(), imagesURLS);
             pager_images_movies.setAdapter(adpter_pager);
 
             Log.d("222", "next_level: " + pager_images_movies.getCurrentItem());
+
+            // todo add a name by the side of the image insted of the click listener ==============================
+
+
             pager_images_movies.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
                 @Override
                 public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -327,6 +335,19 @@ public class HomeFragment extends Fragment {
                 public void onPageSelected(int position) {
                     //best
                     Log.d("333", "next_level: " + pager_images_movies.getCurrentItem());
+
+
+                    String the_URl =  imagesURLS.get(pager_images_movies.getCurrentItem());
+                    String[] try_me = the_URl.split("500");
+                    Log.d("qqq", "onPageSelected: " + try_me[0]+ " \n and the 1 is : " + try_me[1] );
+                    String the_good_side = try_me[1];
+
+                    for (int i = 0; i < theMoviesArrayList.size(); i++) {
+                        if (theMoviesArrayList.get(i).getImage() == the_good_side){
+                            msg("we fpund the value " + theMoviesArrayList.get(i).getTitle());
+                            break;
+                        }
+                    }
 
                 }
 
@@ -363,6 +384,20 @@ public class HomeFragment extends Fragment {
         gridView.setAdapter(adapter);
 
 
+        gridView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                Log.d("croll", "onScrollChange: " + oldScrollX + " y : " + oldScrollY);
+                if (scrollY > 30){
+                    pager_images_movies.setVisibility(View.GONE);
+                }else {
+                    pager_images_movies.setVisibility(View.VISIBLE);
+
+                }
+            }
+        });
+
+
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -375,7 +410,7 @@ public class HomeFragment extends Fragment {
 
                 Fragment_the_movie_overview nextFrag= new Fragment_the_movie_overview();
                 getActivity().getSupportFragmentManager().beginTransaction()
-                        .add(R.id.mail_countener2, nextFrag, "findThisFragment")
+                        .replace(R.id.mail_countener2, nextFrag, "findThisFragment")
                         .addToBackStack(null)
                         .commit();
 
@@ -392,6 +427,9 @@ public class HomeFragment extends Fragment {
 
             }
         });
+        if (currntPage < 3){
+            the_next_pages.callOnClick();
+        }
 
 
     }
