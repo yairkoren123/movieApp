@@ -23,11 +23,17 @@ import java.util.ArrayList;
 public class ViewPagerAdpter extends PagerAdapter implements View.OnClickListener {
 
     private Context context;
-    private ArrayList<String> imagesURL;
+    private ArrayList<String> imagesURL = new ArrayList<>();
 
 
-    public ViewPagerAdpter(Context context, ArrayList<String> imagesURL) {
+    public ViewPagerAdpter(Context context, ArrayList<The_movies> movieList) {
         this.context = context;
+
+        for (int i = 0; i < movieList.size(); i++) {
+            Log.d("URLpager", "onPageSelected: " + movieList.get(i).getImage());
+            String the_good_side ="https://image.tmdb.org/t/p/w500" + movieList.get(i).getImage();
+            imagesURL.add(the_good_side);
+        }
         this.imagesURL = imagesURL;
     }
 

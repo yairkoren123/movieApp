@@ -1,5 +1,6 @@
 package com.example.drawer_try.ui.home;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,6 +19,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import com.android.volley.Request;
@@ -26,6 +28,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.drawer_try.MainActivity;
 import com.example.drawer_try.R;
 import com.example.drawer_try.databinding.FragmentHomeBinding;
 import com.example.drawer_try.modle.FlowerAdapter;
@@ -46,6 +49,12 @@ import java.util.Collections;
 import static java.util.Collections.shuffle;
 
 public class HomeFragment extends Fragment {
+
+
+    // progressDialog
+    ProgressDialog progressDialog;
+    ViewPagerAdpter adpter_pager;
+
 
 
     // fireStore
@@ -112,6 +121,7 @@ public class HomeFragment extends Fragment {
         View root = binding.getRoot();
 
         the_next_pages = root.findViewById(R.id.add_page);
+        the_next_pages.setVisibility(View.VISIBLE);
         the_next_pages.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -139,6 +149,7 @@ public class HomeFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        progressDialog();
 
 
 
@@ -190,6 +201,7 @@ public class HomeFragment extends Fragment {
                             try {
 
                                 the_limit_page = response.getInt("total_pages");
+
 
                                 Log.d("pages", "onResponse: " + the_limit_page);
                                 The_movies one_movie = new The_movies();
@@ -256,6 +268,7 @@ public class HomeFragment extends Fragment {
                                 }
                                 single_one = Single_one.getInstance();
                                 shuffle(theMoviesArrayList);
+                                Log.d("size", "onResponse: "+ theMoviesArrayList.size());
 
                                 for (int i = 0; i < theMoviesArrayList.size(); i++) {
                                     String image_full = "https://image.tmdb.org/t/p/w500" + theMoviesArrayList.get(i).getImage();
@@ -315,8 +328,7 @@ public class HomeFragment extends Fragment {
         if (currntPage <= 3 ) {
             pager_images_movies.setVisibility(View.VISIBLE);
 
-
-            ViewPagerAdpter adpter_pager = new ViewPagerAdpter(getContext(), imagesURLS);
+            adpter_pager = new ViewPagerAdpter(getContext(), theMoviesArrayList);
             pager_images_movies.setAdapter(adpter_pager);
 
             Log.d("222", "next_level: " + pager_images_movies.getCurrentItem());
@@ -408,6 +420,8 @@ public class HomeFragment extends Fragment {
                 single_one.setThe_same_movie_id(theMoviesArrayList.get(position).getId());
 
 
+                // gone the button of teh next page
+                the_next_pages.setVisibility(View.GONE);
                 Fragment_the_movie_overview nextFrag= new Fragment_the_movie_overview();
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .replace(R.id.mail_countener2, nextFrag, "findThisFragment")
@@ -430,6 +444,9 @@ public class HomeFragment extends Fragment {
         if (currntPage < 3){
             the_next_pages.callOnClick();
         }
+        progressDialog.dismiss();
+
+
 
 
     }
@@ -439,10 +456,23 @@ public class HomeFragment extends Fragment {
                 .show();
     }
 
+    public void progressDialog() {
+        progressDialog = new ProgressDialog(getContext());
+        progressDialog.show();
+        // set Content view
+        progressDialog.setContentView(R.layout.progress_dialog);
+        // set Transparent background
+        progressDialog.getWindow().setBackgroundDrawableResource(
+                android.R.color.transparent
+        );
+    }
+
 
         @Override
         public void onDestroyView(){
             super.onDestroyView();
+            // dsmiss progress dialog
+            progressDialog.dismiss();
             binding = null;
         }
 }

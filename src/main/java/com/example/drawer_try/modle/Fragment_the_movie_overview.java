@@ -1,5 +1,7 @@
 package com.example.drawer_try.modle;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -15,10 +17,18 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.bumptech.glide.Glide;
 import com.example.drawer_try.R;
 import com.example.drawer_try.singletonClass.Single_one;
+import com.example.drawer_try.singup.ToData;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -29,6 +39,14 @@ public class Fragment_the_movie_overview extends Fragment {
 
     private ArrayList<The_movies> the_movies_list = new ArrayList<>();
     private The_movies the_string_movie;
+
+    private LottieAnimationView add_animationview;
+
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+
+    private DocumentReference movie_data_add = db.collection("shopping").document();
+
 
     public Fragment_the_movie_overview() {
         // Required empty public constructor
@@ -95,6 +113,78 @@ public class Fragment_the_movie_overview extends Fragment {
         TextView language_text_overview = view.findViewById(R.id.textview_language_overview);
         language_text_overview.setText(the_string_movie.getOriginal_language().toString().trim());
 
+        // anim
+
+        add_animationview = view.findViewById(R.id.add_overview_button);
+
+
+        if (single_one.seeiflove(the_string_movie) == true){
+            add_animationview.setAnimation(R.raw.minus);
+        }else {
+            add_animationview.setAnimation(R.raw.add);
+        }
+        // click listener to the add movie button
+        add_animationview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (single_one.seeiflove(the_string_movie) == false) {
+
+                    add_animationview.addAnimatorListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            add_animationview.setAnimation(R.raw.minus);
+                            super.onAnimationEnd(animation);
+                        }
+
+                        @Override
+                        public void onAnimationStart(Animator animation) {
+                            super.onAnimationStart(animation);
+
+
+                            Log.d("overviewadd", "onAnimationStart: ");
+                            Single_one single_one = Single_one.getInstance();
+                            single_one.addThe_love_movies(the_string_movie);
+
+                            ToData toData = new ToData();
+                            single_one = Single_one.getInstance();
+                            toData.setEmail(single_one.getNow_login_email());
+                            toData.setBitmap(String.valueOf(single_one.getUserImage()));
+                            toData.setThe_moviesArrayList(Single_one.getInstance().getThe_love_movies());
+
+
+                            movie_data_add = db.collection("good").document(single_one.getNow_login_email());
+                            // add to the list
+                            // todo
+                            movie_data_add.
+                                    set(toData).
+                                    addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull @NotNull Task<Void> task) {
+                                            if (task.isSuccessful()) {
+                                                msg(the_string_movie.getTitle() + " was add to your list");
+                                            } else {
+                                                msg(task.getException().getMessage());
+                                            }
+                                        }
+                                    }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull @NotNull Exception e) {
+                                    msg(e.getMessage());
+                                }
+                            });
+
+
+                        }
+                    });
+                    add_animationview.playAnimation();
+
+                }else {
+                    msg("try one more time");
+                }
+            }
+        });
+
 
         // 18 +
         TextView adult_overview = view.findViewById(R.id.adult_overview);
@@ -140,10 +230,18 @@ public class Fragment_the_movie_overview extends Fragment {
             }
         });
 
+
         The_movies cool = new The_movies();
         cool.setTitle("none");
         single_one.setValue_movie(cool);
         Log.d("TAG12", "onViewCreated: " + the_string_movie.getTitle());
 
     }
+    private void msg (String text){
+        Toast.makeText(getContext(),text,Toast.LENGTH_LONG)
+                .show();
+    }
+
+
+
 }

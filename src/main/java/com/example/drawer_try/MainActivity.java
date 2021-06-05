@@ -1,5 +1,6 @@
 package com.example.drawer_try;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -42,6 +43,12 @@ import java.io.InputStream;
 
 public class MainActivity extends AppCompatActivity {
 
+    // progressDialog
+    ProgressDialog progressDialog;
+
+
+
+
 
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityMainBinding binding;
@@ -72,6 +79,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
 
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
@@ -337,8 +346,32 @@ public class MainActivity extends AppCompatActivity {
         auth.addAuthStateListener(authStateListener);
 
     }
+    // progressDialog
+
+    public void progressDialog(){
+        progressDialog = new ProgressDialog(MainActivity.this);
+        progressDialog.show();
+        // set Content view
+        progressDialog.setContentView(R.layout.progress_dialog);
+        // set Transparent background
+        progressDialog.getWindow().setBackgroundDrawableResource(
+                android.R.color.transparent
+        );
+    }
     public void msg(String text){
         Toast.makeText(getApplicationContext(),text,Toast.LENGTH_LONG)
                 .show();
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        // dsmiss progress dialog
+        //progressDialog.dismiss();
+
+        msg("no");
+//        Intent intent = new Intent(this,MainActivity.class);
+//        startActivity(intent);
+        super.onBackPressed();
     }
 }
