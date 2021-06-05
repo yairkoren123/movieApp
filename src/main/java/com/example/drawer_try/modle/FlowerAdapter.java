@@ -140,7 +140,7 @@ public class FlowerAdapter extends BaseAdapter  {
 
         FirebaseAuth auth = FirebaseAuth.getInstance();
         if (auth.getCurrentUser() == null){
-            add.setVisibility(View.GONE);
+            add.setVisibility(View.INVISIBLE);
         }
 
         add.setOnClickListener(new View.OnClickListener() {

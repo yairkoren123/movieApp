@@ -27,6 +27,7 @@ import com.example.drawer_try.singup.ToData;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -117,7 +118,11 @@ public class Fragment_the_movie_overview extends Fragment {
 
         add_animationview = view.findViewById(R.id.add_overview_button);
 
-
+        // check if is user in quarry
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        if (auth.getCurrentUser() == null){
+            add_animationview.setVisibility(View.GONE);
+        }
         if (single_one.seeiflove(the_string_movie) == true){
             add_animationview.setAnimation(R.raw.minus);
         }else {
