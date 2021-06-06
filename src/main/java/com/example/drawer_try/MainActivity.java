@@ -9,6 +9,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -36,6 +37,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.drawer_try.databinding.ActivityMainBinding;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
@@ -81,6 +83,8 @@ public class MainActivity extends AppCompatActivity{
 
     private String the_user_Image = "none";
 
+    DrawerLayout drawer;
+
 
 
 
@@ -98,7 +102,7 @@ public class MainActivity extends AppCompatActivity{
 
         setSupportActionBar(binding.appBarMain.toolbar);
 
-        DrawerLayout drawer = binding.drawerLayout;
+        drawer = binding.drawerLayout;
         NavigationView navigationView = binding.navView;
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
@@ -112,9 +116,60 @@ public class MainActivity extends AppCompatActivity{
 
 
 
+
+
+
+
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+
+        MenuItem item = findViewById(R.id.nav_slideshow);
+
+
+
+
+
+
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                int id=menuItem.getItemId();
+                //it's possible to do more actions on several items, if there is a large amount of items I prefer switch(){case} instead of if()
+                if (id==R.id.nav_logout){
+                    Toast.makeText(getApplicationContext(), "Logout", Toast.LENGTH_SHORT).show();
+                    FirebaseAuth auth = FirebaseAuth.getInstance();
+                    auth.signOut();
+                    Single_one single_one = Single_one.getInstance();
+
+                    // adding a simple move to the start
+                    The_movies one_none_move = new The_movies();
+                    one_none_move.setTitle("Shaun the Sheep Movie");
+                    one_none_move.setOriginal_language("en");
+                    one_none_move.setRelease_date("2015-02-05");
+                    one_none_move.setVote_average("7");
+                    one_none_move.setImage("/dhVYlfMNc2bfXPB83LLL00I4l9n.jpg");
+                    one_none_move.setImage_sec("/1eJLkZWuFVKr6OnNkMyqgoqkU1E.jpg");
+
+
+                    ArrayList<The_movies> s =  new ArrayList<>();
+                    s.add(one_none_move);
+                    single_one.setThe_love_movies(s);
+                    single_one.setNow_login_email("none");
+                    msg("now your are out");
+
+
+                    Intent intent = new Intent(MainActivity.this,MainActivity.class);
+                    startActivity(intent);
+
+                }
+                //This is for maintaining the behavior of the Navigation view
+                NavigationUI.onNavDestinationSelected(menuItem,navController);
+                //This is for closing the drawer after acting on it
+                drawer.closeDrawer(GravityCompat.START);
+                return true;
+            }
+        });
 
 
         authStateListener = new FirebaseAuth.AuthStateListener() {
@@ -149,7 +204,6 @@ public class MainActivity extends AppCompatActivity{
         };
 
     }
-
 
 
     private static int RESULT_LOAD_IMG = 1;
@@ -295,6 +349,8 @@ public class MainActivity extends AppCompatActivity{
         switch (item.getItemId()){
 
             case R.id.action_about:
+                Log.d("drawer", "onOptionsItemSelected: ");
+
                 msg("is action_about");
                 Intent intent = new Intent(this, About.class);
                 startActivity(intent);
@@ -303,6 +359,7 @@ public class MainActivity extends AppCompatActivity{
 
             case R.id.action_Login:
                 msg("is action_Login");
+                Log.d("drawer", "onOptionsItemSelected: ");
                 // todo  take to login page ===============
 
                 break;
@@ -345,6 +402,7 @@ public class MainActivity extends AppCompatActivity{
     @Override
     public boolean onSupportNavigateUp() {
         TextView email = findViewById(R.id.email_main);
+
 
 
         // live when data change
@@ -448,10 +506,11 @@ public class MainActivity extends AppCompatActivity{
         super.onStart();
 
 
+
     }
     // progressDialog
 
-    public void progressDialog(){
+    public void progressDialog() {
         progressDialog = new ProgressDialog(MainActivity.this);
         progressDialog.show();
         // set Content view
@@ -461,14 +520,20 @@ public class MainActivity extends AppCompatActivity{
                 android.R.color.transparent
         );
     }
+
+
+
+
+
     public void msg(String text){
         Toast.makeText(getApplicationContext(),text,Toast.LENGTH_LONG)
                 .show();
     }
 
+
+
     @Override
     public void onBackPressed() {
-
 
 
         // dsmiss progress dialog
@@ -477,6 +542,7 @@ public class MainActivity extends AppCompatActivity{
         msg("no");
 //        Intent intent = new Intent(this,MainActivity.class);
 //        startActivity(intent);
+
         super.onBackPressed();
     }
 }

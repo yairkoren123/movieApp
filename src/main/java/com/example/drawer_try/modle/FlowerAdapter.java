@@ -24,6 +24,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
@@ -45,6 +46,8 @@ public class FlowerAdapter extends BaseAdapter  {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     private DocumentReference movie_data_add = db.collection("shopping").document();
+    private DocumentReference movie_data_remove = db.collection("shopping").document();
+
     private CollectionReference movie_data_add2 = db.collection("shopping");
 
 
@@ -175,7 +178,8 @@ public class FlowerAdapter extends BaseAdapter  {
                             toData.setBitmap(String.valueOf(single_one.getUserImage()));
                             toData.setThe_moviesArrayList(Single_one.getInstance().getThe_love_movies());
 
-                            movie_data_add = db.collection("good").document(single_one.getNow_login_email());
+                            movie_data_add = db.collection("good")
+                                    .document(single_one.getNow_login_email());
                             // add to the list
                             movie_data_add.
                                     set(toData).
@@ -208,6 +212,48 @@ public class FlowerAdapter extends BaseAdapter  {
                     msg("already in the list");
                     // now is minus
                     // todo call a alert dialog and say: " do you wont to remove {movie} from the Watchlist?
+                    Snackbar snackbar = Snackbar.make(imageView_poster_movie,"remove " + selectedMovie.getTitle() + " from Watchlist ?",Snackbar.LENGTH_LONG)
+                            .setDuration(5000)
+                            .setAction("YES", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    single_one = Single_one.getInstance();
+                                    single_one.remove_one(selectedMovie);
+
+                                    ToData toData = new ToData();
+                                    single_one = Single_one.getInstance();
+                                    toData.setEmail(single_one.getNow_login_email());
+                                    toData.setBitmap(String.valueOf(single_one.getUserImage()));
+                                    toData.setThe_moviesArrayList(Single_one.getInstance().getThe_love_movies());
+
+                                    movie_data_remove = db.collection("good")
+                                            .document(single_one.getNow_login_email());
+                                    // add to the list
+                                    movie_data_remove.
+                                            set(toData).
+                                            addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull @NotNull Task<Void> task) {
+                                                    if (task.isSuccessful()) {
+                                                        msg(selectedMovie.getTitle() + " was remove from your list");
+                                                        add.setAnimation(R.raw.add);
+                                                        notifyDataSetChanged();
+
+                                                    } else {
+                                                        msg(task.getException().getMessage());
+                                                    }
+                                                }
+                                            }).addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull @NotNull Exception e) {
+                                            msg(e.getMessage());
+                                        }
+                                    });
+
+
+                                }
+                            });
+                    snackbar.show();
 
                 }
             }

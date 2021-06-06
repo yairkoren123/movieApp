@@ -28,14 +28,18 @@
 
         <ImageView
             android:id="@+id/image_view_poster_overview"
-            android:layout_width="111dp"
+            android:layout_width="115dp"
             android:layout_height="180dp"
+            android:outlineProvider="bounds"
             android:layout_marginTop="108dp"
+            android:elevation="100dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.093"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:src="@tools:sample/backgrounds/scenic" />
+            android:src="@drawable/background1"
+
+            />
 
         <ScrollView
             android:id="@+id/scrool_view_overview"
@@ -52,7 +56,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:paddingBottom="10dp">
 
 
                 <TextView
@@ -60,7 +65,7 @@
                     android:layout_width="200dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="right"
-                    android:layout_margin="5dp"
+                    android:layout_margin="10dp"
                     android:layout_marginRight="10dp"
                     android:gravity="right"
                     android:text="the name of the movie"
@@ -76,6 +81,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:fontFamily="@font/roboto_medium"
                         android:padding="5dp"
                         android:text="Description"
                         android:textColor="@color/white"
@@ -102,6 +108,7 @@
                     android:id="@+id/textview_description_overview"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/nunito"
                     android:paddingLeft="10dp"
                     android:paddingTop="18dp"
                     android:paddingRight="10dp"
@@ -114,10 +121,11 @@
                     android:id="@+id/textview_vote_average_overview"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_medium"
                     android:padding="10dp"
                     android:text="avrage"
                     android:textColor="@color/white"
-                    android:textSize="15dp"
+                    android:textSize="17dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -127,10 +135,11 @@
                     android:id="@+id/textview_release_date_overview"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_medium"
                     android:padding="10dp"
                     android:text="release_date"
                     android:textColor="@color/white"
-                    android:textSize="15dp"
+                    android:textSize="17dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -141,10 +150,11 @@
                     android:id="@+id/textview_language_overview"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_medium"
                     android:padding="10dp"
                     android:text="language"
                     android:textColor="@color/white"
-                    android:textSize="15dp"
+                    android:textSize="17dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"

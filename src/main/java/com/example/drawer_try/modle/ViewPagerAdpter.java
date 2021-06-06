@@ -19,6 +19,7 @@ import com.example.drawer_try.singletonClass.Single_one;
 import com.google.android.material.internal.ThemeEnforcement;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class ViewPagerAdpter extends PagerAdapter implements View.OnClickListener {
 
@@ -28,6 +29,10 @@ public class ViewPagerAdpter extends PagerAdapter implements View.OnClickListene
 
     public ViewPagerAdpter(Context context, ArrayList<The_movies> movieList) {
         this.context = context;
+
+        //shuffle Array list
+//        Collections.shuffle(movieList);
+
 
         for (int i = 0; i < movieList.size(); i++) {
             Log.d("URLpager", "onPageSelected: " + movieList.get(i).getImage());
@@ -113,4 +118,9 @@ public class ViewPagerAdpter extends PagerAdapter implements View.OnClickListene
     public void onClick(View v) {
         Log.d("pager", "onClick: click pager");
     }
+
+
+
+
+
 }

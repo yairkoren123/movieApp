@@ -162,6 +162,8 @@ public class SearchBox extends Fragment {
                                 String image = jsonObject.getString("poster_path");
                                 String image_sec = jsonObject.getString("backdrop_path");
 
+
+
 //                                    if (title == null || title == ""){
 //                                        title="null";
 //                                    }

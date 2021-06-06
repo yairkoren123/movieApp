@@ -248,6 +248,7 @@ public class HomeFragment extends Fragment {
                                     one_movie.setId(movie_id);
 
 
+
                                     // after all in movies :
 
                                     theMoviesArrayList.add(one_movie);

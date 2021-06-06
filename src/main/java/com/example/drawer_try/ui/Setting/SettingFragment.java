@@ -22,6 +22,7 @@ import android.widget.Toast;
 import com.example.drawer_try.MainActivity;
 import com.example.drawer_try.R;
 import com.example.drawer_try.databinding.SettingFragmentBinding;
+import com.example.drawer_try.modle.FlowerAdapter;
 import com.example.drawer_try.modle.The_movies;
 import com.example.drawer_try.singletonClass.Single_one;
 import com.example.drawer_try.singup.SingUp_Fragment;
@@ -30,6 +31,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
@@ -88,6 +90,9 @@ public class SettingFragment extends Fragment {
 
         pass = root.findViewById(R.id.login_passowrd);
         email = root.findViewById(R.id.login_email);
+
+
+
 
         login_now = root.findViewById(R.id.login_login_button);
         sing_up_text_view = root.findViewById(R.id.login_sing_up_button);
@@ -173,6 +178,7 @@ public class SettingFragment extends Fragment {
                                 msg(e.getMessage());
                             }
                         });
+
                     }
 
 

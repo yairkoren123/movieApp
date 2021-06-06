@@ -23,5 +23,6 @@
     <string name="action_About">About</string>
     <string name="action_logout">Logout</string>
     <string name="action_login">Login</string>
+    <string name="me">you</string>
 
 </resources>

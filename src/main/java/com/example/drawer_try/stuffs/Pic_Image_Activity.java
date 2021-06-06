@@ -20,6 +20,7 @@ public class Pic_Image_Activity extends AppCompatActivity {
     // layout
     GridLayout mgrid;
     String email_now = "";
+    TextView username;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,9 +31,12 @@ public class Pic_Image_Activity extends AppCompatActivity {
 
         mgrid = findViewById(R.id.mainGrid_image);
 
+        username = findViewById(R.id.email_pic_image);
+
 
         Intent intent=getIntent();
         email_now = intent.getStringExtra(MainActivity.EXTRAEMAIL);
+        username.setText(email_now);
 
         if (email_now.equals(MainActivity.no_user_string_main)){
             LinearLayout private_screen = findViewById(R.id.no_account_linar_image);

@@ -75,6 +75,10 @@ public class Single_one {
         return false;
     }
 
+    public void remove_one(The_movies movie){
+        the_love_movies.remove(movie);
+    }
+
     // id
 
     public String getThe_same_movie_id() {

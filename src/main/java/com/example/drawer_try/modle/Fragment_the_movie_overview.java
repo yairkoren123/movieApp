@@ -27,6 +27,7 @@ import com.example.drawer_try.singup.ToData;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -47,6 +48,7 @@ public class Fragment_the_movie_overview extends Fragment {
 
 
     private DocumentReference movie_data_add = db.collection("shopping").document();
+    private DocumentReference movie_data_remove = db.collection("shopping").document();
 
 
     public Fragment_the_movie_overview() {
@@ -108,11 +110,11 @@ public class Fragment_the_movie_overview extends Fragment {
         TextView release_date = view.findViewById(R.id.textview_release_date_overview);
         release_date.setText("Date release : "+the_string_movie.getRelease_date().toString().trim());
 
-        TextView avrage_text_overview = view.findViewById(R.id.textview_vote_average_overview);
-        avrage_text_overview.setText(the_string_movie.getVote_average().toString().trim());
+        TextView average_text_overview = view.findViewById(R.id.textview_vote_average_overview);
+        average_text_overview.setText("average : " + the_string_movie.getVote_average().toString().trim());
 
         TextView language_text_overview = view.findViewById(R.id.textview_language_overview);
-        language_text_overview.setText(the_string_movie.getOriginal_language().toString().trim());
+        language_text_overview.setText("language : " + the_string_movie.getOriginal_language().toString().trim());
 
         // anim
 
@@ -128,7 +130,7 @@ public class Fragment_the_movie_overview extends Fragment {
         }else {
             add_animationview.setAnimation(R.raw.add);
         }
-        // click listener to the add movie button
+        // click listener to the add movie button and remove
         add_animationview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -186,6 +188,54 @@ public class Fragment_the_movie_overview extends Fragment {
 
                 }else {
                     msg("try one more time");
+                    msg("already in the list");
+                    // now is minus
+                    // todo call a alert dialog and say: " do you wont to remove {movie} from the Watchlist?
+                    Snackbar snackbar = Snackbar.make(average_text_overview,"remove " + the_string_movie.getTitle() + " from Watchlist ?",Snackbar.LENGTH_LONG)
+                            .setDuration(5000)
+                            .setAction("YES", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    Single_one single_one1 = Single_one.getInstance();
+                                    single_one1.remove_one(the_string_movie);
+
+                                    ToData toData = new ToData();
+                                    single_one1 = Single_one.getInstance();
+                                    toData.setEmail(single_one1.getNow_login_email());
+                                    toData.setBitmap(String.valueOf(single_one1.getUserImage()));
+                                    toData.setThe_moviesArrayList(Single_one.getInstance().getThe_love_movies());
+
+                                    movie_data_remove = db.collection("good")
+                                            .document(single_one1.getNow_login_email());
+                                    // add to the list
+                                    movie_data_remove.
+                                            set(toData).
+                                            addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull @NotNull Task<Void> task) {
+                                                    if (task.isSuccessful()) {
+                                                        msg(the_string_movie.getTitle() + " was remove from your list");
+                                                        add_animationview.setAnimation(R.raw.add);
+
+
+                                                    } else {
+                                                        msg(task.getException().getMessage());
+                                                    }
+                                                }
+                                            }).addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull @NotNull Exception e) {
+                                            msg(e.getMessage());
+                                        }
+                                    });
+
+
+                                }
+                            });
+                    snackbar.show();
+
+
+
                 }
             }
         });
