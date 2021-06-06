@@ -1,0 +1,126 @@
+package com.example.drawer_try.modle;
+
+import android.app.Activity;
+import android.content.Context;
+import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+
+import com.bumptech.glide.Glide;
+import com.example.drawer_try.R;
+import com.example.drawer_try.singletonClass.Single_one;
+import com.google.android.material.internal.ThemeEnforcement;
+
+import java.util.ArrayList;
+import java.util.Collections;
+
+public class ViewPagerAdpter extends PagerAdapter implements View.OnClickListener {
+
+    private Context context;
+    private ArrayList<String> imagesURL = new ArrayList<>();
+
+
+    public ViewPagerAdpter(Context context, ArrayList<The_movies> movieList) {
+        this.context = context;
+
+        //shuffle Array list
+//        Collections.shuffle(movieList);
+
+
+        for (int i = 0; i < movieList.size(); i++) {
+            Log.d("URLpager", "onPageSelected: " + movieList.get(i).getImage());
+            String the_good_side ="https://image.tmdb.org/t/p/w500" + movieList.get(i).getImage();
+            imagesURL.add(the_good_side);
+        }
+        this.imagesURL = imagesURL;
+    }
+
+    @Override
+    public int getCount() {
+        return imagesURL.size();
+    }
+
+    @Override
+    public boolean isViewFromObject(@NonNull View view, @NonNull  Object object) {
+        return view == object;
+    }
+
+    @NonNull
+    @Override
+    public Object instantiateItem(@NonNull  ViewGroup container, int position) {
+        ImageView imageView = new ImageView(context);
+
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("3333", "onClick: click me");
+                Single_one single_one = Single_one.getInstance();
+                ArrayList<The_movies> theMoviesArrayList = single_one.getMovies_list();
+                msg("click on " + theMoviesArrayList.get(position).getTitle());
+                single_one.setValue_movie(theMoviesArrayList.get(position));
+
+                Log.d("URLhome", "onResponse: " + theMoviesArrayList.get(position).getId());
+                single_one.setThe_same_movie_id(theMoviesArrayList.get(position).getId());
+
+                AppCompatActivity activity = (AppCompatActivity) v.getContext();
+
+
+                Fragment_the_movie_overview nextFrag= new Fragment_the_movie_overview();
+                activity.getSupportFragmentManager().beginTransaction()
+                        .add(R.id.mail_countener2, nextFrag, "findThisFragment")
+                        .addToBackStack(null)
+                        .commit();
+
+
+
+
+            }
+        });
+
+
+        Glide.with(context)
+                .load(imagesURL.get(position))
+                .fitCenter()
+                .into(imageView);
+
+//        Picasso.get()
+//                .load(imagesURL.get(position))
+//                .fit()
+//                .centerInside()
+//                .into(imageView);
+//
+//                .centerCrop()
+
+        container.addView(imageView);
+        imageView.setScaleType(ImageView.ScaleType.FIT_XY);
+        return imageView;
+    }
+
+    @Override
+    public void destroyItem(@NonNull  ViewGroup container, int position, @NonNull Object object) {
+        container.removeView((View) object);
+    }
+    private void msg(String text){
+        Toast.makeText(context,text,Toast.LENGTH_LONG)
+                .show();
+    }
+
+
+
+    @Override
+    public void onClick(View v) {
+        Log.d("pager", "onClick: click pager");
+    }
+
+
+
+
+
+}
