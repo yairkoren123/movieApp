@@ -13,7 +13,7 @@ public class Single_one {
     // values
     String now_login_email;
 
-    Bitmap userImage;
+    String userImage = "";
 
     String toSearch ="";
     String now_login_pass;
@@ -120,11 +120,11 @@ public class Single_one {
     // user image
 
 
-    public Bitmap getUserImage() {
+    public String getUserImage() {
         return userImage;
     }
 
-    public void setUserImage(Bitmap userImage) {
+    public void setUserImage(String userImage) {
         this.userImage = userImage;
     }
 }

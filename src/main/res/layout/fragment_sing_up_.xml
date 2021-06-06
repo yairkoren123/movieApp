@@ -5,14 +5,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".singup.About">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_centerInParent="true"
-        android:background="@drawable/background_tor"
         android:layout_gravity="right"
+        android:background="@drawable/background_tor"
         android:gravity="right"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="20dp">
 
         <Button
             android:id="@+id/logout_button"
@@ -26,7 +28,7 @@
 
         <ImageView
             android:layout_width="150dp"
-            android:layout_height="150dp"
+            android:layout_height="100dp"
             android:layout_gravity="center"
             android:layout_marginBottom="20dp"
             android:background="@drawable/edit_text_background"

@@ -4,8 +4,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,13 +11,11 @@ import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.drawer_try.R;
@@ -28,7 +24,13 @@ import com.example.drawer_try.modle.FlowerAdapter;
 import com.example.drawer_try.modle.Fragment_the_movie_overview;
 import com.example.drawer_try.modle.The_movies;
 import com.example.drawer_try.singletonClass.Single_one;
+import com.example.drawer_try.singup.ToData;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -41,6 +43,11 @@ public class GalleryFragment extends Fragment {
     private GalleryViewModel galleryViewModel;
     //FragmentGalleryBinding
     private FragmentGalleryBinding binding;
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+    private CollectionReference collectionReference1 = db.collection("good");
+
+
 
     private Context context;
 
@@ -65,11 +72,14 @@ public class GalleryFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         context = getContext();
 
+
         Single_one single_one = Single_one.getInstance();
+
+
         the_moviesArrayList = single_one.getThe_love_movies();
 
 
-        LinearLayout no_account = getView().findViewById(R.id.no_account_linar);
+        LinearLayout no_account = getView().findViewById(R.id.no_account_linar_image);
         FirebaseAuth auth = FirebaseAuth.getInstance();
         no_account.setVisibility(View.GONE);
 

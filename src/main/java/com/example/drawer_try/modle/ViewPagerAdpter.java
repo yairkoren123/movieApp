@@ -91,8 +91,7 @@ public class ViewPagerAdpter extends PagerAdapter implements View.OnClickListene
 //                .centerInside()
 //                .into(imageView);
 //
-//        //                .centerCrop()
-
+//                .centerCrop()
 
         container.addView(imageView);
         imageView.setScaleType(ImageView.ScaleType.FIT_XY);

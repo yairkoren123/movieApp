@@ -4,12 +4,16 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,10 +22,12 @@ import com.example.drawer_try.modle.The_movies;
 import com.example.drawer_try.singletonClass.Single_one;
 import com.example.drawer_try.singup.About;
 import com.example.drawer_try.singup.ToData;
+import com.example.drawer_try.stuffs.Pic_Image_Activity;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.annotation.NonNull;
+import androidx.core.view.GravityCompat;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -40,11 +46,15 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity{
 
     // progressDialog
     ProgressDialog progressDialog;
+
+    public static final String EXTRAEMAIL = "extraEmail";
+    public static final String no_user_string_main = "no user";
 
 
 
@@ -69,19 +79,19 @@ public class MainActivity extends AppCompatActivity {
 
     private FirebaseUser currentUser;
 
+    private String the_user_Image = "none";
 
 
 
 
 
-    String email_now;
+
+    String email_now = "none";
+    String image_now = "none";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
-
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -96,6 +106,10 @@ public class MainActivity extends AppCompatActivity {
                 R.id.nav_home, R.id.nav_slideshow, R.id.nav_setting, R.id.nav_search, R.id.nav_watchlist)
                 .setDrawerLayout(drawer)
                 .build();
+        // set color to the Drawer
+        navigationView.setBackgroundColor(Color.parseColor("#454545"));
+
+
 
 
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
@@ -126,12 +140,18 @@ public class MainActivity extends AppCompatActivity {
                     Single_one single_one = Single_one.getInstance();
                     single_one = Single_one.getInstance();
                     email_now = "none";
+                    image_now ="none";
+                    single_one.setUserImage(image_now);
                     single_one.setNow_login_email(email_now);
                 }
 
             }
         };
+
     }
+
+
+
     private static int RESULT_LOAD_IMG = 1;
     ImageView imagemain;
 
@@ -146,63 +166,128 @@ public class MainActivity extends AppCompatActivity {
         //username.setText("hi");
 
         email_now = single_one.getNow_login_email();
+        image_now = single_one.getUserImage();
+
+        ImageView image_user = findViewById(R.id.imageView_main);
+        if (image_now == "none"){
+            image_now = "noImage.png";
+            Log.d("imageuser", "onCreateOptionsMenu: no image");
+        }
 
         TextView email = findViewById(R.id.email_main);
         if (email_now == "none"){
-            email_now = "no user ";
+            email_now = no_user_string_main;
         }
         email.setText(email_now);
+
+        // see if the image is null todo here =====================
+        if (!the_user_Image.equals("none")){
+            single_one.setUserImage(the_user_Image);
+            image_now = the_user_Image;
+
+        }
+
+
+
+        Log.d("imageuser", "onCreateOptionsMenu: image user : " + image_now);
+        // todo just enter the image id to this :  image_user.setImageResource(R.drawable.background1) by number ==========;
+
+
+        switch (image_now){
+            case "smile_0.png":
+                image_user.setImageResource(R.drawable.smile_0);
+                break;
+            case "smile_1.png":
+                image_user.setImageResource(R.drawable.smile_1);
+                break;
+            case "smile_2.png":
+                image_user.setImageResource(R.drawable.smile_2);
+                break;
+            case "smile_3.png":
+                image_user.setImageResource(R.drawable.smile_3);
+                break;
+            case "smile_4.png":
+                image_user.setImageResource(R.drawable.smile_4);
+                break;
+            case "smile_5.png":
+                image_user.setImageResource(R.drawable.smile_5);
+                break;
+            case "none":
+                image_user.setImageResource(0);
+                break;
+        }
 
 
         imagemain = findViewById(R.id.imageView_main);
 
-        username.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
-                photoPickerIntent.setType("image/*");
-                startActivityForResult(photoPickerIntent, RESULT_LOAD_IMG);
 
-            }
-        });
+            // if email != null
+            username.setVisibility(View.VISIBLE);
+            image_user.setVisibility(View.VISIBLE);
+            username.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(MainActivity.this, Pic_Image_Activity.class);
+                    intent.putExtra(EXTRAEMAIL,email_now);
+                    startActivity(intent);
+                    finish();
+
+//                Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+//                photoPickerIntent.setType("image/*");
+//                startActivityForResult(photoPickerIntent, RESULT_LOAD_IMG);
+
+                }
+            });
+
+        // set image user
+        single_one = Single_one.getInstance();
+        DocumentReference documentReference = db.collection("good").document(email_now);
+
+        documentReference.update("bitmap",single_one.getUserImage())
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        msg("image set");
+                    }
+                });
 
         return true;
     }
 
-  @Override
-    protected void onActivityResult(int reqCode, int resultCode, Intent data) {
-        super.onActivityResult(reqCode, resultCode, data);
-
-
-        if (resultCode == RESULT_OK) {
-            try {
-                final Uri imageUri = data.getData();
-                final InputStream imageStream = getContentResolver().openInputStream(imageUri);
-                final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
-
-                // todo user image save
-                // set in single the user image
-                Single_one single_one = Single_one.getInstance();
-                single_one.setUserImage(selectedImage);
-
-
-                Log.d("image1", "onActivityResult: " + selectedImage);
-                DocumentReference documentReference = db.collection("good").document(email_now);
-
-
-
-                imagemain.setImageBitmap(selectedImage);
-
-                msg("image set!");
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-                Toast.makeText(this, "Something went wrong", Toast.LENGTH_LONG).show();
-            }
-
-        }else {
-            Toast.makeText(this, "You haven't picked Image",Toast.LENGTH_LONG).show();
-        }
-    }
+//  @Override
+//    protected void onActivityResult(int reqCode, int resultCode, Intent data) {
+//        super.onActivityResult(reqCode, resultCode, data);
+//
+//
+//        if (resultCode == RESULT_OK) {
+//            try {
+//                final Uri imageUri = data.getData();
+//                final InputStream imageStream = getContentResolver().openInputStream(imageUri);
+//                final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+//
+//                // todo user image save
+//                // set in single the user image
+//                Single_one single_one = Single_one.getInstance();
+//                single_one.setUserImage(selectedImage);
+//
+//
+//                Log.d("image1", "onActivityResult: " + selectedImage);
+//                DocumentReference documentReference = db.collection("good").document(email_now);
+//
+//
+//
+//                imagemain.setImageBitmap(selectedImage);
+//
+//                msg("image set!");
+//            } catch (FileNotFoundException e) {
+//                e.printStackTrace();
+//                Toast.makeText(this, "Something went wrong", Toast.LENGTH_LONG).show();
+//            }
+//
+//        }else {
+//            Toast.makeText(this, "You haven't picked Image",Toast.LENGTH_LONG).show();
+//        }
+//    }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
@@ -218,35 +303,37 @@ public class MainActivity extends AppCompatActivity {
 
             case R.id.action_Login:
                 msg("is action_Login");
+                // todo  take to login page ===============
 
-                //todo need to take the user to the login page
                 break;
 
-            case R.id.action_Logout:
-                //msg("is action_Logout");
-//                FirebaseAuth auth = FirebaseAuth.getInstance();
-//
-//                if (auth.getCurrentUser() == null){
-//                    msg("you don't have a user to logout");
-//
-//
 
-//                }else {
-//                    auth = FirebaseAuth.getInstance();
-//                    auth.signOut();
-//                    Single_one single_one = Single_one.getInstance();
-//                    The_movies one_none_move = new The_movies();
-//                    one_none_move.setTitle("none");
-//                    ArrayList<The_movies> s = new ArrayList<>();
-//                    s.add(one_none_move);
-//                    single_one.setThe_love_movies(s);
-//                    single_one.setNow_login_email("none");
-//                    msg("now your are out");
-//
-//                    intent = new Intent(this, MainActivity.class);
-//                    startActivity(intent);
-//                    break;
-//                }
+            case R.id.action_Logout:
+
+                FirebaseAuth auth = FirebaseAuth.getInstance();
+                auth.signOut();
+                Single_one single_one = Single_one.getInstance();
+
+                // adding a simple move to the start
+                The_movies one_none_move = new The_movies();
+                one_none_move.setTitle("Shaun the Sheep Movie");
+                one_none_move.setOriginal_language("en");
+                one_none_move.setRelease_date("2015-02-05");
+                one_none_move.setVote_average("7");
+                one_none_move.setImage("/dhVYlfMNc2bfXPB83LLL00I4l9n.jpg");
+                one_none_move.setImage_sec("/1eJLkZWuFVKr6OnNkMyqgoqkU1E.jpg");
+
+
+                ArrayList<The_movies> s =  new ArrayList<>();
+                s.add(one_none_move);
+                single_one.setThe_love_movies(s);
+                single_one.setNow_login_email("none");
+                msg("now your are out");
+
+
+                intent = new Intent(MainActivity.this,MainActivity.class);
+                startActivity(intent);
+                break;
 
 
         }
@@ -265,13 +352,18 @@ public class MainActivity extends AppCompatActivity {
         email.setText(email_now);
 
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
+
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
     }
 
+
+
+
+
+
     @Override
     protected void onStart() {
-        super.onStart();
         Single_one single_one = Single_one.getInstance();
 
         FirebaseAuth auth = FirebaseAuth.getInstance();
@@ -283,7 +375,6 @@ public class MainActivity extends AppCompatActivity {
             single_one = Single_one.getInstance();
             single_one.setNow_login_email(email);
 
-            ToData data = new ToData();
             The_movies the_movies = new The_movies();
 
 
@@ -325,11 +416,17 @@ public class MainActivity extends AppCompatActivity {
                         ToData shopping = snapshots.toObject(ToData.class);
                         Log.d("snal2", "onSuccess: " +email);
 
+
                         if (shopping.getEmail().equals(email)){
                             Log.d("snal", "onSuccess: " +snapshots.toString());
                             Log.d("sec", "onSuccess: target on : " + snapshots.getId());
 
                             Log.d("sec2", "onSuccess: target on : " + shopping.getEmail());
+
+                            the_user_Image = shopping.getBitmap();
+
+                            Log.d("getimage2", "onSuccess: " + the_user_Image);
+
 
                             Single_one single_one = Single_one.getInstance();
                             single_one.setThe_love_movies(shopping.getThe_moviesArrayList());
@@ -339,11 +436,17 @@ public class MainActivity extends AppCompatActivity {
 
                     }
                 }
+
+
             });
+
+
         }else {
             single_one.setNow_login_email("none");
         }
         auth.addAuthStateListener(authStateListener);
+        super.onStart();
+
 
     }
     // progressDialog
@@ -365,6 +468,8 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+
+
 
         // dsmiss progress dialog
         //progressDialog.dismiss();

@@ -9,13 +9,17 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/white"
         android:backgroundTint="@color/backbluedark"
-        android:background="@color/white">
+        android:clickable="false"
+        android:contextClickable="true"
+        android:longClickable="false">
 
         <ImageView
             android:id="@+id/imageview_background_overview"
             android:layout_width="0dp"
             android:layout_height="230dp"
+            android:background="@color/backbluedark"
             android:src="@drawable/gradint_viewpager"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
@@ -150,8 +154,8 @@
                     android:id="@+id/adult_overview"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="18 + "
                     android:padding="10dp"
+                    android:text="18 + "
                     android:textColor="@android:color/holo_red_dark"
                     android:textSize="16dp"
                     android:visibility="visible" />

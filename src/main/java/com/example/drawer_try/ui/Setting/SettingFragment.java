@@ -28,6 +28,7 @@ import com.example.drawer_try.singup.SingUp_Fragment;
 import com.example.drawer_try.singup.ToData;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -38,6 +39,7 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -116,6 +118,7 @@ public class SettingFragment extends Fragment {
                     msg("you are login already");
 
                 } else {
+
                     String the_email, the_pass, the_username;
 
                     the_email = email.getText().toString().trim();
@@ -171,6 +174,38 @@ public class SettingFragment extends Fragment {
                             }
                         });
                     }
+
+
+//                    collectionReference1.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+//                        @Override
+//                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+//
+//                            String data = "";
+//                            for (QueryDocumentSnapshot snapshots : queryDocumentSnapshots) {
+//
+//                                Log.d("sec", "onSuccess: " + snapshots.getId());
+//
+//                                ToData shopping = snapshots.toObject(ToData.class);
+//                                Log.d("snal2", "onSuccess: " +the_email);
+//
+//                                if (shopping.getEmail().equals(the_email)){
+//                                    Log.d("snal", "onSuccess: " +snapshots.toString());
+//                                    Log.d("sec", "onSuccess: target on : " + snapshots.getId());
+//
+//                                    Log.d("sec2", "onSuccess: target on : " + shopping.getEmail());
+//
+//                                    Single_one single_one = Single_one.getInstance();
+//                                    single_one.setThe_love_movies(shopping.getThe_moviesArrayList());
+//
+//                                    Log.d("data", "onSuccess: " + shopping.getThe_moviesArrayList().toString());
+//                                }
+//
+//                            }
+//                        }
+//
+//
+//                    });
+
                     Intent intent = new Intent(getActivity(),MainActivity.class);
                     startActivity(intent);
 
@@ -202,8 +237,11 @@ public class SettingFragment extends Fragment {
                 single_one.setNow_login_email("none");
                 msg("now your are out");
 
+
                 Intent intent = new Intent(getActivity(),MainActivity.class);
                 startActivity(intent);
+
+
 
 
             }

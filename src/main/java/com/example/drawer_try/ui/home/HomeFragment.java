@@ -7,6 +7,8 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
@@ -324,6 +326,9 @@ public class HomeFragment extends Fragment {
 
         // viewpager
         ViewPager pager_images_movies = getView().findViewById(R.id.viewpager);
+        // text of image
+        TextView name_of_image = getView().findViewById(R.id.name_of_movie_main);
+        Log.d("xandy", "next_level: " + name_of_image.getTop());
 
         if (currntPage <= 3 ) {
             pager_images_movies.setVisibility(View.VISIBLE);
@@ -333,8 +338,10 @@ public class HomeFragment extends Fragment {
 
             Log.d("222", "next_level: " + pager_images_movies.getCurrentItem());
 
+
             // todo add a name by the side of the image insted of the click listener ==============================
 
+            name_of_image.setText(theMoviesArrayList.get(0).getTitle());
 
             pager_images_movies.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
                 @Override
@@ -347,6 +354,7 @@ public class HomeFragment extends Fragment {
                 public void onPageSelected(int position) {
                     //best
                     Log.d("333", "next_level: " + pager_images_movies.getCurrentItem());
+                    name_of_image.setText(theMoviesArrayList.get(position).getTitle());
 
 
                     String the_URl =  imagesURLS.get(pager_images_movies.getCurrentItem());
@@ -377,6 +385,9 @@ public class HomeFragment extends Fragment {
             });
         }else {
             pager_images_movies.setVisibility(View.GONE);
+            name_of_image.setVisibility(View.GONE);
+
+
         }
 
 
@@ -420,8 +431,14 @@ public class HomeFragment extends Fragment {
                 single_one.setThe_same_movie_id(theMoviesArrayList.get(position).getId());
 
 
-                // gone the button of teh next page
+                // gone the button of the next page
                 the_next_pages.setVisibility(View.GONE);
+                // gone the button of the next page
+
+                // todo set gone in fragment and return its back
+
+                //name_of_image.setVisibility(View.GONE);
+
                 Fragment_the_movie_overview nextFrag= new Fragment_the_movie_overview();
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .replace(R.id.mail_countener2, nextFrag, "findThisFragment")
@@ -450,6 +467,8 @@ public class HomeFragment extends Fragment {
 
 
     }
+
+
 
     private void msg(String text){
         Toast.makeText(getContext(),text,Toast.LENGTH_LONG)
