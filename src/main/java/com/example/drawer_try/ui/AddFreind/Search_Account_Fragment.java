@@ -14,7 +14,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.EditText;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -33,12 +33,12 @@ import com.google.firebase.firestore.QuerySnapshot;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class Search_Account_Fragment extends Fragment {
 
     //layout
     private ListView listView_friends;
-
     private AddFriendsViewModel mViewModel;
 
     private AddFriendsViewModel addFriendsViewModel;
@@ -176,7 +176,17 @@ public class Search_Account_Fragment extends Fragment {
                 }
                 // after for loop
                 CustomAdaper customAdaper = new CustomAdaper();
+                Collections.shuffle(friendArrayList);
                 listView_friends.setAdapter(customAdaper);
+
+                // get the position of the account
+                listView_friends.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        //here you can use the position to determine what checkbox to check
+                        Log.d("6pos", "onItemClick: " + position);
+                    }
+                });
                 customAdaper.notifyDataSetChanged();
                 search_by_text = false;
 
@@ -216,7 +226,18 @@ public class Search_Account_Fragment extends Fragment {
             View view = getLayoutInflater().inflate(R.layout.search_friend_item, null);
 
 
-            TextView username = (TextView) view.findViewById(R.id.single_username);
+            TextView username = (TextView) view.findViewById(R.id.account_username_search_single);
+            ImageView image = view.findViewById(R.id.account_image_search_single);
+            Button folloingButton = view.findViewById(R.id.folloing_button_single);
+
+            folloingButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    folloingButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_baseline_remove_24, 0, 0, 0);
+
+                }
+            });
+
             Log.d("county", "getView: " + username.getText());
 
 
@@ -227,6 +248,30 @@ public class Search_Account_Fragment extends Fragment {
 //            }
 
             username.setText(friendArrayList.get(position).getEmail());
+            switch (friendArrayList.get(position).getBitmap()){
+                case "smile_0.png":
+                    image.setBackgroundResource(R.drawable.smile_0);
+                    break;
+                case "smile_1.png":
+                    image.setBackgroundResource(R.drawable.smile_1);
+                    break;
+                case "smile_2.png":
+                    image.setBackgroundResource(R.drawable.smile_2);
+                    break;
+                case "smile_3.png":
+                    image.setBackgroundResource(R.drawable.smile_3);
+                    break;
+                case "smile_4.png":
+                    image.setBackgroundResource(R.drawable.smile_4);
+                    break;
+                case "smile_5.png":
+                    image.setBackgroundResource(R.drawable.smile_5);
+                    break;
+                case "none":
+                    image.setBackgroundResource(0);
+                    break;
+            }
+
             Log.d("friends", "getView: " + friendArrayList.get(position).getEmail());
 
 //            String timeAgo = (String) DateUtils.getRelativeTimeSpanString(

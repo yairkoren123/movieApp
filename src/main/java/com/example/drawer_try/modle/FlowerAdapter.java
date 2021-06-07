@@ -175,14 +175,16 @@ public class FlowerAdapter extends BaseAdapter  {
                             ToData toData = new ToData();
                             single_one = Single_one.getInstance();
                             toData.setEmail(single_one.getNow_login_email());
+                            toData.setFriends(single_one.getFriend_list());
                             toData.setBitmap(String.valueOf(single_one.getUserImage()));
                             toData.setThe_moviesArrayList(Single_one.getInstance().getThe_love_movies());
 
                             movie_data_add = db.collection("good")
                                     .document(single_one.getNow_login_email());
                             // add to the list
+                            // set(toData)
                             movie_data_add.
-                                    set(toData).
+                                    update("the_moviesArrayList",single_one.getThe_love_movies()).
                                     addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override
                                         public void onComplete(@NonNull @NotNull Task<Void> task) {
@@ -198,10 +200,7 @@ public class FlowerAdapter extends BaseAdapter  {
                                     msg(e.getMessage());
                                 }
                             });
-
                             //msg(selectedMovie.getTitle() + " was add to your list");
-
-
                         }
                     });
                     add.playAnimation();
@@ -230,7 +229,7 @@ public class FlowerAdapter extends BaseAdapter  {
                                             .document(single_one.getNow_login_email());
                                     // add to the list
                                     movie_data_remove.
-                                            set(toData).
+                                            update("the_moviesArrayList",single_one.getThe_love_movies()).
                                             addOnCompleteListener(new OnCompleteListener<Void>() {
                                                 @Override
                                                 public void onComplete(@NonNull @NotNull Task<Void> task) {

@@ -37,6 +37,14 @@ public class ToData {
                 '}';
     }
 
+    public ArrayList<String> getFriends() {
+        return friends;
+    }
+
+    public void setFriends(ArrayList<String> friends) {
+        this.friends = friends;
+    }
+
     public String getBitmap() {
         return bitmap;
     }

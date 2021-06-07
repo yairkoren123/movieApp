@@ -179,8 +179,51 @@ public class SettingFragment extends Fragment {
                             }
                         });
 
-                    }
+                        collectionReference1.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                            @Override
+                            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
 
+                                String data = "";
+                                for (QueryDocumentSnapshot snapshots : queryDocumentSnapshots) {
+
+                                    Log.d("sec", "onSuccess: " + snapshots.getId());
+
+                                    ToData shopping = snapshots.toObject(ToData.class);
+                                    Log.d("snal2", "onSuccess: " +email);
+
+                                    if (shopping != null) {
+
+
+                                        if (shopping.getEmail().equals(email)) {
+                                            Single_one single_one = Single_one.getInstance();
+
+                                            Log.d("snal", "onSuccess: " + snapshots.toString());
+                                            Log.d("sec", "onSuccess: target on : " + snapshots.getId());
+
+                                            Log.d("sec2", "onSuccess: target on : " + shopping.getEmail());
+
+                                            single_one.setUserImage(shopping.getBitmap());
+
+                                            Log.d("getimage2", "onSuccess: " + shopping.getBitmap());
+
+
+
+                                            single_one.setThe_love_movies(shopping.getThe_moviesArrayList());
+                                            Log.d("getarray", "onSuccess: " + shopping.getThe_moviesArrayList().toString());
+
+                                            Log.d("data", "onSuccess: " + shopping.getThe_moviesArrayList().toString());
+
+                                            msg("auisdauishfdkjasfdfjsgnolh");
+                                        }
+                                    }
+
+                                }
+                            }
+
+
+                        });
+
+                    }
 
 //                    collectionReference1.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
 //                        @Override

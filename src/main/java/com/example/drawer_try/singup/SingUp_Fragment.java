@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.example.drawer_try.R;
 import com.example.drawer_try.singletonClass.Single_one;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -36,6 +37,9 @@ public class SingUp_Fragment extends Fragment {
 
 
     FirebaseAuth auth;
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+    private DocumentReference movie_data_add = db.collection("good").document();
 
 
 
@@ -104,10 +108,42 @@ public class SingUp_Fragment extends Fragment {
                                 msg(task.getException().getMessage());
 
                             }
-
-
                         }
                     });
+
+                    // here put in data base
+
+                    Single_one single_one = Single_one.getInstance();
+
+                    ToData toData = new ToData();
+                    single_one = Single_one.getInstance();
+                    toData.setEmail(the_email);
+                    toData.setFriends(single_one.getFriend_list());
+                    toData.setBitmap("smile_1.png");
+                    toData.setThe_moviesArrayList(Single_one.getInstance().getThe_love_movies());
+
+                    movie_data_add = db.collection("good")
+                            .document(the_email);
+
+                    movie_data_add
+                            .set(toData)
+                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull @NotNull Task<Void> task) {
+                                    if (task.isSuccessful()) {
+                                        Log.d("winwin", "onComplete: ");
+                                    } else {
+                                        msg(task.getException().getMessage());
+                                    }
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull @NotNull Exception e) {
+                            msg(e.getMessage());
+                        }
+                    });
+
+
                 }
 
             }

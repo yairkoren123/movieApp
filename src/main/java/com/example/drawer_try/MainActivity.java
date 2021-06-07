@@ -24,7 +24,9 @@ import com.example.drawer_try.singletonClass.Single_one;
 import com.example.drawer_try.singup.About;
 import com.example.drawer_try.singup.ToData;
 import com.example.drawer_try.stuffs.Pic_Image_Activity;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.annotation.NonNull;
@@ -294,7 +296,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 image_user.setImageResource(R.drawable.smile_5);
                 break;
             case "none":
-                image_user.setImageResource(0);
+                image_user.setImageResource(R.drawable.smile_0);
                 break;
         }
 
@@ -406,7 +408,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 one_none_move.setImage("/dhVYlfMNc2bfXPB83LLL00I4l9n.jpg");
                 one_none_move.setImage_sec("/1eJLkZWuFVKr6OnNkMyqgoqkU1E.jpg");
 
-
+                // THE LOVE MOVE ARRAY LIST  = s
                 ArrayList<The_movies> s =  new ArrayList<>();
                 s.add(one_none_move);
                 single_one.setThe_love_movies(s);
@@ -462,6 +464,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             The_movies the_movies = new The_movies();
 
 
+
+
+
 //            db.collection("good")
 //                    .get()
 //                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -487,7 +492,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
 
-
+            // get the love movies
             collectionReference1.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                 @Override
                 public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
@@ -503,7 +508,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         if (shopping != null) {
 
 
-                            if (shopping.getEmail() == email) {
+                            if (shopping.getEmail().equals(email)) {
                                 Log.d("snal", "onSuccess: " + snapshots.toString());
                                 Log.d("sec", "onSuccess: target on : " + snapshots.getId());
 
@@ -515,7 +520,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
                                 Single_one single_one = Single_one.getInstance();
+
                                 single_one.setThe_love_movies(shopping.getThe_moviesArrayList());
+                                Log.d("getarray", "onSuccess: " + shopping.getThe_moviesArrayList().toString());
 
                                 Log.d("data", "onSuccess: " + shopping.getThe_moviesArrayList().toString());
                             }

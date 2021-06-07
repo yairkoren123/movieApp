@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.util.Log;
 
 import com.example.drawer_try.modle.The_movies;
+import com.example.drawer_try.singup.ToData;
 
 import java.util.ArrayList;
 
@@ -21,6 +22,7 @@ public class Single_one {
     The_movies value_movie  = new The_movies("none");
     ArrayList<The_movies> the_love_movies = new ArrayList<>();
     String the_same_movie_id = "";
+    ArrayList<String> friend_list = new ArrayList<>();
 
     private static final Single_one ourInstance = new Single_one();
     public static Single_one getInstance() {
@@ -130,5 +132,15 @@ public class Single_one {
 
     public void setUserImage(String userImage) {
         this.userImage = userImage;
+    }
+
+    // friend list
+
+    public ArrayList<String> getFriend_list() {
+        return friend_list;
+    }
+
+    public void setFriend_list(ArrayList<String> friend_list) {
+        this.friend_list = friend_list;
     }
 }
