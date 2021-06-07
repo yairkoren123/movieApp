@@ -23,10 +23,20 @@
             android:id="@+id/nav_watchlist"
             android:icon="@drawable/ic_baseline_star_24"
             android:title="@string/menu_love" />
+        <item
+            android:id="@+id/nav_friends"
+            android:icon="@drawable/ic_baseline_people_alt_24"
+            android:title="friends" />
+
+        <item
+            android:id="@+id/nav_add_friends"
+            android:icon="@drawable/ic_baseline_person_add_alt_1_24"
+            android:title="add friends" />
+
 
         <item
             android:id="@+id/nav_setting"
-            android:icon="@drawable/ic_baseline_account_box_24"
+            android:icon="@drawable/ic_baseline_person_pin_24"
             android:title="@string/menu_setting" />
         <item
             android:id="@+id/nav_logout"
