@@ -101,36 +101,44 @@ public class GalleryFragment extends Fragment {
             // adpter
 
             Log.d("tostring", "onViewCreated: " + the_moviesArrayList.toString());
-            if (the_moviesArrayList.get(0).getTitle().equals("none") || the_moviesArrayList.get(0).getTitle().equals("here the name of the move")) {
-                Log.d("tostring 1", "onViewCreated: " + "none");
-                the_moviesArrayList.get(0).setTitle("here the name of the move");
 
-            }
+            if (the_moviesArrayList.size() == 0 || the_moviesArrayList != null) {
+//                if (the_moviesArrayList.get(0).getTitle().equals("none") || the_moviesArrayList.get(0).getTitle().equals("here the name of the move")) {
+//                    Log.d("tostring 1", "onViewCreated: " + "none");
+//                    the_moviesArrayList.get(0).setTitle("here the name of the move");
+//
+//                }
 
-            adapter = new FlowerAdapter(getContext(), the_moviesArrayList);
-            gridView.setAdapter(adapter);
-
-
-            gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    msg("click on " + the_moviesArrayList.get(position).getTitle());
-                    single_one.setValue_movie(the_moviesArrayList.get(position));
+                adapter = new FlowerAdapter(getContext(), the_moviesArrayList);
+                gridView.setAdapter(adapter);
 
 
-                    Fragment_the_movie_overview nextFrag = new Fragment_the_movie_overview();
-                    getActivity().getSupportFragmentManager().beginTransaction()
-                            .add(R.id.mail_countener5, nextFrag, "findThisFragment")
-                            .addToBackStack(null)
-                            .commit();
+                gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        msg("click on " + the_moviesArrayList.get(position).getTitle());
+                        single_one.setValue_movie(the_moviesArrayList.get(position));
+
+
+                        Fragment_the_movie_overview nextFrag = new Fragment_the_movie_overview();
+                        getActivity().getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.mail_countener5, nextFrag, "findThisFragment")
+                                .addToBackStack(null)
+                                .commit();
+
+                        //                                .addToBackStack(null)
 
 //                gridView.setVisibility(View.GONE);
 //                pager_images_movies.setVisibility(View.GONE);
 
-                }
-            });
+                    }
+                });
 
 
+            } else {
+                Log.d("aaaa", "onViewCreated: ");
+                msg("array  = null");
+            }
         }
     }
 

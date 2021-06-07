@@ -16,6 +16,8 @@ public class ToData {
 
     private String last_add;
 
+    private ArrayList<String> friends = new ArrayList<>();
+
     public ToData() {
     }
 

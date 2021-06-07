@@ -46,11 +46,13 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity{
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     // progressDialog
     ProgressDialog progressDialog;
@@ -63,6 +65,7 @@ public class MainActivity extends AppCompatActivity{
 
 
     private AppBarConfiguration mAppBarConfiguration;
+    //ActivityMainBinding
     private ActivityMainBinding binding;
 
     private FirebaseFirestore firebaseFirestore;
@@ -107,11 +110,14 @@ public class MainActivity extends AppCompatActivity{
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_slideshow, R.id.nav_setting, R.id.nav_search, R.id.nav_watchlist)
+                R.id.nav_home, R.id.nav_slideshow, R.id.nav_setting, R.id.nav_search, R.id.nav_watchlist,
+        R.id.nav_add_friends , R.id.nav_friends)
                 .setDrawerLayout(drawer)
                 .build();
         // set color to the Drawer
-        navigationView.setBackgroundColor(Color.parseColor("#454545"));
+        //navigationView.setBackgroundColor(Color.parseColor("#"));
+        navigationView.setBackgroundColor(Color.WHITE);
+
 
 
 
@@ -136,31 +142,47 @@ public class MainActivity extends AppCompatActivity{
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 int id=menuItem.getItemId();
                 //it's possible to do more actions on several items, if there is a large amount of items I prefer switch(){case} instead of if()
-                if (id==R.id.nav_logout){
-                    Toast.makeText(getApplicationContext(), "Logout", Toast.LENGTH_SHORT).show();
-                    FirebaseAuth auth = FirebaseAuth.getInstance();
-                    auth.signOut();
-                    Single_one single_one = Single_one.getInstance();
 
-                    // adding a simple move to the start
-                    The_movies one_none_move = new The_movies();
-                    one_none_move.setTitle("Shaun the Sheep Movie");
-                    one_none_move.setOriginal_language("en");
-                    one_none_move.setRelease_date("2015-02-05");
-                    one_none_move.setVote_average("7");
-                    one_none_move.setImage("/dhVYlfMNc2bfXPB83LLL00I4l9n.jpg");
-                    one_none_move.setImage_sec("/1eJLkZWuFVKr6OnNkMyqgoqkU1E.jpg");
+                switch (menuItem.getItemId()){
 
+                    case R.id.nav_logout:
+                    // logout
+                        Toast.makeText(getApplicationContext(), "Logout", Toast.LENGTH_SHORT).show();
+                        FirebaseAuth auth = FirebaseAuth.getInstance();
+                        auth.signOut();
+                        Single_one single_one = Single_one.getInstance();
 
-                    ArrayList<The_movies> s =  new ArrayList<>();
-                    s.add(one_none_move);
-                    single_one.setThe_love_movies(s);
-                    single_one.setNow_login_email("none");
-                    msg("now your are out");
+                        // adding a simple move to the start
+                        The_movies one_none_move = new The_movies();
+                        one_none_move.setTitle("Shaun the Sheep Movie");
+                        one_none_move.setOriginal_language("en");
+                        one_none_move.setRelease_date("2015-02-05");
+                        one_none_move.setVote_average("7");
+                        one_none_move.setImage("/dhVYlfMNc2bfXPB83LLL00I4l9n.jpg");
+                        one_none_move.setImage_sec("/1eJLkZWuFVKr6OnNkMyqgoqkU1E.jpg");
 
 
-                    Intent intent = new Intent(MainActivity.this,MainActivity.class);
-                    startActivity(intent);
+                        ArrayList<The_movies> s =  new ArrayList<>();
+                        s.add(one_none_move);
+                        single_one.setThe_love_movies(s);
+                        single_one.setNow_login_email("none");
+                        msg("now your are out");
+
+
+                        Intent intent = new Intent(MainActivity.this,MainActivity.class);
+                        startActivity(intent);
+                        break;
+
+
+                    case R.id.nav_add_friends:
+                        // add Friend
+                        msg("nav_add_friends");
+                        break;
+
+                    case R.id.nav_friends:
+                        // add Friend
+                        msg("nav_friends");
+                        break;
 
                 }
                 //This is for maintaining the behavior of the Navigation view
@@ -168,8 +190,9 @@ public class MainActivity extends AppCompatActivity{
                 //This is for closing the drawer after acting on it
                 drawer.closeDrawer(GravityCompat.START);
                 return true;
-            }
+                }
         });
+
 
 
         authStateListener = new FirebaseAuth.AuthStateListener() {
@@ -205,6 +228,10 @@ public class MainActivity extends AppCompatActivity{
 
     }
 
+    @Override
+    public boolean onNavigationItemSelected(@NonNull @NotNull MenuItem item) {
+        return true;
+    }
 
     private static int RESULT_LOAD_IMG = 1;
     ImageView imagemain;
@@ -349,7 +376,7 @@ public class MainActivity extends AppCompatActivity{
         switch (item.getItemId()){
 
             case R.id.action_about:
-                Log.d("drawer", "onOptionsItemSelected: ");
+                Log.d("drawery", "onOptionsItemSelected: ");
 
                 msg("is action_about");
                 Intent intent = new Intent(this, About.class);
@@ -359,11 +386,10 @@ public class MainActivity extends AppCompatActivity{
 
             case R.id.action_Login:
                 msg("is action_Login");
-                Log.d("drawer", "onOptionsItemSelected: ");
+                Log.d("drawery", "onOptionsItemSelected: ");
                 // todo  take to login page ===============
 
                 break;
-
 
             case R.id.action_Logout:
 
@@ -474,22 +500,25 @@ public class MainActivity extends AppCompatActivity{
                         ToData shopping = snapshots.toObject(ToData.class);
                         Log.d("snal2", "onSuccess: " +email);
 
-
-                        if (shopping.getEmail().equals(email)){
-                            Log.d("snal", "onSuccess: " +snapshots.toString());
-                            Log.d("sec", "onSuccess: target on : " + snapshots.getId());
-
-                            Log.d("sec2", "onSuccess: target on : " + shopping.getEmail());
-
-                            the_user_Image = shopping.getBitmap();
-
-                            Log.d("getimage2", "onSuccess: " + the_user_Image);
+                        if (shopping != null) {
 
 
-                            Single_one single_one = Single_one.getInstance();
-                            single_one.setThe_love_movies(shopping.getThe_moviesArrayList());
+                            if (shopping.getEmail() == email) {
+                                Log.d("snal", "onSuccess: " + snapshots.toString());
+                                Log.d("sec", "onSuccess: target on : " + snapshots.getId());
 
-                            Log.d("data", "onSuccess: " + shopping.getThe_moviesArrayList().toString());
+                                Log.d("sec2", "onSuccess: target on : " + shopping.getEmail());
+
+                                the_user_Image = shopping.getBitmap();
+
+                                Log.d("getimage2", "onSuccess: " + the_user_Image);
+
+
+                                Single_one single_one = Single_one.getInstance();
+                                single_one.setThe_love_movies(shopping.getThe_moviesArrayList());
+
+                                Log.d("data", "onSuccess: " + shopping.getThe_moviesArrayList().toString());
+                            }
                         }
 
                     }
