@@ -77,6 +77,20 @@ public class Single_one {
         return false;
     }
 
+    public boolean seeiffollow(String email_to_search){
+        for (int i = 0; i < friend_list.size(); i++) {
+            if (friend_list.get(i).equals(email_to_search)) {
+                Log.d("loves", "seeiffollow: in the list already" );
+                return true;
+            }
+        }
+        return false;
+    }
+    public void add_to_friend(String fr) {
+        friend_list.add(fr);
+        Log.d("friends", "addThe_love_movies:   + " + fr);
+    }
+
     public void remove_one(The_movies movie){
         the_love_movies.remove(movie);
     }

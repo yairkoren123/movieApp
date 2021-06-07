@@ -1,5 +1,6 @@
 package com.example.drawer_try.ui.AddFreind;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.app.Activity;
@@ -43,6 +44,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 public class Add_Friends_Fragment extends Fragment {
+
+    // main ADD Friend
 
 
     //layout
@@ -96,6 +99,22 @@ public class Add_Friends_Fragment extends Fragment {
         // layout
         search_account_by_name_et = view.findViewById(R.id.edittext_search_friends);
         search_account_image = view.findViewById(R.id.imageView_search_friends);
+        Single_one single_one = Single_one.getInstance();
+
+        ConstraintLayout private_s = view.findViewById(R.id.cons_private_fr);
+        ConstraintLayout content = view.findViewById(R.id.contant_friend_add);
+
+
+        if (auth.getCurrentUser() == null || single_one.getNow_login_email() == "none") {
+            // no user
+            private_s.setVisibility(View.VISIBLE);
+
+            content.setVisibility(View.GONE);
+            Log.d("vis", "onViewCreated: ");
+        }else {
+            private_s.setVisibility(View.GONE);
+            content.setVisibility(View.VISIBLE);
+        }
 
         search_account_image.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -110,9 +129,15 @@ public class Add_Friends_Fragment extends Fragment {
 
 
                     }
-                call_frag();
+                FirebaseAuth auth = FirebaseAuth.getInstance();
 
+                if (auth.getCurrentUser() != null) {
+                    call_frag();
+                
                 }
+
+            }
+
         });
 
 
@@ -127,7 +152,7 @@ public class Add_Friends_Fragment extends Fragment {
     public void call_frag(){
         Search_Account_Fragment nextFrag = new Search_Account_Fragment(text);
         getActivity().getSupportFragmentManager().beginTransaction()
-                .add(R.id.mail_countener7, nextFrag, "findThisFragment")
+                .replace(R.id.mail_countener7, nextFrag, "findThisFragment")
                 .addToBackStack(null)
                 .commit();
     }

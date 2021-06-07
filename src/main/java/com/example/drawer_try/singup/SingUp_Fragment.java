@@ -30,6 +30,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import org.jetbrains.annotations.NotNull;
 
 import java.sql.Struct;
+import java.util.ArrayList;
 
 
 public class SingUp_Fragment extends Fragment {
@@ -115,10 +116,12 @@ public class SingUp_Fragment extends Fragment {
 
                     Single_one single_one = Single_one.getInstance();
 
+                    single_one.setFriend_list(new ArrayList<>());
+
                     ToData toData = new ToData();
                     single_one = Single_one.getInstance();
                     toData.setEmail(the_email);
-                    toData.setFriends(single_one.getFriend_list());
+                    toData.setFriends(new ArrayList<>());
                     toData.setBitmap("smile_1.png");
                     toData.setThe_moviesArrayList(Single_one.getInstance().getThe_love_movies());
 

@@ -24,13 +24,9 @@ import com.example.drawer_try.modle.FlowerAdapter;
 import com.example.drawer_try.modle.Fragment_the_movie_overview;
 import com.example.drawer_try.modle.The_movies;
 import com.example.drawer_try.singletonClass.Single_one;
-import com.example.drawer_try.singup.ToData;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -79,7 +75,7 @@ public class GalleryFragment extends Fragment {
         the_moviesArrayList = single_one.getThe_love_movies();
 
 
-        LinearLayout no_account = getView().findViewById(R.id.no_account_linar_image);
+        LinearLayout no_account = getView().findViewById(R.id.no_account_linar_image_add_friend);
         FirebaseAuth auth = FirebaseAuth.getInstance();
         no_account.setVisibility(View.GONE);
 
@@ -94,7 +90,6 @@ public class GalleryFragment extends Fragment {
             no_account.setVisibility(View.VISIBLE);
             frameLayout.setVisibility(View.GONE);
             gridView.setVisibility(View.GONE);
-
             Log.d("vis", "onViewCreated: ");
         } else {
             msg("you are login already");

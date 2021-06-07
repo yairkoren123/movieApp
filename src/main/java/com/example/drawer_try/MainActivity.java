@@ -89,6 +89,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private String the_user_Image = "none";
 
     DrawerLayout drawer;
+    ImageView image_user;
 
 
 
@@ -249,11 +250,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //username.setText("hi");
 
         email_now = single_one.getNow_login_email();
-        image_now = single_one.getUserImage();
+        image_now = single_one.getUserImage(); // the image in none
 
-        ImageView image_user = findViewById(R.id.imageView_main);
+        image_user = findViewById(R.id.imageView_main);
         if (image_now == "none"){
-            image_now = "noImage.png";
+            image_now = "smile_1.png";
             Log.d("imageuser", "onCreateOptionsMenu: no image");
         }
 
@@ -296,7 +297,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 image_user.setImageResource(R.drawable.smile_5);
                 break;
             case "none":
-                image_user.setImageResource(R.drawable.smile_0);
+                image_user.setImageResource(R.drawable.smile_7);
                 break;
         }
 
@@ -497,7 +498,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 @Override
                 public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
 
-                    String data = "";
                     for (QueryDocumentSnapshot snapshots : queryDocumentSnapshots) {
 
                         Log.d("sec", "onSuccess: " + snapshots.getId());
@@ -520,6 +520,37 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
                                 Single_one single_one = Single_one.getInstance();
+                                single_one.setFriend_list(shopping.getFriends());
+
+
+
+                                image_now = shopping.getBitmap();
+                                switch (image_now){
+                                    case "smile_0.png":
+                                        image_user.setImageResource(R.drawable.smile_0);
+                                        break;
+                                    case "smile_1.png":
+                                        image_user.setImageResource(R.drawable.smile_1);
+                                        break;
+                                    case "smile_2.png":
+                                        image_user.setImageResource(R.drawable.smile_2);
+                                        break;
+                                    case "smile_3.png":
+                                        image_user.setImageResource(R.drawable.smile_3);
+                                        break;
+                                    case "smile_4.png":
+                                        image_user.setImageResource(R.drawable.smile_4);
+                                        break;
+                                    case "smile_5.png":
+                                        image_user.setImageResource(R.drawable.smile_5);
+                                        break;
+                                    case "none":
+                                        image_user.setImageResource(R.drawable.smile_0);
+                                        break;
+                                }
+
+
+
 
                                 single_one.setThe_love_movies(shopping.getThe_moviesArrayList());
                                 Log.d("getarray", "onSuccess: " + shopping.getThe_moviesArrayList().toString());

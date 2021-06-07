@@ -39,7 +39,7 @@ public class Pic_Image_Activity extends AppCompatActivity {
         username.setText(email_now);
 
         if (email_now.equals(MainActivity.no_user_string_main)){
-            LinearLayout private_screen = findViewById(R.id.no_account_linar_image);
+            LinearLayout private_screen = findViewById(R.id.no_account_linar_image_add_friend);
             TextView setImageText = findViewById(R.id.title_view_open_image);
 
             private_screen.setVisibility(View.VISIBLE);
@@ -103,6 +103,8 @@ public class Pic_Image_Activity extends AppCompatActivity {
                         //5
 
                     } else {
+                        single_one.setUserImage("smile_0.png");
+
                         //Error
 
                     }

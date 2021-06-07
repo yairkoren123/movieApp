@@ -1,10 +1,12 @@
 package com.example.drawer_try.ui.AddFreind;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
@@ -18,14 +20,20 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.drawer_try.Activitys_stuffs.Activity_Account_overview;
 import com.example.drawer_try.R;
 import com.example.drawer_try.databinding.AddFriendsFragmentBinding;
 import com.example.drawer_try.singletonClass.Single_one;
 import com.example.drawer_try.singup.ToData;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -39,6 +47,8 @@ public class Search_Account_Fragment extends Fragment {
 
     //layout
     private ListView listView_friends;
+    private CardView single_card;
+
     private AddFriendsViewModel mViewModel;
 
     private AddFriendsViewModel addFriendsViewModel;
@@ -49,15 +59,20 @@ public class Search_Account_Fragment extends Fragment {
     String text = "";
     boolean search_by_text = false;
 
+    Single_one single_one= Single_one.getInstance();
+
     // firebase
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference collectionReference1 = db.collection("good");
+    private DocumentReference movie_data_add = db.collection("shopping").document();
+
 
 
 
     //firestore / firebase
     private FirebaseAuth auth = FirebaseAuth.getInstance();
-
+    public static String EXTRAOVERVIEW = "email";
+    public static String EXTRAIMAGE = "image";
 
 
     public Search_Account_Fragment(String theText) {
@@ -93,12 +108,6 @@ public class Search_Account_Fragment extends Fragment {
         }
 
         get_accounts();
-
-
-
-
-
-
 
     }
 
@@ -147,6 +156,7 @@ public class Search_Account_Fragment extends Fragment {
 
 
                                 Log.d("data123", "onSuccess: " + shopping.getThe_moviesArrayList().toString());
+                                break;
                             }
                         }else {
                             // all user
@@ -169,6 +179,7 @@ public class Search_Account_Fragment extends Fragment {
 
 
                                 Log.d("data123", "onSuccess: " + shopping.getThe_moviesArrayList().toString());
+
                             }
                         }
                     }
@@ -225,18 +236,17 @@ public class Search_Account_Fragment extends Fragment {
 
             View view = getLayoutInflater().inflate(R.layout.search_friend_item, null);
 
+            Single_one single_one = Single_one.getInstance();
+
 
             TextView username = (TextView) view.findViewById(R.id.account_username_search_single);
             ImageView image = view.findViewById(R.id.account_image_search_single);
             Button folloingButton = view.findViewById(R.id.folloing_button_single);
 
-            folloingButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    folloingButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_baseline_remove_24, 0, 0, 0);
+            single_card = view.findViewById(R.id.card_view_single_account);
 
-                }
-            });
+
+
 
             Log.d("county", "getView: " + username.getText());
 
@@ -248,6 +258,8 @@ public class Search_Account_Fragment extends Fragment {
 //            }
 
             username.setText(friendArrayList.get(position).getEmail());
+
+            String image_text = friendArrayList.get(position).getBitmap();
             switch (friendArrayList.get(position).getBitmap()){
                 case "smile_0.png":
                     image.setBackgroundResource(R.drawable.smile_0);
@@ -268,7 +280,7 @@ public class Search_Account_Fragment extends Fragment {
                     image.setBackgroundResource(R.drawable.smile_5);
                     break;
                 case "none":
-                    image.setBackgroundResource(0);
+                    image.setBackgroundResource(R.drawable.smile_7);
                     break;
             }
 
@@ -278,6 +290,111 @@ public class Search_Account_Fragment extends Fragment {
 //                    shoppingArrayList.get(position).getTimeAdded().getSeconds() * 1000);
 
 //            time.setText(timeAgo);
+
+            String email = friendArrayList.get(position).getEmail();
+
+            //check is its need to be plus or minus
+            boolean isthere = single_one.seeiffollow(email);
+            if (isthere == false) {
+                // not in the list
+                folloingButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_baseline_add_24, 0, 0, 0);
+
+            }else {
+                // in the list
+                folloingButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_baseline_remove_24, 0, 0, 0);
+
+            }
+            // click on card view
+            single_card.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // card view click
+                    Log.d("6card", "onClick: " + email);
+
+
+
+                    // start over view on account
+                    Intent intent = new Intent(getActivity(), Activity_Account_overview.class);
+                    intent.putExtra(EXTRAOVERVIEW,email);
+                    intent.putExtra(EXTRAIMAGE,image_text);
+                    startActivity(intent);
+                }
+            });
+
+
+            folloingButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+
+                    boolean isthere = false;
+
+                    Single_one single_one = Single_one.getInstance();
+                    isthere = single_one.seeiffollow(email);
+                    if (isthere == false) {
+                        // not in the list
+
+                        folloingButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_baseline_remove_24, 0, 0, 0);
+
+
+                        single_one.add_to_friend(email);
+
+                        movie_data_add = db.collection("good")
+                                .document(single_one.getNow_login_email());
+                        // add to the list
+                        // set(toData)
+                        movie_data_add.
+                                update("friends", single_one.getFriend_list()).
+                                addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull @NotNull Task<Void> task) {
+                                        if (task.isSuccessful()) {
+                                            msg("add to the follower list");
+                                        } else {
+                                            msg(task.getException().getMessage());
+                                        }
+                                    }
+                                }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull @NotNull Exception e) {
+                                msg(e.getMessage());
+                            }
+                        });
+
+                    }else {
+                        // need to remove from the list
+                        folloingButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_baseline_add_24, 0, 0, 0);
+
+
+                        ArrayList<String> needremov = single_one.getFriend_list();
+                        needremov.remove(email);
+                        single_one.setFriend_list(needremov);
+
+                        movie_data_add = db.collection("good")
+                                .document(single_one.getNow_login_email());
+                        // add to the list
+                        // set(toData)
+                        movie_data_add.
+                                update("friends", single_one.getFriend_list()).
+                                addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull @NotNull Task<Void> task) {
+                                        if (task.isSuccessful()) {
+                                            msg("add to the follower list");
+                                        } else {
+                                            msg(task.getException().getMessage());
+                                        }
+                                    }
+                                }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull @NotNull Exception e) {
+                                msg(e.getMessage());
+                            }
+                        });
+                    }
+                }
+            });
+
 
 
             return view;
@@ -300,6 +417,11 @@ public class Search_Account_Fragment extends Fragment {
             view = new View(activity);
         }
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
+    public void msg(String text){
+        Toast.makeText(getContext(),text,Toast.LENGTH_LONG)
+                .show();
     }
 
 
