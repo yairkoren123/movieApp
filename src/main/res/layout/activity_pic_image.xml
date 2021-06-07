@@ -223,7 +223,7 @@
         </GridLayout>
 
         <LinearLayout
-            android:id="@+id/no_account_linar_image"
+            android:id="@+id/no_account_linar_image_add_friend"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:alpha="0.7"

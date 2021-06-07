@@ -7,17 +7,18 @@
 
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/card_view_single_account"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="6dp"
+        android:clickable="true"
         app:cardCornerRadius="8dp"
         app:cardElevation="10dp"
         app:cardPreventCornerOverlap="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        >
+        app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -42,16 +43,14 @@
 
             </androidx.cardview.widget.CardView>
 
-            <TextView
-                android:id="@+id/single_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="44dp"
-                android:layout_marginTop="16dp"
-                android:background="@android:color/transparent"
-                android:text="time"
-                app:layout_constraintStart_toEndOf="@+id/cardView"
-                app:layout_constraintTop_toBottomOf="@+id/account_username_search_single" />
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="46dp"
+                android:layout_height="56dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_baseline_arrow_forward_ios_24" />
 
             <TextView
                 android:id="@+id/account_username_search_single"
@@ -72,13 +71,18 @@
                 android:id="@+id/folloing_button_single"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="44dp"
+                android:layout_marginEnd="136dp"
+                android:layout_marginBottom="8dp"
                 android:background="@android:color/transparent"
                 android:drawableLeft="@drawable/ic_baseline_add_24"
                 android:text="Follow"
                 android:textColor="@color/black"
-                android:textSize="14sp"
+                android:textSize="12sp"
+                app:iconPadding="8dp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/cardView" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
