@@ -11,7 +11,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.DRAWER_TRY">
-        <activity android:name=".Activitys_stuffs.Activity_Account_overview"></activity>
+        <activity android:name=".stuffs.Pic_image_background"></activity>
+        <activity android:name=".Activitys_stuffs.Activity_Account_overview" />
         <activity android:name=".stuffs.Pic_Image_Activity" />
         <activity android:name=".singup.About" />
         <activity
