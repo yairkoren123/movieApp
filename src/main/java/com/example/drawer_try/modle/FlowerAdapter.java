@@ -40,10 +40,10 @@ public class FlowerAdapter extends BaseAdapter  {
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-    private DocumentReference movie_data_add = db.collection("shopping").document();
-    private DocumentReference movie_data_remove = db.collection("shopping").document();
+    private DocumentReference movie_data_add = db.collection("good").document();
+    private DocumentReference movie_data_remove = db.collection("good").document();
 
-    private CollectionReference movie_data_add2 = db.collection("shopping");
+    private CollectionReference movie_data_add2 = db.collection("good");
 
 
     private Single_one single_one = Single_one.getInstance();
@@ -214,11 +214,13 @@ public class FlowerAdapter extends BaseAdapter  {
                                     single_one = Single_one.getInstance();
                                     single_one.remove_one(selectedMovie);
 
-                                    ToData toData = new ToData();
                                     single_one = Single_one.getInstance();
-                                    toData.setEmail(single_one.getNow_login_email());
-                                    toData.setBitmap(String.valueOf(single_one.getUserImage()));
-                                    toData.setThe_moviesArrayList(Single_one.getInstance().getThe_love_movies());
+
+//                                    ToData toData = new ToData();
+//                                    single_one = Single_one.getInstance();
+//                                    toData.setEmail(single_one.getNow_login_email());
+//                                    toData.setBitmap(String.valueOf(single_one.getUserImage()));
+//                                    toData.setThe_moviesArrayList(Single_one.getInstance().getThe_love_movies());
 
                                     movie_data_remove = db.collection("good")
                                             .document(single_one.getNow_login_email());
@@ -228,13 +230,14 @@ public class FlowerAdapter extends BaseAdapter  {
                                             addOnCompleteListener(new OnCompleteListener<Void>() {
                                                 @Override
                                                 public void onComplete(@NonNull @NotNull Task<Void> task) {
-                                                    if (task.isSuccessful()) {
+                                                    if (task.isComplete()) {
                                                         msg(selectedMovie.getTitle() + " was remove from your list");
                                                         add.setAnimation(R.raw.add);
                                                         notifyDataSetChanged();
 
                                                     } else {
                                                         msg(task.getException().getMessage());
+                                                        Log.d("EEE", "onComplete: error" );
                                                     }
                                                 }
                                             }).addOnFailureListener(new OnFailureListener() {

@@ -92,7 +92,19 @@ public class Single_one {
     }
 
     public void remove_one(The_movies movie){
-        the_love_movies.remove(movie);
+
+        Log.d("removenow", "remove_one: " + the_love_movies.size());
+
+        for (int i = 0; i < the_love_movies.size(); i++) {
+
+            if (the_love_movies.get(i).getTitle().equals(movie.getTitle()) ){
+                the_love_movies.remove(i);
+                break;
+            }
+
+        }
+        Log.d("removenow", "remove_one: " + the_love_movies.size());
+
     }
 
     // id

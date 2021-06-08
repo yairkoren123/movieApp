@@ -14,6 +14,9 @@ import android.widget.Toast;
 import com.example.drawer_try.MainActivity;
 import com.example.drawer_try.R;
 import com.example.drawer_try.singletonClass.Single_one;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class Pic_Image_Activity extends AppCompatActivity {
 
@@ -21,6 +24,9 @@ public class Pic_Image_Activity extends AppCompatActivity {
     GridLayout mgrid;
     String email_now = "";
     TextView username;
+
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,6 +116,16 @@ public class Pic_Image_Activity extends AppCompatActivity {
                     }
                     // back to the main activity
                     msg(single_one.getUserImage());
+
+                    DocumentReference documentReference = db.collection("good").document(email_now);
+
+                    documentReference.update("bitmap",single_one.getUserImage())
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void unused) {
+                                    msg("image set");
+                                }
+                            });
 
                     intent = new Intent(Pic_Image_Activity.this, MainActivity.class);
                     startActivity(intent);

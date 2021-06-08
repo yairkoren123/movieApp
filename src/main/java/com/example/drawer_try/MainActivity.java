@@ -13,23 +13,28 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.drawer_try.modle.The_movies;
 import com.example.drawer_try.singletonClass.Single_one;
 import com.example.drawer_try.singup.About;
 import com.example.drawer_try.singup.ToData;
 import com.example.drawer_try.stuffs.Pic_Image_Activity;
+import com.example.drawer_try.stuffs.Pic_image_background;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.view.GravityCompat;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -42,6 +47,12 @@ import com.example.drawer_try.databinding.ActivityMainBinding;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -61,6 +72,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     public static final String EXTRAEMAIL = "extraEmail";
     public static final String no_user_string_main = "no user";
+
+    FirebaseDatabase database;
+    DatabaseReference reference;
 
 
 
@@ -88,6 +102,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private String the_user_Image = "none";
 
+    private Single_one single_one = Single_one.getInstance();
+
     DrawerLayout drawer;
     ImageView image_user;
 
@@ -98,6 +114,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     String email_now = "none";
     String image_now = "none";
+    String now_image_background = "none";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,6 +123,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+
+        Window window = getWindow();
+
         setSupportActionBar(binding.appBarMain.toolbar);
 
         drawer = binding.drawerLayout;
@@ -113,8 +133,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_slideshow, R.id.nav_setting, R.id.nav_search, R.id.nav_watchlist,
-        R.id.nav_add_friends , R.id.nav_friends)
+                R.id.nav_home,
+                R.id.nav_slideshow,
+                R.id.nav_setting,
+                R.id.nav_search,
+                R.id.nav_watchlist,
+                R.id.nav_friends,
+                R.id.nav_add_friends)
                 .setDrawerLayout(drawer)
                 .build();
         // set color to the Drawer
@@ -247,14 +272,56 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Single_one single_one = Single_one.getInstance();
 
         TextView username = findViewById(R.id.username_main);
+
+        ImageView imageView_main_back = findViewById(R.id.background_main_imageview);
+
+        imageView_main_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("backclick", "onClick: now ");
+                // start the background activity
+                Intent intent = new Intent(MainActivity.this, Pic_image_background.class);
+                startActivity(intent);
+            }
+        });
         //username.setText("hi");
 
         email_now = single_one.getNow_login_email();
         image_now = single_one.getUserImage(); // the image in none
 
         image_user = findViewById(R.id.imageView_main);
-        if (image_now == "none"){
-            image_now = "smile_1.png";
+        if (image_now.equals("none") || image_now.equals("")){
+            //image_now = "smile_1.png";
+
+            final Single_one single_one1 = Single_one.getInstance();
+
+            collectionReference1.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                @Override
+                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                    Single_one single_one = Single_one.getInstance();
+
+                    for (QueryDocumentSnapshot snapshots : queryDocumentSnapshots) {
+
+                        ToData shopping = snapshots.toObject(ToData.class);
+                        if (shopping != null) {
+                            if (shopping.getEmail().equals(email_now)) {
+                                the_user_Image = shopping.getBitmap();
+                                image_now = shopping.getBitmap();
+                                now_image_background = shopping.getImage_background();
+
+                                // set the background image to null if he not find a image for background
+                                if (now_image_background == null){
+                                    now_image_background = "none";
+                                }
+
+                                Log.d("imageuser", "onCreateOptionsMenu: no image get" + image_now);
+                                single_one.setUserImage(image_now);
+                                break;
+                            }
+                        }
+                    }
+                }
+            });
             Log.d("imageuser", "onCreateOptionsMenu: no image");
         }
 
@@ -265,15 +332,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         email.setText(email_now);
 
         // see if the image is null todo here =====================
-        if (!the_user_Image.equals("none")){
-            single_one.setUserImage(the_user_Image);
-            image_now = the_user_Image;
+//        if (!the_user_Image.equals("none")){
+//            single_one.setUserImage(the_user_Image);
+//            image_now = the_user_Image;
 
-        }
+        //}
 
 
 
-        Log.d("imageuser", "onCreateOptionsMenu: image user : " + image_now);
+        Log.d("imageuser", "onCreateOptionsMenu: image user1 : " + image_now);
         // todo just enter the image id to this :  image_user.setImageResource(R.drawable.background1) by number ==========;
 
 
@@ -325,15 +392,30 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         // set image user
         single_one = Single_one.getInstance();
-        DocumentReference documentReference = db.collection("good").document(email_now);
+//        DocumentReference documentReference = db.collection("good").document(email_now);
+//
+//        documentReference.update("bitmap",image_now)
+//                .addOnSuccessListener(new OnSuccessListener<Void>() {
+//                    @Override
+//                    public void onSuccess(Void unused) {
+//                        msg("image set");
+//                    }
+//                });
 
-        documentReference.update("bitmap",single_one.getUserImage())
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void unused) {
-                        msg("image set");
-                    }
-                });
+        // set the image of the background :
+
+        if (now_image_background.equals("none")){
+            now_image_background = " s";
+        }
+        Glide.with(getApplicationContext())
+                .load(now_image_background)
+                .fitCenter()
+                .into(imageView_main_back);
+
+        imageView_main_back.setScaleType(ImageView.ScaleType.FIT_XY);
+
+        // todo to countoinue the image main in the background of the main screen
+
 
         return true;
     }
@@ -525,6 +607,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
                                 image_now = shopping.getBitmap();
+                                Log.d("1start", "onSuccess: start "+image_now);
                                 switch (image_now){
                                     case "smile_0.png":
                                         image_user.setImageResource(R.drawable.smile_0);
@@ -563,13 +646,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
 
 
+
+
             });
+
 
 
         }else {
             single_one.setNow_login_email("none");
         }
         auth.addAuthStateListener(authStateListener);
+
+
+
+
+
+
+
         super.onStart();
 
 

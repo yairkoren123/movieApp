@@ -4,11 +4,8 @@ import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
@@ -19,9 +16,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import com.android.volley.Request;
@@ -30,7 +25,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.drawer_try.MainActivity;
 import com.example.drawer_try.R;
 import com.example.drawer_try.databinding.FragmentHomeBinding;
 import com.example.drawer_try.modle.FlowerAdapter;
@@ -46,7 +40,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 import static java.util.Collections.shuffle;
 
@@ -442,7 +435,7 @@ public class HomeFragment extends Fragment {
 
                 Fragment_the_movie_overview nextFrag= new Fragment_the_movie_overview();
                 getActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.mail_countener2, nextFrag, "findThisFragment")
+                        .replace(R.id.mail_countener9, nextFrag, "findThisFragment")
                         .addToBackStack(null)
                         .commit();
 

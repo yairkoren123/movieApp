@@ -56,8 +56,8 @@ public class SettingFragment extends Fragment {
     //private DocumentReference journalRef = db.document("Journal/First Thoughts");
     private DocumentReference cool = db.collection("shopping")
             .document("First Thoughts");
-    private CollectionReference collectionReference = db.collection("Journal");
-    private CollectionReference collectionReference1 = db.collection("shopping");
+    private CollectionReference collectionReference = db.collection("good");
+    private CollectionReference collectionReference1 = db.collection("good");
 
     private DocumentReference movie_data_add = db.collection("good").document();
 
@@ -151,9 +151,6 @@ public class SettingFragment extends Fragment {
                                             single_one.setNow_login_email(the_email);
                                             single_one.setNow_login_pass(the_pass);
 
-
-
-
                                             ToData toData = new ToData();
                                             toData.setEmail(the_email);
                                             toData.setThe_moviesArrayList(single_one.getThe_love_movies());
@@ -183,18 +180,20 @@ public class SettingFragment extends Fragment {
                             @Override
                             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
 
-                                String data = "";
                                 for (QueryDocumentSnapshot snapshots : queryDocumentSnapshots) {
 
                                     Log.d("sec", "onSuccess: " + snapshots.getId());
 
                                     ToData shopping = snapshots.toObject(ToData.class);
-                                    Log.d("snal2", "onSuccess: " +email);
+                                    Log.d("snal2", "onSuccess: " +the_email);
 
                                     if (shopping != null) {
 
+                                        Log.d("bobob", "onSuccess: shopping : " + shopping.getEmail()+ "    email :" +email);
+                                        Log.d("bobob", "onSuccess: snapshots " + snapshots.getId());
 
-                                        if (shopping.getEmail().equals(email)) {
+
+                                        if (snapshots.getId().equals(the_email)) {
                                             Single_one single_one = Single_one.getInstance();
 
                                             Log.d("snal", "onSuccess: " + snapshots.toString());
@@ -204,7 +203,7 @@ public class SettingFragment extends Fragment {
 
                                             single_one.setUserImage(shopping.getBitmap());
 
-                                            Log.d("getimage2", "onSuccess: " + shopping.getBitmap());
+                                            Log.d("getimage3", "onSuccess: " + shopping.getBitmap());
 
 
 
@@ -214,6 +213,10 @@ public class SettingFragment extends Fragment {
                                             Log.d("data", "onSuccess: " + shopping.getThe_moviesArrayList().toString());
 
                                             msg("auisdauishfdkjasfdfjsgnolh");
+                                            Intent intent = new Intent(getActivity(),MainActivity.class);
+                                            startActivity(intent);
+                                            break;
+
                                         }
                                     }
 
@@ -221,6 +224,12 @@ public class SettingFragment extends Fragment {
                             }
 
 
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull @NotNull Exception e) {
+                                Log.d("settingfrag", "onFailure: " + e.getMessage());
+                                msg(e.getMessage());
+                            }
                         });
 
                     }
@@ -255,8 +264,6 @@ public class SettingFragment extends Fragment {
 //
 //                    });
 
-                    Intent intent = new Intent(getActivity(),MainActivity.class);
-                    startActivity(intent);
 
 
                 }

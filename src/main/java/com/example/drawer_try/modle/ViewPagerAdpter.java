@@ -1,6 +1,5 @@
 package com.example.drawer_try.modle;
 
-import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 import android.view.View;
@@ -11,15 +10,12 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.PagerAdapter;
-import androidx.viewpager.widget.ViewPager;
 
 import com.bumptech.glide.Glide;
 import com.example.drawer_try.R;
 import com.example.drawer_try.singletonClass.Single_one;
-import com.google.android.material.internal.ThemeEnforcement;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 public class ViewPagerAdpter extends PagerAdapter implements View.OnClickListener {
 
@@ -74,7 +70,7 @@ public class ViewPagerAdpter extends PagerAdapter implements View.OnClickListene
 
                 Fragment_the_movie_overview nextFrag= new Fragment_the_movie_overview();
                 activity.getSupportFragmentManager().beginTransaction()
-                        .add(R.id.mail_countener2, nextFrag, "findThisFragment")
+                        .add(R.id.mail_countener9, nextFrag, "findThisFragment")
                         .addToBackStack(null)
                         .commit();
 

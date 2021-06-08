@@ -12,11 +12,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.bumptech.glide.Glide;
 import com.example.drawer_try.R;
+import com.example.drawer_try.modle.Fragment_the_movie_overview;
 import com.example.drawer_try.modle.The_movies;
 import com.example.drawer_try.singletonClass.Single_one;
 import com.example.drawer_try.singup.ToData;
@@ -35,6 +39,9 @@ import java.util.ArrayList;
 public class recycler_Adpter_HORIZONTAL extends RecyclerView.Adapter<recycler_Adpter_HORIZONTAL.ViewHolder> {
     ArrayList<The_movies> arrayList;
     Context context;
+
+
+    // on ckick
 
     // firebase
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -67,6 +74,29 @@ public class recycler_Adpter_HORIZONTAL extends RecyclerView.Adapter<recycler_Ad
         //holder.imageView.setImageResource(arrayList.get(position).getImage());
 
         The_movies selectedMovie = arrayList.get(position);
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                msg(holder.textView.getText().toString());
+                for (int i = 0; i < arrayList.size(); i++) {
+                    if(arrayList.get(i).getTitle().equals(holder.textView.getText().toString())){
+
+                        The_movies sected_movie_acount = arrayList.get(i);
+                        // find the value we type on in recycler view
+                        Log.d("6find", "onClick: " + sected_movie_acount.getTitle() );
+
+                        Single_one single_one = Single_one.getInstance();
+                        single_one.setValue_movie(sected_movie_acount);
+
+
+                        break;
+
+                    }
+
+                }
+            }
+        });
 
         String image ="https://image.tmdb.org/t/p/w500" + selectedMovie.getImage() ;
 
@@ -232,10 +262,10 @@ public class recycler_Adpter_HORIZONTAL extends RecyclerView.Adapter<recycler_Ad
         return arrayList.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         // here values
         ImageView imageView;
-        TextView textView , stars_avg;
+        TextView textView, stars_avg;
         LottieAnimationView add;
 
         public ViewHolder(@NonNull @NotNull View itemView) {
@@ -247,8 +277,14 @@ public class recycler_Adpter_HORIZONTAL extends RecyclerView.Adapter<recycler_Ad
             stars_avg = itemView.findViewById(R.id.stars_rec);
 
 
+
         }
+
+
+
+
     }
+    
     private void msg (String text){
         Toast.makeText(context,text,Toast.LENGTH_LONG)
                 .show();
