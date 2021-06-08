@@ -9,7 +9,6 @@
             android:icon="@drawable/ic_baseline_movie_24"
             android:title="@string/menu_home" />
 
-
         <item
             android:id="@+id/nav_slideshow"
             android:icon="@drawable/ic_baseline_autorenew_24"
@@ -26,12 +25,12 @@
         <item
             android:id="@+id/nav_friends"
             android:icon="@drawable/ic_baseline_people_alt_24"
-            android:title="friends" />
+            android:title="@string/friends" />
 
         <item
             android:id="@+id/nav_add_friends"
             android:icon="@drawable/ic_baseline_person_add_alt_1_24"
-            android:title="add friends" />
+            android:title="@string/add_friends" />
 
 
         <item
@@ -42,6 +41,5 @@
             android:id="@+id/nav_logout"
             android:icon="@drawable/ic_baseline_exit_to_app_24"
             android:title="@string/menu_logout"/>
-<!--        todo a click linter to the logout-->
     </group>
 </menu>

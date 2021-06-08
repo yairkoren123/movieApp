@@ -24,5 +24,7 @@
     <string name="action_logout">Logout</string>
     <string name="action_login">Login</string>
     <string name="me">you</string>
+    <string name="friends">friends</string>
+    <string name="add_friends">add friends</string>
 
 </resources>
