@@ -5,11 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.FriendList.List_Friends_Fragment"
-    android:background="@color/backbluedark">
+    android:background="#454545">
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Hello" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="hello is my fragment from list of my friends"
+        android:textColor="@color/white"/>
 
 </FrameLayout>
