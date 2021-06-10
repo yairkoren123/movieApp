@@ -14,7 +14,7 @@
         android:background="@color/backbluedark"
         android:columnWidth="100dp"
         android:horizontalSpacing="5dp"
-        android:numColumns="auto_fit"
+        android:numColumns="3"
         android:padding="3dp"
         android:stretchMode="columnWidth"
         android:verticalSpacing="10dp"
