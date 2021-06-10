@@ -118,7 +118,7 @@ public class SearchFragment extends Fragment {
                 Single_one single_one = Single_one.getInstance();
                 single_one.setToSearch(need_search);
 
-                // start fargmant
+                // start fragment
                 SearchBox nextFrag = new SearchBox();
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .add(R.id.mail_countener6, nextFrag, "findThisFragment")

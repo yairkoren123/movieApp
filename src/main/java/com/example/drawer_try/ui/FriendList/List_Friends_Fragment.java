@@ -54,13 +54,6 @@ public class List_Friends_Fragment extends Fragment {
 
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        mViewModel = new ViewModelProvider(this).get(ListFriendsViewModel.class);
-        // TODO: Use the ViewModel
-    }
-
-    @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;

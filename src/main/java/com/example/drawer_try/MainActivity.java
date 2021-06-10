@@ -28,6 +28,14 @@ import com.example.drawer_try.singup.About;
 import com.example.drawer_try.singup.ToData;
 import com.example.drawer_try.stuffs.Pic_Image_Activity;
 import com.example.drawer_try.stuffs.Pic_image_background;
+import com.example.drawer_try.ui.AddFreind.Add_Friends_Fragment;
+import com.example.drawer_try.ui.FriendList.List_Friends_Fragment;
+import com.example.drawer_try.ui.Search.SearchBox;
+import com.example.drawer_try.ui.Search.SearchFragment;
+import com.example.drawer_try.ui.Setting.SettingFragment;
+import com.example.drawer_try.ui.gallery.GalleryFragment;
+import com.example.drawer_try.ui.home.HomeFragment;
+import com.example.drawer_try.ui.slideshow.SlideshowFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -36,6 +44,7 @@ import com.google.android.material.navigation.NavigationView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.view.GravityCompat;
+import androidx.fragment.app.FragmentManager;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -106,6 +115,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     DrawerLayout drawer;
     ImageView image_user;
+    ImageView imageView_main_back;
+
 
 
 
@@ -115,6 +126,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     String email_now = "none";
     String image_now = "none";
     String now_image_background = "none";
+    String the_now_open_drawer = "home";
+
+    boolean is_back_press = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -135,16 +149,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.nav_home,
                 R.id.nav_slideshow,
-                R.id.nav_setting,
                 R.id.nav_search,
                 R.id.nav_watchlist,
                 R.id.nav_friends,
-                R.id.nav_add_friends)
+                R.id.nav_add_friends,
+                R.id.nav_setting)
                 .setDrawerLayout(drawer)
                 .build();
         // set color to the Drawer
         //navigationView.setBackgroundColor(Color.parseColor("#"));
         navigationView.setBackgroundColor(Color.WHITE);
+
 
 
 
@@ -164,17 +179,99 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
 
-
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                int id=menuItem.getItemId();
+                int id = menuItem.getItemId();
                 //it's possible to do more actions on several items, if there is a large amount of items I prefer switch(){case} instead of if()
 
                 switch (menuItem.getItemId()){
 
+                    // .addToBackStack(null)
+
+                    case R.id.nav_home:
+                        the_now_open_drawer = "home";
+                        HomeFragment nextFrag_nav_home =  new HomeFragment();
+                        MainActivity.this.getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.nav_host_fragment_content_main, nextFrag_nav_home, "findThisFragment")
+                                .commit();
+                        msg("nav_home");
+                        break;
+
+
+                    case R.id.nav_slideshow:
+                        the_now_open_drawer = "slideshow";
+
+                        SlideshowFragment nextFrag_nav_slideshow =  new SlideshowFragment();
+                        MainActivity.this.getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.nav_host_fragment_content_main, nextFrag_nav_slideshow, "findThisFragment")
+                                .commit();
+                        msg("nav_slideshow");
+                        break;
+
+                    case R.id.nav_search:
+                        the_now_open_drawer = "search";
+
+                        SearchFragment nextFrag_nav_search= new SearchFragment();
+                        MainActivity.this.getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.nav_host_fragment_content_main, nextFrag_nav_search, "findThisFragment")
+                                .commit();
+                        msg("nav_search");
+                        break;
+
+
+                    case R.id.nav_watchlist:
+                        the_now_open_drawer = "watchlist";
+
+                        GalleryFragment nextFrag_nav_watchlist= new GalleryFragment();
+                        MainActivity.this.getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.nav_host_fragment_content_main, nextFrag_nav_watchlist, "findThisFragment")
+                                .commit();
+                        msg("nav_watchlist");
+                        break;
+
+
+                    case R.id.nav_friends:
+                        // add Friend
+                        the_now_open_drawer = "friends";
+
+                        List_Friends_Fragment nextFrag_friend_list = new List_Friends_Fragment();
+                        MainActivity.this.getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.nav_host_fragment_content_main, nextFrag_friend_list, "findThisFragment")
+                                .commit();
+                        msg("nav_friends");
+                        break;
+
+                    case R.id.nav_add_friends:
+                        // add Friend
+                        the_now_open_drawer = "add_friends";
+
+                        Add_Friends_Fragment nextFrag_add_friends = new Add_Friends_Fragment();
+                        MainActivity.this.getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.nav_host_fragment_content_main, nextFrag_add_friends, "findThisFragment")
+                                .commit();
+                        msg("nav_add_friends");
+
+                        break;
+
+                    case R.id.nav_setting:
+                        the_now_open_drawer = "setting";
+
+                        SettingFragment nextFrag_setting = new SettingFragment();
+                        MainActivity.this.getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.nav_host_fragment_content_main, nextFrag_setting, "findThisFragment")
+                                .commit();
+                        msg("nav_setting");
+
+                        break;
+
+
+
+
                     case R.id.nav_logout:
-                    // logout
+                        the_now_open_drawer = "home";
+
+                        // logout
                         Toast.makeText(getApplicationContext(), "Logout", Toast.LENGTH_SHORT).show();
                         FirebaseAuth auth = FirebaseAuth.getInstance();
                         auth.signOut();
@@ -201,25 +298,27 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         startActivity(intent);
                         break;
 
-
-                    case R.id.nav_add_friends:
-                        // add Friend
-                        msg("nav_add_friends");
-                        break;
-
-                    case R.id.nav_friends:
-                        // add Friend
-                        msg("nav_friends");
-                        break;
+                    default:
+                        Intent intent_to_main = new Intent(MainActivity.this,MainActivity.class);
+                        startActivity(intent_to_main);
 
                 }
                 //This is for maintaining the behavior of the Navigation view
-                NavigationUI.onNavDestinationSelected(menuItem,navController);
+
+
+                //NavigationUI.onNavDestinationSelected(menuItem,navController); // todo ? we need this ? its just if i click is going me throw the layout but not the friend list fragment , why? idk
+
+
                 //This is for closing the drawer after acting on it
                 drawer.closeDrawer(GravityCompat.START);
                 return true;
                 }
+
+
         });
+
+
+
 
 
 
@@ -271,9 +370,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         Single_one single_one = Single_one.getInstance();
 
-        TextView username = findViewById(R.id.username_main);
 
-        ImageView imageView_main_back = findViewById(R.id.background_main_imageview);
+        imageView_main_back = findViewById(R.id.background_main_imageview);
 
         imageView_main_back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -312,9 +410,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                 // set the background image to null if he not find a image for background
                                 if (now_image_background == null){
                                     now_image_background = "none";
+                                }else {
+                                    Glide.with(getApplicationContext())
+                                            .load(now_image_background)
+                                            .fitCenter()
+                                            .into(imageView_main_back);
+
+                                    imageView_main_back.setScaleType(ImageView.ScaleType.FIT_XY);
                                 }
 
-                                Log.d("imageuser", "onCreateOptionsMenu: no image get" + image_now);
+                                Log.d("imageuser", "onCreateOptionsMenu: no image get " + image_now + "image back P:  " + now_image_background);
                                 single_one.setUserImage(image_now);
                                 break;
                             }
@@ -373,9 +478,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
             // if email != null
-            username.setVisibility(View.VISIBLE);
             image_user.setVisibility(View.VISIBLE);
-            username.setOnClickListener(new View.OnClickListener() {
+            image_user.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(MainActivity.this, Pic_Image_Activity.class);
@@ -407,12 +511,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (now_image_background.equals("none")){
             now_image_background = " s";
         }
-        Glide.with(getApplicationContext())
-                .load(now_image_background)
-                .fitCenter()
-                .into(imageView_main_back);
+//        Glide.with(getApplicationContext())
+//                .load(now_image_background)
+//                .fitCenter()
+//                .into(imageView_main_back);
+//
+//        imageView_main_back.setScaleType(ImageView.ScaleType.FIT_XY);
 
-        imageView_main_back.setScaleType(ImageView.ScaleType.FIT_XY);
+
+        Log.d("mainimage", "onCreateOptionsMenu: "+now_image_background);
 
         // todo to countoinue the image main in the background of the main screen
 
@@ -604,6 +711,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                 Single_one single_one = Single_one.getInstance();
                                 single_one.setFriend_list(shopping.getFriends());
 
+                                now_image_background  = shopping.getImage_background();
+                                if (now_image_background == null || now_image_background.equals("none")){
+                                    msg("email = none");
+
+                                }else {
+                                    Glide.with(getApplicationContext())
+                                            .load(now_image_background)
+                                            .fitCenter()
+                                            .into(imageView_main_back);
+
+                                    imageView_main_back.setScaleType(ImageView.ScaleType.FIT_XY);
+                                }
+
 
 
                                 image_now = shopping.getBitmap();
@@ -694,6 +814,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void onBackPressed() {
+
+
+        if (the_now_open_drawer.equals("home")){
+
+        }else {
+            Intent intent = new Intent(this,MainActivity.class);
+            startActivity(intent);
+            finish();
+        }
+
+
+
+
+
 
 
         // dsmiss progress dialog

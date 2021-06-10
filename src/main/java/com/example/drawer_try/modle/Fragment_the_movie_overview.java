@@ -252,6 +252,12 @@ public class Fragment_the_movie_overview extends Fragment {
 
         // IMAGE
         String image_background ="https://image.tmdb.org/t/p/w500" + the_string_movie.getImage_sec() ;
+
+        if (the_string_movie.image_sec == null || the_string_movie.image_sec.equals("null")){
+            image_background = single_one.getNo_imgae_abl();
+
+        }
+
         ImageView imageView_poster_background =  view.findViewById(R.id.imageview_background_overview);
         Glide.with(getContext())
                 .load(image_background)
@@ -259,8 +265,14 @@ public class Fragment_the_movie_overview extends Fragment {
                 .into(imageView_poster_background);
 
 
+
         String image_poster ="https://image.tmdb.org/t/p/w500" + the_string_movie.getImage() ;
         ImageView imageView_poster_poster =  view.findViewById(R.id.image_view_poster_overview);
+
+        if (the_string_movie.image == null || the_string_movie.image.equals("null")){
+            image_poster = single_one.getNo_imgae_abl();
+            imageView_poster_poster.setVisibility(View.INVISIBLE);
+        }
         Glide.with(getContext())
                 .load(image_poster)
                 .fitCenter()

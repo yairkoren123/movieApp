@@ -12,6 +12,8 @@ import java.util.ArrayList;
 public class Single_one {
 
     // values
+
+    String no_imgae_abl = "https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg";
     String now_login_email;
 
     String userImage = "";
@@ -168,5 +170,10 @@ public class Single_one {
 
     public void setFriend_list(ArrayList<String> friend_list) {
         this.friend_list = friend_list;
+    }
+    // no image
+
+    public String getNo_imgae_abl() {
+        return no_imgae_abl;
     }
 }

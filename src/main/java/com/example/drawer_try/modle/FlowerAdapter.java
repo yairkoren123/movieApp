@@ -38,6 +38,8 @@ public class FlowerAdapter extends BaseAdapter  {
     private FirebaseAuth firebaseAuth;
 
 
+
+
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     private DocumentReference movie_data_add = db.collection("good").document();
@@ -93,20 +95,34 @@ public class FlowerAdapter extends BaseAdapter  {
         textView_title_movie.setText(selectedMovie.getTitle());
         String image ="https://image.tmdb.org/t/p/w500" + selectedMovie.image ;
 
-        if (selectedMovie.image == null || selectedMovie.image == ""){
+        if (selectedMovie.image == null || selectedMovie.image.equals("") || image.equals("null")){
             image ="null";
 
         }
+        single_one = Single_one.getInstance();
         Log.d("images", "getView: " + image);
-        if (image.equals("null") || image == "null"){
-            if (selectedMovie.getImage_sec() != null){
-                image ="https://image.tmdb.org/t/p/w500" + selectedMovie.getImage_sec() ;
+        if (image.equals("https://image.tmdb.org/t/p/w500null") || image == "null") {
 
-            }else{
-                //Glide.with(getView(position,convertView,parent)).load(getImage("pic")).into(imageView_poster_movie);
+            if (selectedMovie.getImage_sec() != null) {
+                Log.d("image_sec111", "getView: image null and sec : " + selectedMovie.image_sec );
+                image = "https://image.tmdb.org/t/p/w500" + selectedMovie.getImage_sec();
+                Glide.with(mContext)
+                        .load(image)
+                        .centerCrop()
+                        .into(imageView_poster_movie);
 
+                imageView_poster_movie.setScaleType(ImageView.ScaleType.FIT_XY);
+
+            }if (selectedMovie.image_sec == null || selectedMovie.image_sec.equals("null")){
+                Glide.with(mContext)
+                        .load(single_one.getNo_imgae_abl())
+                        .centerCrop()
+                        .into(imageView_poster_movie);
+                imageView_poster_movie.setScaleType(ImageView.ScaleType.FIT_XY);
             }
+
         }else {
+
 
             Glide.with(mContext)
                     .load(image)
@@ -115,6 +131,7 @@ public class FlowerAdapter extends BaseAdapter  {
 
             imageView_poster_movie.setScaleType(ImageView.ScaleType.FIT_XY);
         }
+
 
 
 //        Picasso.get()
