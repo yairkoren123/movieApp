@@ -21,10 +21,14 @@ public class ViewPagerAdpter extends PagerAdapter implements View.OnClickListene
 
     private Context context;
     private ArrayList<String> imagesURL = new ArrayList<>();
+    Single_one single_one = Single_one.getInstance();
 
 
     public ViewPagerAdpter(Context context, ArrayList<The_movies> movieList) {
         this.context = context;
+
+        single_one.setThe_now_open_drawer("overview");
+
 
         //shuffle Array list
 //        Collections.shuffle(movieList);

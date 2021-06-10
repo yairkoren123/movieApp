@@ -18,6 +18,8 @@ public class Single_one {
 
     String userImage = "";
 
+    String the_now_open_drawer = "home";
+
     String toSearch ="";
     String now_login_pass;
     ArrayList<The_movies> movies_list = null;
@@ -175,5 +177,19 @@ public class Single_one {
 
     public String getNo_imgae_abl() {
         return no_imgae_abl;
+    }
+
+    public void setNo_imgae_abl(String no_imgae_abl) {
+        this.no_imgae_abl = no_imgae_abl;
+    }
+
+    // current drawer
+
+    public String getThe_now_open_drawer() {
+        return the_now_open_drawer;
+    }
+
+    public void setThe_now_open_drawer(String the_now_open_drawer) {
+        this.the_now_open_drawer = the_now_open_drawer;
     }
 }

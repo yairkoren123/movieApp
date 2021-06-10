@@ -99,20 +99,39 @@ public class recycler_Adpter_HORIZONTAL extends RecyclerView.Adapter<recycler_Ad
         });
 
         String image ="https://image.tmdb.org/t/p/w500" + selectedMovie.getImage() ;
+        Log.d("images1234", "getView: " + image);
 
-        if (selectedMovie.getImage() == null || selectedMovie.getImage() == ""){
-            image ="null";
 
-        }
-        Log.d("images", "getView: " + image);
-        if (image.equals("null") || image == "null"){
-            if (selectedMovie.getImage_sec() != null){
-                image ="https://image.tmdb.org/t/p/w500" + selectedMovie.getImage_sec() ;
+        if (image.equals("https://image.tmdb.org/t/p/w500null") || selectedMovie.getImage() == null || selectedMovie.getImage() == "" || selectedMovie.getImage() == "null"){
+        image = "null";
 
-            }else{
+        Log.d("image123", "getView: " + image);
+        if (image.equals("null") || image.equals("https://image.tmdb.org/t/p/w500null")) {
+            Log.d("opop", "onBindViewHolder: " + image);
+
+            if (selectedMovie.getImage_sec() != null) {
+                image = "https://image.tmdb.org/t/p/w500" + selectedMovie.getImage_sec();
+                Glide.with(context)
+                        .load(image)
+                        .centerCrop()
+                        .into(holder.imageView);
+                holder.imageView.setScaleType(ImageView.ScaleType.FIT_XY);
+
+
+                Log.d("opop", "onBindViewHolder: " + image);
+
+            }
+            if (image.equals("https://image.tmdb.org/t/p/w500null")) {
+                // no images
+                Glide.with(context)
+                        .load(single_one.getNo_imgae_abl())
+                        .centerCrop()
+                        .into(holder.imageView);
+                holder.imageView.setScaleType(ImageView.ScaleType.FIT_XY);
                 //Glide.with(getView(position,convertView,parent)).load(getImage("pic")).into(imageView_poster_movie);
 
             }
+        }
         }else {
 
             Glide.with(context)

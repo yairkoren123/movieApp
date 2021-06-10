@@ -48,6 +48,7 @@ public class Search_Account_Fragment extends Fragment {
     //layout
     private ListView listView_friends;
     private CardView single_card;
+    private TextView no_flowers;
 
     private AddFriendsViewModel mViewModel;
 
@@ -58,13 +59,14 @@ public class Search_Account_Fragment extends Fragment {
     String the_user_Image = "";
     String text = "";
     boolean search_by_text = false;
+    ArrayList<String> friend_list_from_single_my  = new ArrayList<>();
 
     Single_one single_one= Single_one.getInstance();
 
     // firebase
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference collectionReference1 = db.collection("good");
-    private DocumentReference movie_data_add = db.collection("shopping").document();
+    private DocumentReference movie_data_add = db.collection("good").document();
 
 
 
@@ -101,6 +103,8 @@ public class Search_Account_Fragment extends Fragment {
         // the code here
         friendArrayList = new ArrayList<>();
         listView_friends = view.findViewById(R.id.list_view_friends);
+        no_flowers = view.findViewById(R.id.alone_friend_textview);
+        no_flowers.setVisibility(View.GONE);
 
         if (text.contains("@")) {
             Log.d("6cou", "onClick: text have '@' text : " + text);
@@ -117,6 +121,11 @@ public class Search_Account_Fragment extends Fragment {
         FirebaseAuth auth = FirebaseAuth.getInstance();
         Single_one single_one = Single_one.getInstance();
 
+        // get the friend list from singleton
+        friend_list_from_single_my = single_one.getFriend_list();
+        no_flowers.setVisibility(View.GONE);
+
+
         String email = single_one.getNow_login_email();
 
         collectionReference1.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -128,14 +137,46 @@ public class Search_Account_Fragment extends Fragment {
                     Log.d("sec", "onSuccess: " + snapshots.getId());
 
                     ToData shopping = snapshots.toObject(ToData.class);
+
                     Log.d("snal2", "onSuccess: " +email);
+
+                    Log.d("friend_list", "onSuccess: " + single_one.getFriend_list().toString());
 
                     if (shopping != null) {
 
 
                         if (search_by_text == true){
-                            // by text
-                            if (shopping.getEmail().equals(text)) {
+                            // by followers
+
+                            if (text.equals("ABCDEFG@") ){
+
+                                for (int i = 0; i < friend_list_from_single_my.size(); i++) {
+
+                                    if (shopping.getEmail().equals(friend_list_from_single_my.get(i))){
+                                        the_user_Image = shopping.getBitmap();
+
+                                        Log.d("getimage123", "onSuccess: " + the_user_Image);
+
+                                        ToData toData = new ToData();
+                                        toData.setEmail(shopping.getEmail());
+                                        toData.setBitmap(shopping.getBitmap());
+                                        toData.setLast_add(shopping.getLast_add());
+                                        toData.setThe_moviesArrayList(shopping.getThe_moviesArrayList());
+                                        friendArrayList.add(toData);
+                                    }
+
+                                }
+                                if (single_one.getNow_login_email().contains("@")){
+                                    if (friendArrayList.size() == 0){
+                                        no_flowers.setVisibility(View.VISIBLE);
+                                    }
+                                }
+
+
+                            }
+
+                            else if (shopping.getEmail().equals(text)) {
+                                // by text
 
 
                                 Log.d("snal123", "onSuccess: " + snapshots.toString());
@@ -182,6 +223,7 @@ public class Search_Account_Fragment extends Fragment {
 
                             }
                         }
+
                     }
 
                 }

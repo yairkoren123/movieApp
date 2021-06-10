@@ -22,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.drawer_try.modle.Fragment_the_movie_overview;
 import com.example.drawer_try.modle.The_movies;
 import com.example.drawer_try.singletonClass.Single_one;
 import com.example.drawer_try.singup.About;
@@ -44,7 +45,9 @@ import com.google.android.material.navigation.NavigationView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.view.GravityCompat;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -126,7 +129,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     String email_now = "none";
     String image_now = "none";
     String now_image_background = "none";
-    String the_now_open_drawer = "home";
+    public String the_now_open_drawer = "home";
 
     boolean is_back_press = false;
 
@@ -183,6 +186,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 int id = menuItem.getItemId();
+                single_one = Single_one.getInstance();
                 //it's possible to do more actions on several items, if there is a large amount of items I prefer switch(){case} instead of if()
 
                 switch (menuItem.getItemId()){
@@ -191,6 +195,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                     case R.id.nav_home:
                         the_now_open_drawer = "home";
+                        single_one.setThe_now_open_drawer(the_now_open_drawer);
+
                         HomeFragment nextFrag_nav_home =  new HomeFragment();
                         MainActivity.this.getSupportFragmentManager().beginTransaction()
                                 .replace(R.id.nav_host_fragment_content_main, nextFrag_nav_home, "findThisFragment")
@@ -201,6 +207,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                     case R.id.nav_slideshow:
                         the_now_open_drawer = "slideshow";
+                        single_one.setThe_now_open_drawer(the_now_open_drawer);
+
 
                         SlideshowFragment nextFrag_nav_slideshow =  new SlideshowFragment();
                         MainActivity.this.getSupportFragmentManager().beginTransaction()
@@ -211,6 +219,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                     case R.id.nav_search:
                         the_now_open_drawer = "search";
+                        single_one.setThe_now_open_drawer(the_now_open_drawer);
+
 
                         SearchFragment nextFrag_nav_search= new SearchFragment();
                         MainActivity.this.getSupportFragmentManager().beginTransaction()
@@ -222,6 +232,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                     case R.id.nav_watchlist:
                         the_now_open_drawer = "watchlist";
+                        single_one.setThe_now_open_drawer(the_now_open_drawer);
+
 
                         GalleryFragment nextFrag_nav_watchlist= new GalleryFragment();
                         MainActivity.this.getSupportFragmentManager().beginTransaction()
@@ -234,6 +246,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     case R.id.nav_friends:
                         // add Friend
                         the_now_open_drawer = "friends";
+                        single_one.setThe_now_open_drawer(the_now_open_drawer);
+
 
                         List_Friends_Fragment nextFrag_friend_list = new List_Friends_Fragment();
                         MainActivity.this.getSupportFragmentManager().beginTransaction()
@@ -245,6 +259,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     case R.id.nav_add_friends:
                         // add Friend
                         the_now_open_drawer = "add_friends";
+                        single_one.setThe_now_open_drawer(the_now_open_drawer);
+
 
                         Add_Friends_Fragment nextFrag_add_friends = new Add_Friends_Fragment();
                         MainActivity.this.getSupportFragmentManager().beginTransaction()
@@ -256,6 +272,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                     case R.id.nav_setting:
                         the_now_open_drawer = "setting";
+                        single_one.setThe_now_open_drawer(the_now_open_drawer);
 
                         SettingFragment nextFrag_setting = new SettingFragment();
                         MainActivity.this.getSupportFragmentManager().beginTransaction()
@@ -270,6 +287,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                     case R.id.nav_logout:
                         the_now_open_drawer = "home";
+                        single_one.setThe_now_open_drawer(the_now_open_drawer);
+
 
                         // logout
                         Toast.makeText(getApplicationContext(), "Logout", Toast.LENGTH_SHORT).show();
@@ -296,13 +315,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                         Intent intent = new Intent(MainActivity.this,MainActivity.class);
                         startActivity(intent);
+                        finish();
                         break;
 
                     default:
-                        Intent intent_to_main = new Intent(MainActivity.this,MainActivity.class);
-                        startActivity(intent_to_main);
+//                        Intent intent_to_main = new Intent(MainActivity.this,MainActivity.class);
+//                        startActivity(intent_to_main);
 
                 }
+                Log.d("nowdrawer1", "onBackPressed: " + the_now_open_drawer);
+
                 //This is for maintaining the behavior of the Navigation view
 
 
@@ -579,7 +601,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.action_Login:
                 msg("is action_Login");
                 Log.d("drawery", "onOptionsItemSelected: ");
-                // todo  take to login page ===============
+
+                the_now_open_drawer = "setting";
+
+                SettingFragment nextFrag_setting = new SettingFragment();
+                MainActivity.this.getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.nav_host_fragment_content_main, nextFrag_setting, "findThisFragment")
+                        .commit();
+                msg("nav_setting");
+
 
                 break;
 
@@ -643,6 +673,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Single_one single_one = Single_one.getInstance();
 
         FirebaseAuth auth = FirebaseAuth.getInstance();
+        single_one.setThe_now_open_drawer("home");
 
         if (auth.getCurrentUser() != null) {
             String email = auth.getCurrentUser().getEmail().toString().trim();
@@ -713,7 +744,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                                 now_image_background  = shopping.getImage_background();
                                 if (now_image_background == null || now_image_background.equals("none")){
-                                    msg("email = none");
+                                    //msg("email = none");
 
                                 }else {
                                     Glide.with(getApplicationContext())
@@ -815,10 +846,37 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onBackPressed() {
 
-
-        if (the_now_open_drawer.equals("home")){
+        if (is_back_press == true){
 
         }else {
+            is_back_press = true;
+        }
+
+
+
+        single_one = Single_one.getInstance();
+        the_now_open_drawer = single_one.getThe_now_open_drawer();
+        Log.d("nowdrawer2", "onBackPressed: " + the_now_open_drawer);
+        if (the_now_open_drawer.equals("home")){
+            onDestroy();
+        } else if (the_now_open_drawer.equals("singup")){
+            the_now_open_drawer = "setting";
+            single_one.setThe_now_open_drawer(the_now_open_drawer);
+            // if we are in sing up page
+            super.onBackPressed();
+
+
+        }
+        else if (the_now_open_drawer.equals("overview")){
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            Fragment_the_movie_overview myFragment = new Fragment_the_movie_overview();
+            fragmentTransaction.remove(myFragment).commit();
+            super.onBackPressed();
+
+        }
+
+
+        else {
             Intent intent = new Intent(this,MainActivity.class);
             startActivity(intent);
             finish();
@@ -832,11 +890,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         // dsmiss progress dialog
         //progressDialog.dismiss();
+        Log.d("wwww", "onBackPressed: we are in " + the_now_open_drawer );
 
         msg("no");
 //        Intent intent = new Intent(this,MainActivity.class);
 //        startActivity(intent);
 
-        super.onBackPressed();
+        //super.onBackPressed();
     }
 }

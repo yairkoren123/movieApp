@@ -82,6 +82,7 @@ public class Fragment_the_movie_overview extends Fragment {
 
         // get the list of the movies
         Single_one single_one = Single_one.getInstance();
+        single_one.setThe_now_open_drawer("overview");
 
         the_string_movie = single_one.getValue_movie();
         the_movies_list = single_one.getMovies_list();
@@ -263,6 +264,10 @@ public class Fragment_the_movie_overview extends Fragment {
                 .load(image_background)
                 .fitCenter()
                 .into(imageView_poster_background);
+
+        // new
+        imageView_poster_background.setScaleType(ImageView.ScaleType.FIT_XY);
+
 
 
 

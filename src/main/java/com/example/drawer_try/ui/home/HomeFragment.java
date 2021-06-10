@@ -358,7 +358,7 @@ public class HomeFragment extends Fragment {
 
                     for (int i = 0; i < theMoviesArrayList.size(); i++) {
                         if (theMoviesArrayList.get(i).getImage() == the_good_side){
-                            msg("we fpund the value " + theMoviesArrayList.get(i).getTitle());
+                            msg("we found the value " + theMoviesArrayList.get(i).getTitle());
                             break;
                         }
                     }
@@ -374,7 +374,7 @@ public class HomeFragment extends Fragment {
             pager_images_movies.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Log.d("3333", "onClick: click pager");
+                    Log.d("3333", "onClick: click pager " + currntPage);
                 }
             });
         }else {
@@ -418,7 +418,7 @@ public class HomeFragment extends Fragment {
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                msg("click on " + theMoviesArrayList.get(position).getTitle());
+                msg("click on1 " + theMoviesArrayList.get(position).getTitle());
                 single_one.setValue_movie(theMoviesArrayList.get(position));
 
                 Log.d("URLhome", "onResponse: " + theMoviesArrayList.get(position).getId());

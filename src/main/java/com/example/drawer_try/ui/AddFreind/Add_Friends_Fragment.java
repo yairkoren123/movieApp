@@ -10,34 +10,22 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
-import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.drawer_try.R;
 import com.example.drawer_try.databinding.AddFriendsFragmentBinding;
-import com.example.drawer_try.databinding.SearchFragmentBinding;
-import com.example.drawer_try.modle.The_friend;
 import com.example.drawer_try.singletonClass.Single_one;
 import com.example.drawer_try.singup.ToData;
-import com.example.drawer_try.ui.Search.SearchBox;
-import com.example.drawer_try.ui.Search.SearchViewModel;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -101,7 +89,7 @@ public class Add_Friends_Fragment extends Fragment {
         search_account_image = view.findViewById(R.id.imageView_search_friends);
         Single_one single_one = Single_one.getInstance();
 
-        ConstraintLayout private_s = view.findViewById(R.id.cons_private_fr);
+        ConstraintLayout private_s = view.findViewById(R.id.private_find_friend);
         ConstraintLayout content = view.findViewById(R.id.contant_friend_add);
 
 
@@ -128,11 +116,14 @@ public class Add_Friends_Fragment extends Fragment {
                         search_by_text = true;
 
 
+
                     }
                 FirebaseAuth auth = FirebaseAuth.getInstance();
 
                 if (auth.getCurrentUser() != null) {
                     call_frag();
+                    // low keyboard
+                    hideKeyboard(getActivity());
                 
                 }
 
@@ -155,6 +146,17 @@ public class Add_Friends_Fragment extends Fragment {
                 .replace(R.id.mail_countener7, nextFrag, "findThisFragment")
                 .addToBackStack(null)
                 .commit();
+    }
+
+    public static void hideKeyboard(Activity activity) {
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        //Find the currently focused view, so we can grab the correct window token from it.
+        View view = activity.getCurrentFocus();
+        //If no view currently has focus, create a new one, just so we can grab a window token from it
+        if (view == null) {
+            view = new View(activity);
+        }
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
 

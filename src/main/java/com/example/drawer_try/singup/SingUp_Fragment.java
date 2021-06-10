@@ -1,5 +1,6 @@
 package com.example.drawer_try.singup;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -11,10 +12,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.drawer_try.MainActivity;
 import com.example.drawer_try.R;
 import com.example.drawer_try.singletonClass.Single_one;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -105,6 +108,13 @@ public class SingUp_Fragment extends Fragment {
                                 single_one.setNow_login_email(the_email);
                                 single_one.setNow_login_pass(the_pass);
 
+                                // hide hideKeyboard and start new MAin activity
+                                hideKeyboard(getActivity());
+
+                                Intent intent = new Intent(getContext(), MainActivity.class);
+                                startActivity(intent);
+                                getActivity().finish();
+
                             }else {
                                 msg(task.getException().getMessage());
 
@@ -170,6 +180,16 @@ public class SingUp_Fragment extends Fragment {
     public void msg(String text){
         Toast.makeText(getActivity(),text,Toast.LENGTH_LONG)
                 .show();
+    }
+    public static void hideKeyboard(Activity activity) {
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        //Find the currently focused view, so we can grab the correct window token from it.
+        View view = activity.getCurrentFocus();
+        //If no view currently has focus, create a new one, just so we can grab a window token from it
+        if (view == null) {
+            view = new View(activity);
+        }
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
     @Override
