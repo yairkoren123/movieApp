@@ -4,13 +4,11 @@ import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -18,10 +16,9 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import com.android.volley.Request;
@@ -30,7 +27,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.drawer_try.MainActivity;
 import com.example.drawer_try.R;
 import com.example.drawer_try.databinding.FragmentHomeBinding;
 import com.example.drawer_try.modle.FlowerAdapter;
@@ -46,7 +42,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 import static java.util.Collections.shuffle;
 
@@ -56,6 +51,10 @@ public class HomeFragment extends Fragment {
     // progressDialog
     ProgressDialog progressDialog;
     ViewPagerAdpter adpter_pager;
+    FrameLayout the_frag_of_overview;
+
+    ArrayList<The_movies> the_moviesArrayList_adpter = new ArrayList<>();
+
 
 
 
@@ -79,6 +78,9 @@ public class HomeFragment extends Fragment {
     private ImageView imagemovies;
 
     String movie_id;
+
+    ViewPager pager_images_movies;
+
 
 
     public ArrayList<String> imagesURLS = new ArrayList<>();
@@ -123,16 +125,26 @@ public class HomeFragment extends Fragment {
         View root = binding.getRoot();
 
         the_next_pages = root.findViewById(R.id.add_page);
+
+
+
         the_next_pages.setVisibility(View.VISIBLE);
+        the_next_pages.setText("PAGE 1");
+
         the_next_pages.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 requestQueue = Volley.newRequestQueue(getContext());
                 if (currntPage < the_limit_page) {
 
+                    if (currntPage != 0){
+                        the_next_pages.setText("PAGE " + (currntPage-1));
+                    }
                     currntPage++;
                     JsonURL = JsonURL = "https://api.themoviedb.org/3/movie/" + the_data + "?api_key=2029d84f820b9dc29ab83773c31b4320&page=" + currntPage;
                     Log.d("current", "onClick: " + currntPage);
+                    // todo view pager dispersing
+                    //pager_images_movies.setVisibility(View.GONE);
                     get_movies();
                 }else {
                     // you got to the limit of the pages
@@ -141,8 +153,6 @@ public class HomeFragment extends Fragment {
 
             }
         });
-
-
         return root;
 
     }
@@ -164,7 +174,7 @@ public class HomeFragment extends Fragment {
         // set the URL
 
         //the_values_array.add("latest");
-        the_values_array.add("popular");
+        //the_values_array.add("popular");
         the_values_array.add("top_rated");
         the_values_array.add("upcoming");
 
@@ -326,15 +336,32 @@ public class HomeFragment extends Fragment {
 
 
         // viewpager
-        ViewPager pager_images_movies = getView().findViewById(R.id.viewpager);
         // text of image
         TextView name_of_image = getView().findViewById(R.id.name_of_movie_main);
         Log.d("xandy", "next_level: " + name_of_image.getTop());
+        ViewPager pager_images_movies = getView().findViewById(R.id.viewpager);
+        Log.d("pagecountnow", "next_level: out " + currntPage);
+
+        ConstraintLayout pager_mail = getView().findViewById(R.id.constraintLayout2_pager);
+
+
 
         if (currntPage <= 3 ) {
+
+            Log.d("is3n", "onClick: click pager " + currntPage);
+
+
+            Log.d("pagecountnow", "next_level: more 3  " + currntPage);
+
             pager_images_movies.setVisibility(View.VISIBLE);
 
-            adpter_pager = new ViewPagerAdpter(getContext(), theMoviesArrayList);
+            the_moviesArrayList_adpter = theMoviesArrayList;
+
+
+            adpter_pager = new ViewPagerAdpter(getContext(), the_moviesArrayList_adpter);
+
+
+
             pager_images_movies.setAdapter(adpter_pager);
 
             Log.d("222", "next_level: " + pager_images_movies.getCurrentItem());
@@ -342,7 +369,7 @@ public class HomeFragment extends Fragment {
 
             // todo add a name by the side of the image insted of the click listener ==============================
 
-            name_of_image.setText(theMoviesArrayList.get(0).getTitle());
+            name_of_image.setText(the_moviesArrayList_adpter.get(0).getTitle());
 
             pager_images_movies.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
                 @Override
@@ -355,7 +382,7 @@ public class HomeFragment extends Fragment {
                 public void onPageSelected(int position) {
                     //best
                     Log.d("333", "next_level: " + pager_images_movies.getCurrentItem());
-                    name_of_image.setText(theMoviesArrayList.get(position).getTitle());
+                    name_of_image.setText(the_moviesArrayList_adpter.get(position).getTitle());
 
 
                     String the_URl =  imagesURLS.get(pager_images_movies.getCurrentItem());
@@ -363,9 +390,9 @@ public class HomeFragment extends Fragment {
                     Log.d("qqq", "onPageSelected: " + try_me[0]+ " \n and the 1 is : " + try_me[1] );
                     String the_good_side = try_me[1];
 
-                    for (int i = 0; i < theMoviesArrayList.size(); i++) {
-                        if (theMoviesArrayList.get(i).getImage() == the_good_side){
-                            msg("we fpund the value " + theMoviesArrayList.get(i).getTitle());
+                    for (int i = 0; i < the_moviesArrayList_adpter.size(); i++) {
+                        if (the_moviesArrayList_adpter.get(i).getImage() == the_good_side){
+                            msg("we found the value " + the_moviesArrayList_adpter.get(i).getTitle());
                             break;
                         }
                     }
@@ -381,22 +408,18 @@ public class HomeFragment extends Fragment {
             pager_images_movies.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Log.d("3333", "onClick: click pager");
+                    Log.d("3333", "onClick: click pager " + currntPage);
                 }
             });
-        }else {
+        }else if (currntPage > 3){
+                Log.d("is3", "onClick: click pager " + currntPage);
+
             pager_images_movies.setVisibility(View.GONE);
             name_of_image.setVisibility(View.GONE);
+            pager_mail.setVisibility(View.GONE);
 
 
         }
-
-
-
-
-
-
-
 
         // gridView
 
@@ -425,7 +448,7 @@ public class HomeFragment extends Fragment {
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                msg("click on " + theMoviesArrayList.get(position).getTitle());
+                msg("click on1 " + theMoviesArrayList.get(position).getTitle());
                 single_one.setValue_movie(theMoviesArrayList.get(position));
 
                 Log.d("URLhome", "onResponse: " + theMoviesArrayList.get(position).getId());
@@ -433,18 +456,32 @@ public class HomeFragment extends Fragment {
 
 
                 // gone the button of the next page
-                the_next_pages.setVisibility(View.GONE);
+                //the_next_pages.setVisibility(View.GONE);
                 // gone the button of the next page
 
                 // todo set gone in fragment and return its back
 
                 //name_of_image.setVisibility(View.GONE);
 
+
+                the_frag_of_overview = getView().findViewById(R.id.mail_countener9);
+                the_frag_of_overview.setVisibility(View.VISIBLE);
+
+                Single_one single_one = Single_one.getInstance();
+                single_one.setThe_now_open_drawer("overview");
+
                 Fragment_the_movie_overview nextFrag= new Fragment_the_movie_overview();
                 getActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.mail_countener2, nextFrag, "findThisFragment")
+                        .add(R.id.mail_countener9, nextFrag, "findThisFragment")
                         .addToBackStack(null)
                         .commit();
+
+
+
+
+
+//                                        .addToBackStack(null)
+
 
 //                The_movies none_movie = new The_movies();
 //                none_movie.setTitle("");

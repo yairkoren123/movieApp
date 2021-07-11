@@ -7,6 +7,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -44,6 +45,7 @@ public class Fragment_the_movie_overview extends Fragment {
 
     private LottieAnimationView add_animationview;
 
+
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
 
@@ -56,8 +58,10 @@ public class Fragment_the_movie_overview extends Fragment {
     }
 
 
+
     public static Fragment_the_movie_overview newInstance() {
         Fragment_the_movie_overview fragment = new Fragment_the_movie_overview();
+
         return fragment;
     }
 
@@ -69,7 +73,12 @@ public class Fragment_the_movie_overview extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragmen
+        // Inflate the layout for this fragment
+
+        Single_one single_one = Single_one.getInstance();
+
+        single_one.setFragment(this);
+
         View view = inflater.inflate(R.layout.fragment_the_movie_overview, container, false);
 
 
@@ -83,11 +92,17 @@ public class Fragment_the_movie_overview extends Fragment {
         // get the list of the movies
         Single_one single_one = Single_one.getInstance();
 
+        if (single_one.getThe_now_open_drawer().equals("slideshow")){
+
+        }else {
+            single_one.setThe_now_open_drawer("overview");
+        }
+
         the_string_movie = single_one.getValue_movie();
         the_movies_list = single_one.getMovies_list();
 
-        Log.d("random", "onViewCreated: " +the_movies_list.size());
-        Log.d("random", "onViewCreated: " +the_string_movie);
+        Log.d("random2", "onViewCreated: " +the_movies_list.size());
+        Log.d("random3", "onViewCreated: " +the_string_movie);
 
 
         if (the_string_movie.getTitle().equals("none")) {
@@ -115,6 +130,11 @@ public class Fragment_the_movie_overview extends Fragment {
 
         TextView language_text_overview = view.findViewById(R.id.textview_language_overview);
         language_text_overview.setText("language : " + the_string_movie.getOriginal_language().toString().trim());
+
+
+
+
+
 
         // anim
 
@@ -252,15 +272,31 @@ public class Fragment_the_movie_overview extends Fragment {
 
         // IMAGE
         String image_background ="https://image.tmdb.org/t/p/w500" + the_string_movie.getImage_sec() ;
+
+        if (the_string_movie.image_sec == null || the_string_movie.image_sec.equals("null")){
+            image_background = single_one.getNo_imgae_abl();
+
+        }
+
         ImageView imageView_poster_background =  view.findViewById(R.id.imageview_background_overview);
         Glide.with(getContext())
                 .load(image_background)
                 .fitCenter()
                 .into(imageView_poster_background);
 
+        // new
+        imageView_poster_background.setScaleType(ImageView.ScaleType.FIT_XY);
+
+
+
 
         String image_poster ="https://image.tmdb.org/t/p/w500" + the_string_movie.getImage() ;
         ImageView imageView_poster_poster =  view.findViewById(R.id.image_view_poster_overview);
+
+        if (the_string_movie.image == null || the_string_movie.image.equals("null")){
+            image_poster = single_one.getNo_imgae_abl();
+            imageView_poster_poster.setVisibility(View.INVISIBLE);
+        }
         Glide.with(getContext())
                 .load(image_poster)
                 .fitCenter()

@@ -205,7 +205,7 @@ public class SearchBox extends Fragment {
 
                             }
                             single_one = Single_one.getInstance();
-                            single_one.setMovies_list(theMoviesArrayList);
+//                            single_one.setMovies_list(theMoviesArrayList);
                             next_level();
 
 

@@ -1,8 +1,9 @@
-package com.example.drawer_try.ui.Setting;
+ package com.example.drawer_try.ui.Setting;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -14,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -56,18 +58,19 @@ public class SettingFragment extends Fragment {
     //private DocumentReference journalRef = db.document("Journal/First Thoughts");
     private DocumentReference cool = db.collection("shopping")
             .document("First Thoughts");
-    private CollectionReference collectionReference = db.collection("Journal");
-    private CollectionReference collectionReference1 = db.collection("shopping");
+    private CollectionReference collectionReference = db.collection("good");
+    private CollectionReference collectionReference1 = db.collection("good");
 
     private DocumentReference movie_data_add = db.collection("good").document();
 
     FirebaseAuth auth;
 
     public String current_email = "" ;
+    String user = "";
 
 
     //layout
-    private TextView sing_up_text_view;
+    private TextView sing_up_text_view , currnet_email_text_top ;
     private Button login_now , logout_now;
     private EditText pass , email;
 
@@ -90,6 +93,7 @@ public class SettingFragment extends Fragment {
 
         pass = root.findViewById(R.id.login_passowrd);
         email = root.findViewById(R.id.login_email);
+        currnet_email_text_top = root.findViewById(R.id.no_user_setting_textview);
 
 
 
@@ -98,6 +102,15 @@ public class SettingFragment extends Fragment {
         sing_up_text_view = root.findViewById(R.id.login_sing_up_button);
         //sing_up_text_view.setVisibility(View.VISIBLE);
         //login_now.setVisibility(View.VISIBLE);
+        Single_one single_one = Single_one.getInstance();
+        user = single_one.getNow_login_email();
+        if (user.equals("none")){
+            user = "";
+        }
+        currnet_email_text_top.setText(user);
+
+
+
 
 
         sing_up_text_view.setOnClickListener(new View.OnClickListener() {
@@ -105,6 +118,8 @@ public class SettingFragment extends Fragment {
             public void onClick(View v) {
                 SingUp_Fragment nextFrag= new SingUp_Fragment();
                 //ConstraintLayout constraintLayout = root.findViewById(R.id.constractor_setting);
+                Single_one single_one = Single_one.getInstance();
+                single_one.setThe_now_open_drawer("singup");
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .add(R.id.mail_countener4, nextFrag, "findThisFragment")
                         .addToBackStack(null)
@@ -139,6 +154,7 @@ public class SettingFragment extends Fragment {
                         pass.requestFocus();
 
                     } else {
+                        hideKeyboard(getActivity());
                         auth.signInWithEmailAndPassword(the_email, the_pass)
                                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                                     @Override
@@ -151,13 +167,19 @@ public class SettingFragment extends Fragment {
                                             single_one.setNow_login_email(the_email);
                                             single_one.setNow_login_pass(the_pass);
 
-
-
-
                                             ToData toData = new ToData();
                                             toData.setEmail(the_email);
                                             toData.setThe_moviesArrayList(single_one.getThe_love_movies());
 //                                            movie_data_add = db.collection("good").document();
+
+                                            currnet_email_text_top.setText(the_email);
+
+                                            Intent intent = new Intent(getActivity(), MainActivity.class);
+
+                                            // todo
+                                            startActivity(intent);
+                                            getActivity().finish();
+
 //
 //
 //                                            movie_data_add.set(toData).addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -177,10 +199,69 @@ public class SettingFragment extends Fragment {
                             public void onFailure(@NonNull @NotNull Exception e) {
                                 msg(e.getMessage());
                             }
+
+                        });
+
+                        collectionReference1.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                            @Override
+                            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+
+                                for (QueryDocumentSnapshot snapshots : queryDocumentSnapshots) {
+
+                                    Log.d("sec", "onSuccess: " + snapshots.getId());
+
+                                    ToData shopping = snapshots.toObject(ToData.class);
+                                    Log.d("snal2", "onSuccess: " +the_email);
+
+                                    if (shopping != null) {
+
+                                        Log.d("bobob", "onSuccess: shopping : " + shopping.getEmail()+ "    email :" +email);
+                                        Log.d("bobob", "onSuccess: snapshots " + snapshots.getId());
+
+
+                                        if (snapshots.getId().equals(the_email)) {
+                                            Single_one single_one = Single_one.getInstance();
+
+                                            Log.d("snal", "onSuccess: " + snapshots.toString());
+                                            Log.d("sec", "onSuccess: target on : " + snapshots.getId());
+
+                                            Log.d("sec2", "onSuccess: target on : " + shopping.getEmail());
+
+                                            single_one.setUserImage(shopping.getBitmap());
+
+                                            Log.d("getimage3", "onSuccess: " + shopping.getBitmap());
+
+
+
+                                            single_one.setThe_love_movies(shopping.getThe_moviesArrayList());
+                                            Log.d("getarray", "onSuccess: " + shopping.getThe_moviesArrayList().toString());
+
+                                            Log.d("data", "onSuccess: " + shopping.getThe_moviesArrayList().toString());
+
+                                            msg("auisdauishfdkjasfdfjsgnolh");
+                                            email.setText("");
+                                            pass.setText("");
+//                                            Intent intent = new Intent(getActivity(),MainActivity.class);
+//                                            startActivity(intent);
+//                                            getActivity().finish();
+                                            break;
+
+                                        }
+                                    }
+
+                                }
+                            }
+
+
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull @NotNull Exception e) {
+                                Log.d("settingfrag", "onFailure: " + e.getMessage());
+                                msg(e.getMessage());
+                            }
                         });
 
                     }
-
 
 //                    collectionReference1.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
 //                        @Override
@@ -212,8 +293,6 @@ public class SettingFragment extends Fragment {
 //
 //                    });
 
-                    Intent intent = new Intent(getActivity(),MainActivity.class);
-                    startActivity(intent);
 
 
                 }
@@ -242,6 +321,7 @@ public class SettingFragment extends Fragment {
                 single_one.setThe_love_movies(s);
                 single_one.setNow_login_email("none");
                 msg("now your are out");
+                currnet_email_text_top.setText("none");
 
 
                 Intent intent = new Intent(getActivity(),MainActivity.class);
@@ -267,6 +347,17 @@ public class SettingFragment extends Fragment {
         Toast.makeText(getActivity(),text,Toast.LENGTH_LONG)
                 .show();
     }
+    public static void hideKeyboard(Activity activity) {
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        //Find the currently focused view, so we can grab the correct window token from it.
+        View view = activity.getCurrentFocus();
+        //If no view currently has focus, create a new one, just so we can grab a window token from it
+        if (view == null) {
+            view = new View(activity);
+        }
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
 
     @Override
     public void onDestroyView() {

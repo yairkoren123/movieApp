@@ -14,6 +14,9 @@ import android.widget.Toast;
 import com.example.drawer_try.MainActivity;
 import com.example.drawer_try.R;
 import com.example.drawer_try.singletonClass.Single_one;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class Pic_Image_Activity extends AppCompatActivity {
 
@@ -22,10 +25,18 @@ public class Pic_Image_Activity extends AppCompatActivity {
     String email_now = "";
     TextView username;
 
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pic_image);
+
+
+        // set title activity
+        Pic_Image_Activity.this.setTitle("Image for Profile");
+
 
         //layout
 
@@ -39,7 +50,7 @@ public class Pic_Image_Activity extends AppCompatActivity {
         username.setText(email_now);
 
         if (email_now.equals(MainActivity.no_user_string_main)){
-            LinearLayout private_screen = findViewById(R.id.no_account_linar_image);
+            LinearLayout private_screen = findViewById(R.id.no_account_linar_image_add_friend);
             TextView setImageText = findViewById(R.id.title_view_open_image);
 
             private_screen.setVisibility(View.VISIBLE);
@@ -103,11 +114,23 @@ public class Pic_Image_Activity extends AppCompatActivity {
                         //5
 
                     } else {
+                        single_one.setUserImage("smile_0.png");
+
                         //Error
 
                     }
                     // back to the main activity
                     msg(single_one.getUserImage());
+
+                    DocumentReference documentReference = db.collection("good").document(email_now);
+
+                    documentReference.update("bitmap",single_one.getUserImage())
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void unused) {
+                                    msg("image set");
+                                }
+                            });
 
                     intent = new Intent(Pic_Image_Activity.this, MainActivity.class);
                     startActivity(intent);
@@ -128,6 +151,7 @@ public class Pic_Image_Activity extends AppCompatActivity {
     public void onBackPressed() {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
-        super.onBackPressed();
+        finish();
+//        super.onBackPressed();
     }
 }

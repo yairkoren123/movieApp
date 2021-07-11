@@ -1,6 +1,5 @@
 package com.example.drawer_try.modle;
 
-import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 import android.view.View;
@@ -11,24 +10,32 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.PagerAdapter;
-import androidx.viewpager.widget.ViewPager;
 
 import com.bumptech.glide.Glide;
 import com.example.drawer_try.R;
 import com.example.drawer_try.singletonClass.Single_one;
-import com.google.android.material.internal.ThemeEnforcement;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 public class ViewPagerAdpter extends PagerAdapter implements View.OnClickListener {
 
     private Context context;
     private ArrayList<String> imagesURL = new ArrayList<>();
+    Single_one single_one = Single_one.getInstance();
+
+    private ArrayList<The_movies> movieList = new ArrayList<>();
+
 
 
     public ViewPagerAdpter(Context context, ArrayList<The_movies> movieList) {
         this.context = context;
+        this.movieList = movieList;
+
+
+        Log.d("firstone", "ViewPagerAdpter: "+ movieList.get(0));
+
+        //single_one.setThe_now_open_drawer("overview");
+
 
         //shuffle Array list
 //        Collections.shuffle(movieList);
@@ -74,7 +81,7 @@ public class ViewPagerAdpter extends PagerAdapter implements View.OnClickListene
 
                 Fragment_the_movie_overview nextFrag= new Fragment_the_movie_overview();
                 activity.getSupportFragmentManager().beginTransaction()
-                        .add(R.id.mail_countener2, nextFrag, "findThisFragment")
+                        .add(R.id.mail_countener9, nextFrag, "findThisFragment")
                         .addToBackStack(null)
                         .commit();
 

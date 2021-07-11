@@ -53,6 +53,8 @@ public class SlideshowFragment extends Fragment {
         // get singleton
         Single_one single_one = Single_one.getInstance();
 
+        single_one.setThe_now_open_drawer("slideshow");
+
 
         slideshowViewModel =
                 new ViewModelProvider(this).get(SlideshowViewModel.class);
@@ -79,6 +81,9 @@ public class SlideshowFragment extends Fragment {
                 .add(R.id.mail_countener, nextFrag, "findThisFragment")
                 .addToBackStack(null)
                 .commit();
+
+
+
 
 
         return root;
