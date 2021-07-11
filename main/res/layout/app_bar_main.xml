@@ -11,12 +11,16 @@
         android:layout_height="wrap_content"
         android:theme="@style/Theme.DRAWER_TRY.AppBarOverlay">
 
+
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
+            android:background="@color/tabbarr"
             app:popupTheme="@style/Theme.DRAWER_TRY.PopupOverlay" />
+
+        <!--            android:background="?attr/colorPrimary"-->
+
 
     </com.google.android.material.appbar.AppBarLayout>
 

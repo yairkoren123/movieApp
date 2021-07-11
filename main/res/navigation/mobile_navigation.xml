@@ -35,4 +35,14 @@
         android:name="com.example.drawer_try.ui.Setting.SettingFragment"
         android:label="@string/menu_setting"
         tools:layout="@layout/setting_fragment" />
+    <fragment
+        android:id="@+id/nav_add_friends"
+        android:name="com.example.drawer_try.ui.AddFreind.Add_Friends_Fragment"
+        android:label="@string/menu_add_friend"
+        tools:layout="@layout/add__friends__fragment" />
+    <fragment
+        android:id="@+id/nav_friends"
+        android:name="com.example.drawer_try.ui.FriendList.List_Friends_Fragment"
+        android:label="@string/menu_list_friends"
+        tools:layout="@layout/list__friends__fragment" />
 </navigation>

@@ -16,6 +16,13 @@
         android:gravity="right"
         android:orientation="vertical">
 
+        <TextView
+            android:id="@+id/no_user_setting_textview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="no user"
+            android:textColor="@color/white" />
+
         <Button
             android:id="@+id/logout_button"
             android:layout_width="wrap_content"
@@ -29,7 +36,7 @@
 
         <ImageView
             android:layout_width="150dp"
-            android:layout_height="100dp"
+            android:layout_height="70dp"
             android:layout_gravity="center"
             android:layout_marginBottom="10dp"
             android:background="@drawable/edit_text_background"
