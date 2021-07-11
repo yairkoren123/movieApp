@@ -3,6 +3,7 @@
     package="com.example.drawer_try">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
 
     <application
         android:allowBackup="true"
@@ -11,14 +12,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.DRAWER_TRY">
-        <activity android:name=".stuffs.Pic_Image_Activity"></activity>
+        <activity android:name=".stuffs.Pic_image_background"></activity>
+        <activity android:name=".Activitys_stuffs.Activity_Account_overview" />
+        <activity android:name=".stuffs.Pic_Image_Activity" />
         <activity android:name=".singup.About" />
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
             android:theme="@style/Theme.DRAWER_TRY.NoActionBar"
             android:windowSoftInputMode="adjustResize">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
